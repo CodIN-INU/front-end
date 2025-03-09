@@ -118,7 +118,7 @@ const SearchPage: FC = () => {
             </div>
 
             {/* 검색 결과 목록 */}
-            <PostList posts={posts} boardName="search" boardType="search" />
+            <PostList posts={posts} boardName="search" boardType="listWithCategory"  />
 
             {/* 로딩 상태 표시 */}
             {isLoading && (

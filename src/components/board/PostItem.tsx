@@ -14,6 +14,22 @@ interface PostItemProps {
 const PostItem: React.FC<PostItemProps> = ({ post, boardName, boardType, onOpenModal }) => {
     const imageUrl = post.postImageUrl?.length > 0 ? post.postImageUrl[0] : null;
 
+    const getDefaultImageUrl = (title: string): string => {
+        if (title.includes("[정통]")) {
+            return "/images/정보통신학과.png";
+        } else if (title.includes("[컴공]")) {
+            return "/images/컴퓨터공학부.png";
+        } else if (title.includes("[임베]")) {
+            return "/images/임베디드시스템공학과.png";
+        } else if (title.includes("[정보대]")) {
+            return "/images/교학실.png";
+        } else {
+            return "/images/교학실.png";
+        }
+    };
+
+    const defaultImageUrl = getDefaultImageUrl(post.title);
+
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault(); // 기본 Link 동작 방지
         onOpenModal(post); // 모달 열기
@@ -35,22 +51,34 @@ const PostItem: React.FC<PostItemProps> = ({ post, boardName, boardType, onOpenM
         }
     };
 
+    // postCategory를 매핑된 이름으로 변환하는 함수
+    const mapPostCategoryToName = (postCategory: string): string => {
+        for (const boardKey in boardData) {
+            const board = boardData[boardKey];
+            console.log("board", board);
+            if (board) return board.name; // 매핑된 이름 반환
+        }
+        return "알 수 없음"; // 매칭되는 카테고리가 없을 경우
+    };
+
+    const mappedCategoryName = mapPostCategoryToName(post.postCategory); // 매핑된 카테고리 이름
+
     const postStats = (
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs sm:text-sr text-sub gap-2 sm:gap-0">
             {/* 아이콘과 통계 데이터 */}
             <div className="flex space-x-[6px]">
-      <span className="flex items-center gap-[4.33px]">
-        <img src="/icons/board/viewIcon.svg" width={16} height={16} />
-          {post.hits || 0}
-      </span>
                 <span className="flex items-center gap-[4.33px]">
-        <img src="/icons/board/heartIcon.svg" width={16} height={16} />
+                    <img src="/icons/board/viewIcon.svg" width={16} height={16} />
+                    {post.hits || 0}
+                </span>
+                <span className="flex items-center gap-[4.33px]">
+                    <img src="/icons/board/heartIcon.svg" width={16} height={16} />
                     {post.likeCount || 0}
-      </span>
+                </span>
                 <span className="flex items-center gap-[4.33px]">
-        <img src="/icons/board/commentIcon.svg" width={16} height={16} />
+                    <img src="/icons/board/commentIcon.svg" width={16} height={16} />
                     {post.commentCount || 0}
-      </span>
+                </span>
             </div>
 
             {/* 작성자 정보 및 시간 */}
@@ -70,7 +98,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, boardName, boardType, onOpenM
                     <div className="relative w-full h-40">
                         {/* 이미지가 없으면 기본 이미지 표시 */}
                         <Image
-                            src={imageUrl || "/images/교학실.png"} // imageUrl이 없으면 기본 이미지 사용
+                            src={imageUrl || defaultImageUrl} // imageUrl이 없으면 기본 이미지 사용
                             alt={post.title}
                             width={400}
                             height={400}
@@ -107,8 +135,40 @@ const PostItem: React.FC<PostItemProps> = ({ post, boardName, boardType, onOpenM
                 </a>
             </li>
         );
+    } else if (boardType === "listWithCategory") {
+        // 리스트 with 카테고리형 디자인
+        return (
+            <li className="flex items-start justify-between">
+                <a href="#" onClick={handleClick} className="flex-1">
+                    {/* 카테고리 표시 */}
+                    <div className="bg-gray-100 text-gray-500 text-xs px-1 py-0.5 rounded inline-block mb-1">
+                        {mappedCategoryName} {/* 매핑된 카테고리 이름 표시 */}
+                    </div>
+                    <div className="flex justify-between">
+                        <div>
+                            <h3 className="text-sm sm:text-Lm font-medium text-gray-800 mt-[8px]">{post.title}</h3>
+                            <p className="text-xs sm:text-Mm text-sub line-clamp-2 mt-[4px] mb-[8px]">{post.content}</p>
+                        </div>
+                        <div>
+                            {imageUrl && (
+                                <div className="ml-4 w-16 h-16 overflow-hidden rounded bg-gray-50 flex-shrink-0">
+                                    <Image
+                                        src={imageUrl}
+                                        alt={post.title}
+                                        width={64}
+                                        height={64}
+                                        className="object-cover w-full h-full"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    {postStats}
+                </a>
+            </li>
+        );
     } else {
-        // 리스트형 디자인
+        // 기본 리스트형 디자인
         const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
             for (const boardKey in boardData) {
                 const board = boardData[boardKey];
@@ -123,21 +183,27 @@ const PostItem: React.FC<PostItemProps> = ({ post, boardName, boardType, onOpenM
         return (
             <li className="flex items-start justify-between">
                 <a href="#" onClick={handleClick} className="flex-1">
-                    <h3 className="text-sm sm:text-Lm font-medium text-gray-800 mt-[8px]">{post.title}</h3>
-                    <p className="text-xs sm:text-Mm text-sub line-clamp-2 mt-[4px] mb-[8px]">{post.content}</p>
+                    <div className="flex justify-between">
+                        <div>
+                            <h3 className="text-sm sm:text-Lm font-medium text-gray-800 mt-[8px]">{post.title}</h3>
+                            <p className="text-xs sm:text-Mm text-sub line-clamp-2 mt-[4px] mb-[8px]">{post.content}</p>
+                        </div>
+                        <div>
+                            {imageUrl && (
+                                <div className="ml-4 w-16 h-16 overflow-hidden rounded bg-gray-50 flex-shrink-0">
+                                    <Image
+                                        src={imageUrl}
+                                        alt={post.title}
+                                        width={64}
+                                        height={64}
+                                        className="object-cover w-full h-full"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     {postStats}
                 </a>
-                {imageUrl && (
-                    <div className="ml-4 w-16 h-16 overflow-hidden rounded bg-gray-50 flex-shrink-0">
-                        <Image
-                            src={imageUrl}
-                            alt={post.title}
-                            width={64}
-                            height={64}
-                            className="object-cover w-full h-full"
-                        />
-                    </div>
-                )}
             </li>
         );
     }
