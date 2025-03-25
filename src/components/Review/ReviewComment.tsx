@@ -34,7 +34,7 @@ const ReviewComment = ({
     <div className="border-t">
       <div className="mt-4">
         <div className="flex justify-between items-center w-full">
-          <p className="text-xl">
+          <p className="text-lg sm:text-xl font-bold">
             {`${starRating % 1 ? starRating : starRating + ".0"}`}
           </p>
           {heartClick ? (
@@ -45,22 +45,22 @@ const ReviewComment = ({
             />
           ) : (
             <CiHeart
-              fill={"#0D99FF"}
-              style={{ width: "20px", height: "20px" }}
+              fill={"#D2D5D9"}
+              style={{ width: "25px", height: "25px" }}
               onClick={handleHeartClick}
             />
           )}
         </div>
         <div className="flex justify-start items-center w-full mt-2">
-          <p className="text-lg text-wrap break-all whitespace-pre-wrap">
+          <p className="text-base sm:text-lg text-wrap text-black break-all whitespace-pre-wrap">
             {content}
           </p>
         </div>
         <div className="flex justify-between items-center w-full mt-2">
-          <p className="text-xl">{semester + "학기 수강생"}</p>
+          <p className="text-sm sm:text-xl text-[#808080]">{semester + "학기 수강생"}</p>
           <div className="flex items-center">
-            <p>{likes ? likes : 0}</p>
-            <CiHeart className="ml-1" fill={"#808080"} color={"#808080"} />
+            <FaHeart className="mr-1" fill={"#D2D5D9"} color={"#D2D5D9"} />
+            <p className="text-[#808080]">{likes ? likes : 0}</p>
           </div>
         </div>
       </div>

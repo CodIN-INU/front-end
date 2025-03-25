@@ -10,7 +10,7 @@ export const PostLike = async (likeType: string, id: string, retryCount=0): Prom
       likeType: likeType,
       id: id,
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error: any) {
     if (error.response) {
