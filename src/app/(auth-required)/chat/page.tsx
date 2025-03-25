@@ -1,9 +1,7 @@
 'use client';
-//import './chat.css';
 import { useRouter } from 'next/navigation';
-import { useContext, useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import BottomNav from "@/components/Layout/BottomNav/BottomNav";
-import { AuthContext } from '@/context/AuthContext';
 import { GetChatRoomData } from '@/api/chat/getChatRoomData';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
@@ -14,13 +12,10 @@ import SockJS from "sockjs-client";
 export default function Chat() {
     const router = useRouter();
     const [stompClient, setStompClient] = useState<any>(null);
-    const headers = {
-        
-      };
-      const [connected, setConnected] = useState(false); // 연결 상태 추적
+    const [connected, setConnected] = useState(false);
+    const [chatList, setChatList] = useState<any[]>([]);
 
-    const [chatList, setChatList] = useState<any>([]);
-      interface ChatData {
+    interface ChatData {
         chatRoomId: string;
         roomName: string;
         lastMessage: string;
@@ -29,43 +24,49 @@ export default function Chat() {
         unread: number;
     }
 
-    interface ChatListProps {
-        chatList: ChatData[];
-    }
-
-     useEffect(() => {
-       
-        const socket = new SockJS("https://codin.inu.ac.kr/dev/ws-stomp");
+    useEffect(() => {
+        const socket = new SockJS("https://codin.inu.ac.kr/api/ws-stomp");
         const stomp = Stomp.over(socket);
-    
         setStompClient(stomp);
-      }, []);
-    
-      useEffect(() => {
+    }, []);
+
+    useEffect(() => {
         if (!stompClient) return;
-      
-        console.log("전송 헤더", headers);
-      
-        stompClient.connect(headers, (frame) => {
-          console.log("connected:", frame);
-          setConnected(true);
-      
-          // /queue/unread 구독
-          const subUnread = stompClient.subscribe(`/user/queue/chatroom/unread/`, (message) => {
-            const receivedUnread = JSON.parse(message.body);
-            console.log("Received unread message:", receivedUnread);
-      
-          });
-      
+
+        stompClient.connect({}, (frame) => {
+            setConnected(true);
+
+            // WebSocket 구독
+            const subUnread = stompClient.subscribe(`/user/queue/chatroom/unread`, (message) => {
+                const receivedUnread = JSON.parse(message.body);
+                console.log("Received unread message:", receivedUnread);
+
+                // 상태 업데이트 후 재렌더링하도록 처리
+                setChatList((prevChatList) => {
+                    // 기존 채팅방 리스트에서 해당 채팅방을 찾아서 업데이트
+                    const updatedChatList = prevChatList.map((chat) => {
+                        if (chat.chatRoomId === receivedUnread.chatRoomId) {
+                            console.log('upload');
+                            return {
+                                ...chat,
+                                unread: receivedUnread.unread,
+                                lastMessage: receivedUnread.lastMessage
+                            };
+                        }
+                        return chat;
+                    });
+
+                    // 최신 상태로 정렬하여 반환
+                    return updatedChatList.sort((a, b) => b.unread - a.unread); // 직접적으로 상태를 변경하지 않도록 함
+                });
+            });
         });
-      }, [stompClient]);
-      
+    }, [stompClient]);
+
     useEffect(() => {
         const getChatRoomData = async () => {
-            console.log('실행')
             try {
                 const chatRoomData = await GetChatRoomData();
-                console.log(chatRoomData.data.dataList);
                 setChatList(chatRoomData.data.dataList || []);
             } catch (error) {
                 console.log("채팅방 정보를 불러오지 못했습니다.", error);
@@ -73,22 +74,20 @@ export default function Chat() {
             }
         };
         getChatRoomData();
-    },[]);
+    }, []);
 
     const handleGoChatRoom = (chatRoomID: string, roomName: string) => {
-        // roomName을 state로 넘기는 방법 (localStorage는 사용하지 않음)
-
-        localStorage.setItem('roomName',roomName);
-        router.push(`/chatRoom/${chatRoomID}` );
+        localStorage.setItem('roomName', roomName);
+        router.push(`/chatRoom/${chatRoomID}`);
     };
 
-    const ChatList = ({ chatList }: ChatListProps) => {
+    const ChatList = ({ chatList }: { chatList: ChatData[] }) => {
         const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
         return (
             <div className="flex flex-col w-full gap-[24px] relative mt-[47px]">
-                {chatList.map((data, index) => (
+                {chatList.map((data) => (
                     <div
-                        key={data.chatRoomId} // 여기서 고유한 key를 설정
+                        key={data.chatRoomId}
                         className="flex flex-row w-full gap-[13px] relative"
                         onClick={() => handleGoChatRoom(data.chatRoomId, data.roomName)}
                     >
@@ -114,7 +113,7 @@ export default function Chat() {
                         </div>
                         <div id="ect">
                             <div className="absolute right-0 top-0 text-sr text-[#808080]">
-                                {data.currentMessageDate !== null ? (new Date(data.currentMessageDate).toLocaleDateString('ko-KR', options) ) : ( new Date().toLocaleDateString('ko-KR', options))}
+                                {data.currentMessageDate !== null ? (new Date(data.currentMessageDate).toLocaleDateString('ko-KR', options)) : (new Date().toLocaleDateString('ko-KR', options))}
                             </div>
                             {data.unread > 0 && (
                                 <div className="absolute right-0 bottom-0 text-sr rounded-[44px] bg-[#0D99FF] w-[22px] h-[22px] flex justify-center items-center text-[#FFFFFF]">
