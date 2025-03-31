@@ -28,3 +28,25 @@
 .floatBtn {
     animation: floatBtn 3s ease-in-out infinite; /* 애니메이션 적용 */
 }
+
+@keyframes floatBtnBefore {
+}
+.floatBtnBefore {
+    animation: floatBtnBefore 3s ease-in ; /* 애니메이션 적용 */
+}
+
+@keyframes floatBtnBeforeText {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+.floatBtnBeforeText{
+  background: linear-gradient(to right,  rgba(13, 153, 255, 0.25), rgba(13, 153, 255, 0.25), rgba(13, 153, 255, 1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: floatBtnBeforeText 3s linear forwards;
+}

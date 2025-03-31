@@ -23,6 +23,8 @@ export default function LoginPage() {
 
   const userContext = useContext(UserContext);
 
+  const [waitForNotice, setWaitForNotice] = useState<boolean>(true);
+
   if (!userContext) {
     throw new Error("MyConsumer must be used within a MyProvider");
   }
@@ -105,6 +107,12 @@ export default function LoginPage() {
     }
   }, [Auth.accessToken]); // Auth.accessToken의 변경을 감지
 
+  useEffect(() => {
+    setTimeout(() => {
+      setWaitForNotice(false);
+      console.log("hi")
+    }, 3000);
+  }, []);
   // if(!schoolLoginExplained){
   //     return (
   //         <DefaultBody hasHeader={0}>
@@ -210,10 +218,16 @@ export default function LoginPage() {
             <span className='text-active'>@inu.ac.kr</span> 계정만 사용할 수 있어요
           </p>
         </div>
-        <button onClick={handleGoogleLogin} className="w-[348.5px] h-[48.5px] mb-[62px] flex gap-[8px] items-center justify-center shadow-[0_0_12px_4px_rgba(0,44,76,0.25)] rounded-[5px] bg-white floatBtn">
-          <img src='/icons/auth/googleLogo.png' className="w-[14px] h-[14px]"/>
-          <p className="text-XLm leading-none">Google계정으로 로그인</p>
-        </button>
+        { waitForNotice ? 
+          <div className="w-[348.5px] h-[48.5px] mb-[62px] flex gap-[8px] items-center justify-center rounded-[5px] bg-white floatBtnBefore" >
+            <p className="text-XLm text-[rgba(0,0,0,0.3)] leading-none floatBtnBeforeText">@inu.ac.kr 계정을 사용해주세요</p>
+          </div>
+          :
+          <button onClick={handleGoogleLogin} className="w-[348.5px] h-[48.5px] mb-[62px] flex gap-[8px] items-center justify-center shadow-[0_0_12px_4px_rgba(0,44,76,0.25)] rounded-[5px] bg-white floatBtn">
+            <img src='/icons/auth/googleLogo.png' className="w-[14px] h-[14px]"/>
+            <p className="text-XLm leading-none">Google계정으로 로그인</p>
+          </button>
+        }
       </div>
     </DefaultBody>
   );
