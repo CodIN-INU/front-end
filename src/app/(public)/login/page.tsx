@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [schoolLoginExplained, setSchoolLoginExplained] =
     useState<boolean>(false);
   const authContext = useContext(AuthContext);
+  const searchParams = useSearchParams();  // Get the search parameters
 
   const userContext = useContext(UserContext);
 
@@ -33,6 +34,15 @@ export default function LoginPage() {
   }
 
   const { Auth, updateAuth } = authContext;
+
+
+  useEffect(() => {
+    // Check if error=invalid_email_domain is present in the URL
+    if (searchParams.get("error") === "invalid_email_domain") {
+      alert("@inu.ac.kr 계정으로 로그인 해주세요");
+    }
+  }, [searchParams]); // This effect runs whenever searchParams change
+
 
   const handleStudentIdChange = (
     e: React.ChangeEvent<HTMLInputElement>
