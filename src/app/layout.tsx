@@ -4,7 +4,7 @@ import { UserProvider } from '@/context/UserContext';
 import { AuthProvider } from '@/context/AuthContext';
 import type { Viewport } from 'next'
 import ReviewProvider from '@/context/WriteReviewContext';
- 
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -19,6 +19,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <head>
                 <title>인천대학교 정보대 SNS</title>
             </head>
+            
+      {/* Google Analytics gtag.js */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-643XQ6BZ59"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-643XQ6BZ59');
+        `}
+      </Script>
             <AuthProvider>
                 <UserProvider>
                     <ReviewProvider>
