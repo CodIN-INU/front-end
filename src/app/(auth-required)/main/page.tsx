@@ -141,6 +141,13 @@ const MainPage: FC = () => {
         </Header>
 
         <DefaultBody hasHeader={1}>
+
+          {process.env.NEXT_PUBLIC_ENV === 'dev' && (
+            <div className="text-center mt-5 pd-5 font-bold  mb-4">
+              🚧 이곳은 개발 서버입니다.
+            </div>
+          )}
+
           {/* 캘린더 */}
           <Calendar />
 
