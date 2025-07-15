@@ -147,7 +147,7 @@ export default function LoginPage() {
     try {
 
       const redirectUri = window.location.origin;
-      const href = `https://codin.inu.ac.kr/api/auth/google`;
+      const href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=codin.inu.ac.kr`;
 
       if (!isLoginPressed) {
         console.log('로그인 요청 중...')
