@@ -146,8 +146,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
 
-      const currentOrigin = window.location.origin;
-      const redirectUri = `${currentOrigin}/main`;
+      const redirectUri = window.location.origin;
       const href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent(redirectUri)}`;
 
       if (!isLoginPressed) {
