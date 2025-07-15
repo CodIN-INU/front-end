@@ -145,10 +145,10 @@ export default function LoginPage() {
   ): Promise<void> => {
     e.preventDefault();
     try {
-      const href = `https://codin.inu.ac.kr/api/auth/google`;
+      let href = `https://codin.inu.ac.kr/api/auth/google`;
       if(process.env.NEXT_PUBLIC_ENV === 'dev'){
         const redirectUri = "https://codin.inu.ac.kr/login/dev";
-        const href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent(redirectUri)}`;
+        href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent(redirectUri)}`;
       }
 
       if (!isLoginPressed) {
