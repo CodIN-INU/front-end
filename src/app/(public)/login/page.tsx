@@ -146,8 +146,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
 
-      const redirectUri = window.location.origin;
-      const href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent("https://codin.inu.ac.kr")}`;
+      const href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=https://front-end-dun-mu.vercel.app`;
 
       if (!isLoginPressed) {
         console.log('로그인 요청 중...')
