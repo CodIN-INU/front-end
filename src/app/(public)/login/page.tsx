@@ -145,9 +145,16 @@ export default function LoginPage() {
   ): Promise<void> => {
     e.preventDefault();
     try {
+
+      const currentOrigin = window.location.origin;
+      const redirectUri = `${currentOrigin}/main`;
+      const href = `https://codin.inu.ac.kr/api/auth/google?redirect_uri=${encodeURIComponent(redirectUri)}`;
+
       if (!isLoginPressed) {
+        console.log('로그인 요청 중...')
         setTimeout(() => {
-          window.location.href = 'https://codin.inu.ac.kr/api/auth/google';
+          console.log('리디렉션 중...'+ href);
+          window.location.href = href;
         }, 2500);
       }
       setIsLoginPressed(true);
