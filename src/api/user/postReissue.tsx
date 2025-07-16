@@ -1,11 +1,12 @@
 import axios, { AxiosResponse } from "axios";
+import apiClient from "../clients/apiClient";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const PostReissue = async (): Promise<any> => {
   axios.defaults.withCredentials = true;
   try {
-    const response: AxiosResponse<any> = await axios.post(
+    const response: AxiosResponse<any> = await apiClient.post(
       `${apiUrl}/auth/reissue`
     );
 
