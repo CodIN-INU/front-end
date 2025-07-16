@@ -20,11 +20,10 @@ export const PostLogin = async (
     );
 
     if( process.env.NEXT_PUBLIC_ENV === 'dev'){
-      alert("개발 서버에서 로그인 성공");
+
       // ✅ 서버에서 받은 JWT 토큰을 헤더에서 추출
-      const token = response.headers["authorization"];
+      const token = response.headers["authorization"].split(" ")[1];
       const refreshToken = response.headers["x-refresh-token"];
-      alert(token);
 
       if (token) {
         // ✅ JWT를 localStorage에 저장 (WebView-safe)
