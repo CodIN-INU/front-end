@@ -22,6 +22,10 @@ function createAPIClient(): AxiosInstance {
   client.interceptors.request.use(
     config => {
       const token = process.env.NEXT_PUBLIC_ENV === 'dev' ? localStorage.getItem("accessToken") : getCookie('accessToken'); // 쿠키에서 accessToken 읽기
+      if(process.env.NEXT_PUBLIC_ENV === 'dev'){
+        alert("개발 서버에서 API 요청");
+        alert(`토큰: ${token}`);
+      }
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
