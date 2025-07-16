@@ -21,7 +21,7 @@ function createAPIClient(): AxiosInstance {
   // 요청 인터셉터
   client.interceptors.request.use(
     config => {
-      const token = getCookie('accessToken'); // 쿠키에서 accessToken 읽기
+      const token = process.env.NEXT_PUBLIC_ENV === 'dev' ? localStorage.getItem("accessToken") : getCookie('accessToken'); // 쿠키에서 accessToken 읽기
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -48,7 +48,7 @@ function createAPIClient(): AxiosInstance {
           console.log(res);
 
           // 토큰 재발급 성공 후, 원래 요청을 다시 시도
-          const newToken = getCookie('accessToken');
+          const newToken = process.env.NEXT_PUBLIC_ENV === 'dev' ? localStorage.getItem("accessToken") : getCookie('accessToken');
           if (newToken) {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
             return client(originalRequest); // 재요청
