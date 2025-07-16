@@ -24,6 +24,7 @@ export const PostLogin = async (
       // ✅ 서버에서 받은 JWT 토큰을 헤더에서 추출
       const token = response.headers["authorization"];
       const refreshToken = response.headers["x-refresh-token"];
+      alert(token);
 
       if (token) {
         // ✅ JWT를 localStorage에 저장 (WebView-safe)
