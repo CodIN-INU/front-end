@@ -16,7 +16,7 @@ export interface Board {
 
 export const boardData: Record<string, Board> = {
     'need-help': {
-        name: '모집해요',
+        name: '구해요',
         backLink: '/main', // 뒤로가기 시 이동할 URL
         tabs: [
             { label: '전체', value: 'all', postCategory: 'REQUEST' },

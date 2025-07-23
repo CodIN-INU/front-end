@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Header from "@/components/Layout/header/Header";
 import { GetNotificationList, Notification } from "@/api/notification/getNotificationList";
 import { useRouter } from "next/navigation";
+import { createPostUrl } from "@/utils/router/createPostUrl";
 
 // 읽음 처리 더미 (추후 실제 API 연결)
 const markNotificationAsRead = async (notificationId: string) => {
@@ -26,6 +27,9 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
             try {
                 const res = await GetNotificationList();
                 if (res.success) {
+                    // --- 추가된 코드: 성공 시 데이터를 콘솔에 출력합니다 ---
+                    console.log("알림 목록을 성공적으로 불러왔습니다:", res.dataList);
+                    // ---------------------------------------------------
                     setNotifications(res.dataList);
                 }
             } catch (error) {
@@ -55,8 +59,16 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
             );
         }
 
-        // TODO: 채팅/게시글 경로 분기 필요
-        router.push(`/main/boards/notification/${notification.id}`);
+        try {
+            // 알림의 title과 id를 사용하여 URL을 생성합니다.
+            // notification.title이 '모집해요'나 '소통해요'와 같이 boardData에 정의된 이름과 일치해야 합니다.
+            const postUrl = createPostUrl(notification.title, notification.id);
+            router.push(postUrl);
+        } catch (error) {
+            console.error("게시글 URL 생성 실패:", error);
+            // URL 생성 실패 시, 기본 경로로 리다이렉트하거나 오류 처리를 할 수 있습니다.
+            // router.push('/main/boards');
+        }
     };
 
     return (
@@ -106,7 +118,7 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
                             >
                                 <div className="flex flex-col space-y-0.5">
                                     <span className="text-[10px] text-gray-500 bg-gray-100 px-1 py-0.5 rounded w-fit">
-                                        소통해요
+                                        {notification.title}
                                     </span>
                                     <span className="font-semibold text-sm">{notification.title}</span>
                                     <span className="text-xs text-gray-500 max-w-[250px]">
@@ -117,12 +129,12 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
                                     {!notification.isRead && (
                                         <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-red-500" />
                                     )}
-                                    <span className="text-[10px] text-gray-400">
-                                        {new Date(notification.createdAt).toLocaleTimeString("ko-KR", {
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
-                                    </span>
+                                    {/*<span className="text-[10px] text-gray-400">*/}
+                                    {/*    {new Date(notification.createdAt).toLocaleTimeString("ko-KR", {*/}
+                                    {/*        hour: "2-digit",*/}
+                                    {/*        minute: "2-digit",*/}
+                                    {/*    })}*/}
+                                    {/*</span>*/}
                                 </div>
                             </li>
                         ))}
