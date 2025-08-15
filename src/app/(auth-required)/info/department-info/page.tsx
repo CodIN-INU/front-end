@@ -167,7 +167,7 @@ export default function DepartmentInfoPage() {
           <ul className="grid grid-cols-2 gap-[18px] w-full">
             {partners.map((partner, id) => (
               <li key={id}>
-                <Link href={`/main/info/department-info/m/${partner.id}`}>
+                <Link href={`/info/department-info/m/${partner.id}`}>
                   <div className="block border border-[#D4D4D4] flex-1 rounded-[16px] cursor-pointer">
                     <div className="flex flex-col items-center justify-center px-[14px] py-[17px]">
                       <img
