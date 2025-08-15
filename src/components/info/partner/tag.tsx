@@ -31,16 +31,39 @@ export function Tags(
     </div>
   );
 }
+
+export function OtherTag({ tags }: { tags: Tag[] }) {
+  return (
+    <>
+      {tagsArray.every(tag => tags.includes(tag)) ||
+      tags.includes('IT_COLLEGE') ? (
+        <Tags
+          tag="정보대 제휴"
+          other
+        />
+      ) : (
+        <Tags
+          tag="학과 제휴"
+          other
+        />
+      )}
+    </>
+  );
+}
 */
 
 export function Tags(
-  { tag }: ITag = {
-    tag: 'undefined'
+  { tag, other }: ITag = {
+    tag: 'undefined',
+    other: false,
   }
 ) {
+
   return (
     <div
-      className={`text-sub text-[10px] px-[9.5px] py-[3.5px] bg-[#EBF0F7] flex justify-center items-center rounded-[20px] flex-shrink-0`}
+      className={`${
+        !other ? 'bg-[#EBF0F7] text-sub' : 'bg-[#0D99FF] text-white'
+        } text-[10px] px-[9.5px] py-[3.5px] flex justify-center items-center rounded-[20px] flex-shrink-0`}
     >
       #{tagMap[tag as Tag] ? tagMap[tag] : tag}
     </div>
