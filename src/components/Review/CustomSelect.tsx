@@ -1,4 +1,4 @@
-import { selectType} from '@/app/(auth-required)/main/info/course-reviews/write-review/type';
+import { selectType} from '@/app/(auth-required)/info/course-reviews/write-review/type';
 import { SetStateAction } from 'react';
 import { BiFontSize } from 'react-icons/bi';
 import Select, { GroupBase, OptionsOrGroups } from 'react-select'
