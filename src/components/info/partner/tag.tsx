@@ -12,6 +12,9 @@ const tagMap: Record<Tag, string> = {
   IT_COLLEGE: '정보대',
 };
 
+/*
+리디자인 이전
+
 export function Tags(
   { tag, other }: ITag = {
     tag: 'undefined',
@@ -25,6 +28,21 @@ export function Tags(
       } min-w-fit px-[9px] pt-[2px] pb-[3px] rounded-[5px] text-[12px] leading-[1.45]`}
     >
       {!other && '#'} {tagMap[tag as Tag] ? tagMap[tag] : tag}
+    </div>
+  );
+}
+*/
+
+export function Tags(
+  { tag }: ITag = {
+    tag: 'undefined'
+  }
+) {
+  return (
+    <div
+      className={`text-sub text-[10px] px-[9.5px] py-[3.5px] bg-[#EBF0F7] flex justify-center items-center rounded-[20px] flex-shrink-0`}
+    >
+      #{tagMap[tag as Tag] ? tagMap[tag] : tag}
     </div>
   );
 }
