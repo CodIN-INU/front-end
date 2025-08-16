@@ -9,6 +9,7 @@ import {
   Suspense,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { departMentType, selectType } from "./type";
@@ -53,6 +54,8 @@ const WriteReview = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { data } = useContext(ReviewContext);
+
+  const ratingRef = useRef<HTMLDivElement | null>(null);
 
   const getReviewList = async () => {
     try {
@@ -203,7 +206,21 @@ const WriteReview = () => {
             */}
             {/* 수업 후기 점수 평가(리디자인) */}
             <div className="flex w-full justify-center items-center">
-              <Rating score={rating} />
+              <div 
+                className="flex w-fit justify-center items-center"
+                ref={ratingRef}
+                onClick={(e) => {
+                  if (!ratingRef.current) return;
+
+                  const rect = ratingRef.current.getBoundingClientRect();
+                  const clickX = e.clientX - rect.left; // 클릭한 X 좌표 (div 안에서)
+                  const ratio = clickX / rect.width;    // 0 ~ 1 사이 비율
+                  const newRating = Math.min(5, Math.max(0, ratio * 5));
+
+                  setRating(Number(newRating.toFixed(2))); // 소수점 2자리로 반올림
+                }}>
+                <Rating score={rating} />
+              </div>
             </div>
             {/* 후기 입력 공간 */}
             <div className="mt-[43px]">
