@@ -1,6 +1,6 @@
 "use client";
 
-import { selectType } from '@/app/(auth-required)/main/info/course-reviews/write-review/type';
+import { selectType } from '@/app/(auth-required)/info/course-reviews/write-review/type';
 import {
   createContext,
   ReactNode,

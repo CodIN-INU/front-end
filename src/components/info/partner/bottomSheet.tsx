@@ -103,23 +103,24 @@ export default function BottomSheet({
       <div className="p-[18px] mb-[30px]">
         <div className="flex items-center justify-between">
           <BackButton />
-          <h2 className="text-Lm font-bold">{title}</h2>
+          <h2 className="text-Mm font-bold">{title}</h2>
           <MapLinkButton />
         </div>
-        <div className="mt-[22px] mb-[18px] ml-[6px]">
-          <div className="flex gap-[3px]">
+        <div className="mt-[12px] ml-[6px]">
+          <div className="flex gap-[3px] w-full justify-center items-center">
+            <OtherTag tags={tags} />
             {tags.map((tag, index) => (
               <Tags
                 key={index}
                 tag={tag}
               />
             ))}
-            <OtherTag tags={tags} />
           </div>
         </div>
         <div className="flex flex-col gap-[15px] px-[12px]">
           <div>
-            <h2 className="text-Lm mb-[6px]">제휴기간</h2>
+            <div className='border-b bg-[#D4D4D] w-full mt-[24px] mb-[12px]'/>
+            <h2 className="text-Mm mb-[6px]">제휴기간</h2>
             <div className="text-Mr text-sub">
               {/* 2025.03 ~ 2026.03 (1학기 시작 전까지) */}
               {duration[0].toLocaleDateString('ko-KR', {
@@ -135,7 +136,7 @@ export default function BottomSheet({
             </div>
           </div>
           <div>
-            <h2 className="text-Lm mb-[6px]">혜택</h2>
+            <h2 className="text-Mm mb-[6px]">혜택</h2>
             <ul className="list-disc pl-[18px] text-Mr text-sub">
               {benefits.map((benefit, index) => (
                 <li key={index}>{benefit}</li>
@@ -143,21 +144,21 @@ export default function BottomSheet({
             </ul>
           </div>
         </div>
-        <div className="mt-[30px]">
+        <div className="mt-[37px]">
           <div
             id="scrollbar-hidden"
-            className="flex bg-sub p-[24px] gap-[11px] rounded-[15px] overflow-x-scroll"
+            className="flex bg-white p-[18px] gap-[11px] rounded-[15px] overflow-x-scroll shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)]"
           >
             {img.map((image, index) => (
               <img
                 key={index}
                 src={image}
                 alt={`제휴 이미지 ${index + 1}`}
-                className="w-[97px] min-w-[97px] bg-[#d0d0ff] aspect-square rounded-[15px]"
+                className="w-[133px] min-w-[133px] aspect-square rounded-[15px] object-cover"
               />
             ))}
           </div>
-          <div className="text-center text-sr text-sub mt-[12px]">
+          <div className="text-center text-sr text-[#BFBFBF] mt-[17px]">
             업체에서 게시한 홍보 전단지입니다
           </div>
         </div>

@@ -11,6 +11,7 @@ import { Tags, OtherTag } from '@/components/info/partner/tag';
 import type { IPartners } from '@/interfaces/partners';
 import { set } from 'lodash';
 import apiClient from '@/api/clients/apiClient';
+import { PartnerLinkCard } from '@/components/info/partner/PartnerLinkCard';
 
 export default function DepartmentInfoPage() {
   const [activeTab, setActiveTab] = useState('phoneDirectory');
@@ -164,37 +165,14 @@ export default function DepartmentInfoPage() {
           </div>
         )}
         {activeTab === 'partners' && (
-          <ul className="grid grid-cols-2 gap-[18px] w-full">
-            {partners.map((partner, id) => (
-              <li key={id}>
-                <Link href={`/main/info/department-info/m/${partner.id}`}>
-                  <div className="block border border-[#D4D4D4] flex-1 rounded-[16px] cursor-pointer">
-                    <div className="flex flex-col items-center justify-center px-[14px] py-[17px]">
-                      <img
-                        src={partner.mainImg}
-                        alt={partner.name}
-                        className="min-h-[97px] max-h-[97px] border rounded-[15px] aspect-square"
-                      />
-                      <p className="text-center text-[15px] my-[9px] multiline-ellipsis">
-                        {partner.name}
-                      </p>
-                      <div
-                        id="scrollbar-hidden"
-                        className="flex w-full h-[22px] gap-[3px] overflow-x-scroll"
-                      >
-                        {partner.tags.map((tag, id) => (
-                          <Tags
-                            key={id}
-                            tag={tag}
-                          />
-                        ))}
-                        <OtherTag tags={partner.tags} />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+          <ul className="grid grid-cols-2 place-items-center gap-[11px] w-full">
+            {/* LinkCard 컴포넌트화 */}
+            {partners.map((partner) => (
+              <li key={partner.id} className='flex justify-center items-center'>
+                <PartnerLinkCard partner={partner} />
               </li>
             ))}
+
           </ul>
         )}
       </DefaultBody>
