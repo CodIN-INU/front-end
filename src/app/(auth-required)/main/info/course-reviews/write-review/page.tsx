@@ -216,8 +216,11 @@ const WriteReview = () => {
                   const clickX = e.clientX - rect.left; // 클릭한 X 좌표 (div 안에서)
                   const ratio = clickX / rect.width;    // 0 ~ 1 사이 비율
                   const newRating = Math.min(5, Math.max(0, ratio * 5));
+                  
+                  // 0.25 단위로 스냅
+                  const snapped = Math.round(newRating / 0.25) * 0.25;
 
-                  setRating(Number(newRating.toFixed(2))); // 소수점 2자리로 반올림
+                  setRating(Math.min(5, Math.max(0, snapped)));
                 }}>
                 <Rating score={rating} />
               </div>
