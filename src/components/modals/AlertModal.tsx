@@ -28,18 +28,18 @@ const AlertModal = ({
           onClick={() => onClose(false)}
       >
         <div
-            className="w-[20rem] h-[15rem] bg-white rounded-2xl px-7"
+            className="bg-white rounded-2xl px-[24px] pb-[24px]"
             onClick={(e) => e.stopPropagation()}
         >
-          <div className="w-full mt-10 text-lg whitespace-pre-wrap">{text}</div>
-          <div className="mt-9 flex flex-col">
+          <div className="w-full mt-[18px] text-Mm text-center whitespace-pre-wrap">{text}</div>
+          <div className="mt-[13px] flex flex-col gap-[9px] w-[253px]">
             <button
                 className="bg-[#0D99FF] rounded-lg h-10 text-white hover:bg-[#51b4fa]"
                 onClick={() => onConfirm(templateText, modalStateSetter, onClose)}
             >
               확인
             </button>
-            <button className="rounded-lg h-10" onClick={() => onClose(false)}>
+            <button className="rounded-lg h-10 bg-[#EBF0F7]" onClick={() => onClose(false)}>
               취소
             </button>
           </div>
