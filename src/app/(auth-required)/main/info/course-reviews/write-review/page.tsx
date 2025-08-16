@@ -26,6 +26,7 @@ import { submitReview } from "@/api/review/submitReview";
 import { useRouter } from "next/navigation";
 import { calcEmotion } from "./util/calcEmotion";
 import { ReviewContext } from "@/context/WriteReviewContext";
+import Rating from "@/components/info/rating";
 
 const WriteReview = () => {
   const router = useRouter();
@@ -173,9 +174,14 @@ const WriteReview = () => {
             <p className="text-XLm mt-[24px]">
               전반적인 수업 경험은 어땠나요?
             </p>
-            {/* 수업 후기 점수 평가  */}
+
+            <p className="text-sr mt-[3px] mb-[22px] text-[#808080]">
+              별점을 눌러 평가해주세요.
+            </p>
+
+            {/* 수업 후기 점수 평가(기존)  
             <div className="w-full mt-[12px]">
-              {/* 1-5점  해당 바를 눌러 점수를 정할 수 있도록 기능 구현 필요*/}
+              {/* 1-5점  해당 바를 눌러 점수를 정할 수 있도록 기능 구현 필요
               <div className="text-XLm flex items-center mb-[12px] gap-[16px]">
                 <div className="flex">
                   <span className="text-[#0D99FF] text-right">{`${
@@ -193,34 +199,37 @@ const WriteReview = () => {
                 clickFn={setRating}
                 className="mt-1"
               />
-              <p className="text-sr mt-[12px] mb-[24px] text-[#808080]">
-                위 그래프를 눌러 조절해주세요
-              </p>
+            </div>
+            */}
+            {/* 수업 후기 점수 평가(리디자인) */}
+            <div className="flex w-full justify-center items-center">
+              <Rating score={rating} />
             </div>
             {/* 후기 입력 공간 */}
-            <div className="mt-3">
+            <div className="mt-[43px]">
               {/* 후기 내용 */}
               <textarea
-                className="border-[1px] focus:border-[#0D99FF] focus:outline-none focus:ring-1 focus:ring-[#0D99FF] border-gray-200 text-Mr rounded-md px-[16px] py-[12px] sm:mt-5 w-full h-[20vh] sm:h-[30vh] resize-none"
+                className="border-[0px] focus:border-[#0D99FF] focus:outline-none  focus:ring-[#0D99FF] border-gray-200 text-Mr rounded-[15px] px-[23px] py-[22px] sm:mt-5 w-full h-[20vh] sm:h-[30vh] resize-none shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)]"
                 placeholder="상세한 후기를 작성해주세요"
                 onChange={(e) => setReviewContents(e.target.value)}
                 value={reviewContents}
               ></textarea>
             </div>
-            <div className="w-full flex justify-end sm:mt-3">
+            <div className="w-full flex shrink-0 justify-end mt-[29px]">
               <button
-                className="bg-[#0D99FF] text-white text-Mm rounded-full px-[16px] py-[8px] mt-[6px] hover:bg-[#51b4fa]"
+                className="flex items-center gap-[6px] bg-[#0D99FF] text-white text-sm rounded-full px-[16px] py-[6px] mt-[6px] hover:bg-[#51b4fa]"
                 onClick={() => {
                   // setReviewContents('강의와 교재는? : \n과제는? : \n시험은? : \n조별 과제는? : \n\n\n나만의 꿀팁 : ');
                   setIsModalOpen(true);
                 }}
               >
-                템플릿 사용하기
+                <img src="/icons/useTemp.png" width="15" /> 템플릿 사용하기
               </button>
             </div>
           </div>
           <button
-            className="mt-[48px] h-[50px] bg-[#0D99FF] text-white rounded-md text-XLm"
+            className={department.value === "" ? `mt-[53px] h-[50px] bg-[#EBF0F7] text-[#808080] rounded-md text-XLm`
+              :`mt-[53px] h-[50px] bg-[#0D99FF] text-white rounded-md text-XLm`}
             onClick={() => onSummitReview()}
           >
             후기 작성하기
