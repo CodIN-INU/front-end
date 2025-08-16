@@ -52,6 +52,7 @@ const WriteReview = () => {
   });
   const [reviewContents, setReviewContents] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isOnSubmit, setisOnSubmit] = useState<boolean>(false);
 
   const { data } = useContext(ReviewContext);
 
@@ -78,7 +79,9 @@ const WriteReview = () => {
 
   const onSummitReview = async () => {
     if (department.value === "") return;
+    if (isOnSubmit) return; // 중복 제출 방지
     else {
+      setisOnSubmit(true);
       const response = await submitReview({
         lectureId: department.value,
         content: reviewContents,
@@ -248,9 +251,9 @@ const WriteReview = () => {
             </div>
           </div>
           <button
-            className={department.value === "" ? `mt-[53px] h-[50px] bg-[#EBF0F7] text-[#808080] rounded-md text-XLm`
+            className={(department.value === "" || isOnSubmit) ? `mt-[53px] h-[50px] bg-[#EBF0F7] text-[#808080] rounded-md text-XLm`
               :`mt-[53px] h-[50px] bg-[#0D99FF] text-white rounded-md text-XLm`}
-            onClick={() => onSummitReview()}
+            onClick={() => !isOnSubmit && onSummitReview()}
           >
             후기 작성하기
           </button>
