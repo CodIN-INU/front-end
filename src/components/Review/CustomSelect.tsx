@@ -34,14 +34,14 @@ const CustomSelect = ({
           : "#0D99FF"
         : "white", // 파란색 배경
       color: inverted ? "white" : "black",
-      borderRadius: rounded ? "9999px" : "5px", // Tailwind의 rounded-full
-      border: inverted ? "none" : "1px solid #E5E7EB", // 테두리 제거
+      borderRadius: rounded ? "9999px" : "15px", // Tailwind의 rounded-full
+      border: inverted ? "none" : "none", // 테두리 제거
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       padding: rounded? "0px" : "6px 3px",
       minHeight: "40px",
-      boxShadow: state.isFocused ? "rgba(13, 153, 255)" : "none",
+      boxShadow: inverted ? "none" : "0px 5px 13.3px rgba(212, 212, 212, 0.59)",
       minWidth: minWidth ? `${minWidth}px` : "100%",
       // maxWidth: minWidth ? `${minWidth}rem` : "100%",
       marginRight: "5px",
@@ -52,7 +52,7 @@ const CustomSelect = ({
       ...provided,
       color: inverted
         ? value.value === ""
-          ? "black"
+          ? "#808080"
           : "white"
         : value.value === ""
         ? "#A9ADAE"
@@ -65,7 +65,7 @@ const CustomSelect = ({
       ...provided,
       paddingLeft: "0px",
       paddingRight: "8px",
-      color: inverted ? (value.value === "" ? "black" : "white") : "black", // 화살표 색상 변경
+      color: inverted ? (value.value === "" ? "#808080" : "white") : "#808080", // 화살표 색상 변경
     }),
     menu: (provided: any) => ({
       ...provided,
