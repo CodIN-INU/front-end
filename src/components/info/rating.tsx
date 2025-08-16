@@ -24,8 +24,8 @@ export default function Rating({ score }: { score: number }) {
         return (
           <StarIcon
             key={i}
-            width={16}
-            height={16}
+            width={36}
+            height={34}
             className="text-yellow-500"
           />
         );
