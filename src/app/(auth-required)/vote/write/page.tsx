@@ -12,6 +12,7 @@ import { PostVote } from '../../../../api/vote/postVote';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
+import CheckIcon from "@/components/icons/CheckIcon";
 
 export default function Vote() {
     const router = useRouter();
@@ -80,6 +81,11 @@ export default function Vote() {
         }
     }
 
+    const getCanSubmit = (): boolean => {
+        // 제목, 내용, 항목이 모두 입력되었는지 확인
+        return title !== '' && content !== '' && options.every(option => option !== '');
+    }
+
     const handleOptionChange = (index: number, value: string): void => {
         const newOptions = [...options];
         newOptions[index] = value;
@@ -90,6 +96,12 @@ export default function Vote() {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
             e.preventDefault();
             console.log('버튼 눌림');
+
+            if (!getCanSubmit()) {
+                alert("제목, 내용, 항목을 모두 입력해주세요.");
+                return;
+            }
+
             // selectedTime에서 시, 분을 추출 (예: "10:52" -> 10, 52)
             const [hours, minutes] = selectedTime.split(':');
 
@@ -112,19 +124,16 @@ export default function Vote() {
                     alert(message);
                   }
                 }
-
-
-
+    const inputStyle = "shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] bg-white rounded-[15px] text-[#AEAEAE]"
      return (
             <div className="vote w-full">
                 <Header>
                     <Header.BackButton/>
-                    <Header.Title>{`글쓰기`}</Header.Title>
+                    <Header.Title>{`투표 작성하기`}</Header.Title>
                 </Header>
                 <DefaultBody hasHeader={1}>
-                <input className="defaultInput mt-[18px]" id="write_title" placeholder='제목' onChange={handletitleChange}></input>
+                <input className="defaultInput mt-[10px]" style={{fontSize: "16px", fontWeight: "bold", color: "#808080"}} id="write_title" placeholder='투표 제목' onChange={handletitleChange}></input>
                     <div id='voteCont_write'>
-                        <h3 className='text-XLm my-[24px]'>투표</h3>
                         
                         
                         {options.map((option, index) => (
@@ -137,14 +146,36 @@ export default function Vote() {
                             />
                         ))}
 
-                        <button id='addOption' className='text-Mm flex w-full align-center justify-center py-[14px] bg-sub rounded-[5px] mt-[12px] text-sub' onClick={addOption}>항목 추가</button>
+                        <button id='addOption' className={`text-Mm flex w-full align-center justify-center py-[11px] mt-[10px] ${inputStyle}`} onClick={addOption}>+ 항목 추가</button>
 
+                    </div>
 
+                    <div className={`w-full flex justify-end items-center gap-[12px] my-[16px] `} >
+                        <div id='multipleCont' className='flex items-center gap-[5px]'>
+                            <input type="checkbox" className='hidden peer' id="multipleBtn" onClick={handleChecked}></input>
+                            <label
+                                htmlFor="multipleBtn"
+                                className='w-[17px] h-[17px] rounded-full border border-[#CDCDCD] flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:border-[#0D99FF] relative'
+                                >
+                                <CheckIcon className={`w-[8px] h-[6px] ${checked ? "text-[#0D99FF]" : "text-[#CDCDCD]"}`} />
+                            </label>
+                            <div id='multipleMent' className={`text-Mr ${checked? 'text-[#0D99FF]' : 'text-[#CDCDCD]'}`}>복수선택</div>
+                        </div>
 
+                        <div id='anonymityCont' className='flex items-center gap-[5px]'>
+                            <input type="checkbox" className='hidden peer' id="anonymityBtn" onClick={handleAnonymity}></input>
+                            <label
+                                htmlFor="anonymityBtn"
+                                className='w-[17px] h-[17px] rounded-full border border-[#CDCDCD] flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:border-[#0D99FF] relative'
+                                >
+                                <CheckIcon className={`w-[8px] h-[6px] ${anonymity ? "text-[#0D99FF]" : "text-[#CDCDCD]"}`} />
+                            </label>
+                            <div id='anonymityMent'className={`text-Mr ${anonymity? 'text-[#0D99FF]' : 'text-[#CDCDCD]'}`} >익명</div>
+                        </div>
                     </div>
                     <div id='endTimeCont'>
                         <div className='flex justify-between items-center'>
-                            <h3 className='text-XLm my-[24px]'>종료시간 설정</h3>
+                            <h3 className='text-Lm mb-[13px] pt-[8px]'>종료시간 설정</h3>
 
                             <TimePicker
                                             id='write_time'
@@ -158,8 +189,8 @@ export default function Vote() {
                                             className="transform translate-y-[20%] z-50"
                             />
                         </div>
-                        <div id='dateCont' className='relative max-h-[50px] border-[1px] rounded-[5px] p-[16px] flex flex-start justify-start items-center'>
-                            <img src='/icons/board/Clock.svg' className='w-[16px] h-[16px] mr-[12px]'/>
+                        <div id='dateCont' className={`${inputStyle} relative max-h-[47px] px-[22px] py-[13px] flex flex-start justify-start items-center`}>
+                            <img src='/icons/board/Clock.svg' className='w-[19px] h-[19px] mr-[12px]'/>
                             
                             <div className='flex-1'>
                                 <DatePicker
@@ -176,36 +207,13 @@ export default function Vote() {
                     </div>
 
                     <textarea
-                        className="text-Mm mt-[24px] min-h-[143px] resize-none p-[16px] border rounded box-border focus:border-black "
+                        className={`${inputStyle} text-Mm mt-[10px] min-h-[211px] resize-none py-[11px] px-[23px] rounded box-border mb-[85px] focus:outline-none`}
                         id="write_content"
                         placeholder="내용을 입력하세요"
                         onChange={handleContentChange}
                     />
 
-                    <div className='w-full flex justify-end items-center gap-[12px] my-[16px]' >
-                        <div id='multipleCont' className='flex items-center gap-[5px]'>
-                            <input type="checkbox" className='hidden peer' id="multipleBtn" onClick={handleChecked}></input>
-                            <label
-                                htmlFor="multipleBtn"
-                                className='w-[17px] h-[17px] rounded-full border border-gray-400 flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:bg-[#0D99FF] peer-checked:border-[#0D99FF] relative'
-                                >
-                                <img src="/icons/board/check.svg" className="w-[9px] text-white text-[10px] transition-opacity duration-300"/>
-                            </label>
-                            <div id='multipleMent' className='text-Mr'>복수선택</div>
-                        </div>
-
-                        <div id='anonymityCont' className='flex items-center gap-[5px]'>
-                            <input type="checkbox" className='hidden peer' id="anonymityBtn" onClick={handleAnonymity}></input>
-                            <label
-                                htmlFor="anonymityBtn"
-                                className='w-[17px] h-[17px] rounded-full border border-gray-400 flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:bg-[#0D99FF] peer-checked:border-[#0D99FF] relative'
-                                >
-                                <img src="/icons/board/check.svg" className="w-[9px] text-white text-[10px] transition-opacity duration-300"/>
-                            </label>
-                            <div id='anonymityMent'className='text-Mr' >익명</div>
-                        </div>
-                    </div>
-                    <CommonBtn status={1} type="submit" text="작성 완료" onClick={handleSubmit}/>
+                    <CommonBtn status={getCanSubmit()? 1:0} type="submit" text="작성 완료" onClick={handleSubmit}/>
 
                 </DefaultBody>
             </div>
