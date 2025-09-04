@@ -18,9 +18,7 @@ import MenuItem from '@/components/common/Menu/MenuItem';
 
 export default function VoteDetail() {
   const router = useRouter();
-  const [selectedOptions, setSelectedOptions] = useState<{
-    [key: string]: number[];
-  }>({});
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [vote, setVote] = useState<vote | null>(null);
   const { voteId } = useParams();
   const [isPostLiked, setIsPostLiked] = useState<{ [key: string]: boolean }>(
@@ -120,7 +118,7 @@ export default function VoteDetail() {
       // API 요청 URL 및 데이터 설정
       const url = action === 'like' ? '/likes' : `/scraps/${voteId}`;
       const requestData =
-        action === 'like' ? { likeType: 'POST', id: vote?._id } : undefined;
+        action === 'like' ? { likeType: 'POST', likeTypeId: vote?._id } : undefined;
 
       // API 호출
       const response = await apiClient.post(url, requestData);
@@ -179,7 +177,10 @@ export default function VoteDetail() {
     voteId: string
   ) => {
     e.preventDefault();
-    try {
+    
+    if(selectedOptions.length === 0) {alert('투표 옵션을 선택해주세요');}
+
+    else try {
       const response = await PostVoting(voteId, selectedOptions[voteId] || []);
       console.log('결과:', response);
       window.location.reload();
@@ -346,7 +347,7 @@ export default function VoteDetail() {
                         <li
                           key={i}
                           id="pollCont"
-                          className="flex gap-[16px] items-center justify-start"
+                          className="flex gap-[16px] mb-4 items-center justify-start"
                         >
                           <input
                             type="checkBox"

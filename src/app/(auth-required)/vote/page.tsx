@@ -79,6 +79,7 @@ export default function Vote() {
     });
   };
 
+
   useEffect(() => {
     const getVoteData = async (page: number) => {
       if (!hasMore || isLoading) return;
@@ -127,7 +128,9 @@ export default function Vote() {
     voteId: string
   ) => {
     e.preventDefault();
-    try {
+    if(selectedOptions.length==0) {alert('투표 옵션을 선택해주세요');}
+
+    else try {
       const response = await PostVoting(voteId, selectedOptions[voteId] || []);
       console.log('결과:', response);
       window.location.reload();

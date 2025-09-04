@@ -6,7 +6,6 @@ import apiClient from '@/api/clients/apiClient';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import SmRoundedBtn from '@/components/buttons/smRoundedBtn';
-import Head from 'next/head';
 
 const CreatePostPage = () => {
   const params = useParams();

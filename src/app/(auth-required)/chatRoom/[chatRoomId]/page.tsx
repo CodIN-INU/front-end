@@ -2,10 +2,8 @@
 import './chatRoom.css';
 import { useRouter, useParams } from 'next/navigation';
 import { useContext, useState, useEffect, useRef } from 'react';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { AuthContext } from '@/context/AuthContext';
 import { GetChatData } from '@/api/chat/getChatData';
-import * as StompJs from '@stomp/stompjs';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { deleteRoom } from '@/api/chat/deleteRoom';
@@ -14,6 +12,7 @@ import MessageForm from '@/components/chat/MessageForm';
 import MessageList from '@/components/chat/MessageList';
 import Header from '@/components/Layout/header/Header';
 import MenuItem from '@/components/common/Menu/MenuItem';
+
 // 메시지 타입 정의
 interface Message {
   id: string;
@@ -26,13 +25,7 @@ interface Message {
   unread: number;
 }
 
-interface MessageListProps {
-  messages: Message[];
-}
 
-interface MessageFormProps {
-  onMessageSubmit: (message: Message) => void;
-}
 
 export default function ChatRoom() {
   const router = useRouter();
@@ -59,11 +52,12 @@ export default function ChatRoom() {
   const [connected, setConnected] = useState(false); // 연결 상태 추적
   const [subscription, setSubscription] = useState<any>(null); // 구독 객체 관리
 
+
   useEffect(() => {
     if (!chatRoomId) {
       return;
+      
     }
-
     const socket = new SockJS('https://codin.inu.ac.kr/api/ws-stomp');
     const stomp = Stomp.over(socket);
 
@@ -200,8 +194,7 @@ export default function ChatRoom() {
   };
 
   const handleMessageSubmit = async (message: Message) => {
-    //setMessages((prevMessages) => [...prevMessages, message]);
-
+   
     let localImageUrl = imageUrl;
 
     if (message.contentType === 'IMAGE') {
@@ -231,13 +224,6 @@ export default function ChatRoom() {
     console.log(message.content);
   };
 
-  const disconnectSocket = () => {
-    if (stompClient && connected) {
-      stompClient.disconnect(() => {
-        console.log('소켓 연결이 종료되었습니다.');
-      });
-    }
-  };
 
   const handleBackButtonClick = () => {
     // 소켓 구독 해제
@@ -256,7 +242,7 @@ export default function ChatRoom() {
     }
 
     // 페이지 뒤로 가기
-    router.push('/chat');
+    router.push('/chat')
   };
 
   return (
@@ -283,6 +269,7 @@ export default function ChatRoom() {
           myId={myId}
         />
       </div>
+      
       <div id="divider"></div>
       <MessageForm
         onMessageSubmit={handleMessageSubmit}
