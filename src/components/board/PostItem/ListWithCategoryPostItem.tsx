@@ -27,7 +27,7 @@ const ListWithCategoryPostItem: React.FC<Props> = ({ post, onOpenModal }) => {
   const categoryName = mapPostCategoryToName(post.postCategory);
 
   return (
-    <li className="flex items-start justify-between">
+    <li className="flex items-start justify-between ">
       <a href="#" onClick={handleClick} className="flex-1">
         <div className="bg-gray-100 text-gray-500 text-xs px-1 py-0.5 rounded inline-block mb-1">
           {categoryName}
