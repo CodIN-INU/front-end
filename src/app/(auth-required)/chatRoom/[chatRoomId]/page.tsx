@@ -67,7 +67,12 @@ export default function ChatRoom() {
   useEffect(() => {
     const fetchChatRoomData = async () => {
       try {
-        const title = localStorage.getItem('roomName');
+        const raw = localStorage.getItem('roomName') || '';
+        const toEllipsis = (s: string, max: number) => {
+          const chars = Array.from(s); // 유니코드 안전
+          return chars.length >= max ? chars.slice(0, max).join('') + '...' : s;
+        };
+        const title = toEllipsis(raw, 20); // 15글자 이상이면 ... 처리
         setTitle(title);
 
         console.log('전송데이터:', chatRoomId);
@@ -81,6 +86,7 @@ export default function ChatRoom() {
         console.log('채팅 정보를 불러오는 데 실패했습니다.', error);
       }
     };
+
 
     fetchChatRoomData();
   }, [chatRoomId]);
