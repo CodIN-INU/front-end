@@ -17,7 +17,6 @@ import { fetchClient } from '@/api/clients/fetchClient';
 import RoomItemHourly from '../roomstatus/components/roomItemHourly';
 import { Lecture, LectureDict } from '../roomstatus/interfaces/page_interface';
 import { TIMETABLE_LENGTH } from '../roomstatus/constants/timeTableData';
-import clsx from 'clsx';
 import PageBar from '@/components/Layout/pageBar';
 
 const timeAgo = (timestamp: string): string => {
@@ -213,6 +212,7 @@ const MainPage: FC = () => {
           🚧 이곳은 개발 서버입니다.
         </div>
       )}
+      
 
       {/* <ShadowBox className="pl-[19px] pr-[14px] pt-[28px] pb-[25px] h-[213px]">
         <div>
