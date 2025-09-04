@@ -8,6 +8,9 @@ const nextConfig = {
       'ite.inu.ac.kr',
       'ese.inu.ac.kr', // S3 버킷 도메인 추가
       'cse.inu.ac.kr',
+      'inu.ac.kr',
+      'www.inu.ac.kr'
+
     ],
   },
   output: 'standalone',
