@@ -3,12 +3,12 @@ import { PostReissue } from "../user/postReissue";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const PostLike = async (likeType: string, id: string, retryCount=0): Promise<any> => {
+export const PostLike = async (likeType: string, likeTypeId: string, retryCount=0): Promise<any> => {
   axios.defaults.withCredentials = true;
   try {
     const response: AxiosResponse<any> = await axios.post(`${apiUrl}/likes`, {
       likeType: likeType,
-      id: id,
+      likeTypeId: likeTypeId,
     });
 
     return response.data;
@@ -27,7 +27,7 @@ export const PostLike = async (likeType: string, id: string, retryCount=0): Prom
                 console.log(res);
                 
                 // PostReissue가 성공한 후에 GetChatRoomData 실행
-                return await PostLike(likeType, id, retryCount + 1); // 재요청
+                return await PostLike(likeType, likeTypeId, retryCount + 1); // 재요청
             } catch (error) {
                 console.error("❌ 토큰 재발급 실패", error);
                 // 토큰 재발급 실패시 더 이상 재시도하지 않고 로그인 페이지로 이동

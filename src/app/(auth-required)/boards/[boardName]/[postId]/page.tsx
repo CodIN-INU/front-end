@@ -1,4 +1,5 @@
 // PostDetailPage.tsx (하위 페이지)
+import { Header } from '@/components/Layout/header';
 import LayoutWithBottomNav from '../../../layout';
 import PostDetailClient from './PostDetailClient';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
