@@ -54,7 +54,7 @@ const BoardLayout: FC<BoardLayoutProps> = ({
         {hasTabs && (
           <div
             id="scrollbar-hidden"
-            className="w-full bg-white z-50 overflow-x-scroll fixed pb-[8px] pr-[40px]"
+            className="w-full bg-white z-50 overflow-x-scroll fixed pb-[8px] pr-[40px] mt-[-3px]"
           >
             <Tabs
               tabs={tabs}
