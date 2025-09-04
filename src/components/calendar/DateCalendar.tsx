@@ -1,5 +1,7 @@
+"use client";
+
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 dayjs.locale('en');
 
 import LeftArrow from '@public/icons/arrow/arrow_left.svg';
@@ -15,24 +17,19 @@ export default function DateCalendar() {
   // 연도 변환 모달
   const [showYearModal, setShowYearModal] = useState(false);
 
-  // 현재 날짜를 가져옵니다.
+  // 현재 날짜
   const currentDate = dayjs();
   const currentYear = currentDate.year();
-
-  // 200년 전의 연도를 계산합니다.
   const pastYear = currentDate.subtract(200, 'year').year();
 
-  // 현재 연도와 200년 전까지의 연도를 배열에 담습니다.
-  const years = [];
-  for (let year = currentYear; year >= pastYear; year--) {
-    years.push(String(year));
-  }
+  // 연도 목록
+  const years: string[] = [];
+  for (let year = currentYear; year >= pastYear; year--) years.push(String(year));
 
   // 요일
   const dayOfTheWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
-  // 날짜 상태관리
-
+  // 타입
   interface CalendarData {
     date: string;
     totalCont: number;
@@ -42,72 +39,54 @@ export default function DateCalendar() {
       department: Tag | 'OTHERS';
     }>;
   }
-  const [today, setToday] = useState(dayjs());
-  const [selectedDate, setSelectedDate] =
-    useState<[string, number, dayjs.Dayjs]>(null);
-  const [calendarData_fetched, setCalendarData] = useState<CalendarData[]>([]);
 
-  // 해당 달의 전체일수를 구함
-  const daysInMonth = today.daysInMonth();
-
-  // 이번 달의 1일에 대한 정보
-  const firstDayOfMonth = dayjs(today).startOf('month').locale('en');
-
-  // 1일부터 마지막 날까지 배열에 순차적으로 넣음
   interface DateWithStatus {
     date: dayjs.Dayjs;
     status: string[];
   }
+
+  // 상태
+  const [today, setToday] = useState(dayjs());
+  const [selectedDate, setSelectedDate] =
+    useState<[string, number, dayjs.Dayjs] | null>(null);
+  const [calendarData_fetched, setCalendarData] = useState<CalendarData[]>([]);
+
+  // 달 정보
+  const daysInMonth = today.daysInMonth();
+  const firstDayOfMonth = dayjs(today).startOf('month').locale('en');
+
+  // 날짜 배열
   const dates: DateWithStatus[] = [];
   for (let i = 1; i <= daysInMonth; i++) {
     const date = dayjs(firstDayOfMonth).add(i - 1, 'day');
-    dates.push({ date: date, status: ['point'] });
+    dates.push({ date, status: ['point'] });
   }
 
-  // 공백 날
-  // firstDayOfMonth.day() // 0 ~ 6 (일 ~ 토)
+  // 앞쪽 공백(0~6)
   const emptyDates = new Array(firstDayOfMonth.day()).fill(null);
-
-  // 1일의 요일 만큼 앞에 빈 공백 넣어준다.
   const calenderData: Array<null | DateWithStatus> = [...emptyDates, ...dates];
 
-  // 이전 달
-  const onClickPastMonth = () => {
-    setToday(dayjs(today).subtract(1, 'month'));
+  // 네비게이션
+  const onClickPastMonth = () => setToday(dayjs(today).subtract(1, 'month'));
+  const onClickNextMonth = () => setToday(dayjs(today).add(1, 'month'));
+  const onClickResetBtn = () => setToday(dayjs());
+
+  // 연도 변경
+  const onClickChangeYear = (year: string) => {
+    setToday(dayjs(today).set('year', Number(year)));
+    setShowYearModal(v => !v);
   };
 
-  // 다음 달
-  const onClickNextMonth = () => {
-    setToday(dayjs(today).add(1, 'month'));
+  // 날짜 선택(0-based 인덱스 통일)
+  const onClickChangeDate = (date: DateWithStatus, dayIndex0: number) => {
+    setSelectedDate([date.date.format('YYYY-MM-DD'), dayIndex0, date.date]);
   };
 
-  // 초기화 (이번 달로 이동함)
-  const onClickResetBtn = () => {
-    setToday(dayjs());
-  };
+  // 연도 모달 토글/닫기
+  const showYearModalBtn = () => setShowYearModal(v => !v);
+  const showDateCalendarModalBtn = () => setShowYearModal(false);
 
-  // 연도 선택(변경)
-  const onClickChangeYear = year => {
-    setToday(dayjs(today).set('year', year));
-    showYearModalBtn();
-  };
-
-  // 날짜 선택(변경) (= input 값 변경)
-  const onClickChangeDate = (date: DateWithStatus, index: number) => {
-    setSelectedDate([date.date.format('YYYY-MM-DD'), index, date.date]);
-    console.log('선택된 날짜:', date.date.format('YYYY-MM-DD'), index);
-  };
-
-  // 연도 모달 on, off
-  const showYearModalBtn = () => {
-    setShowYearModal(!showYearModal);
-  };
-
-  // DateCalendar 모달 on, off
-  const showDateCalendarModalBtn = () => {
-    setShowYearModal(false);
-  };
-
+  // 데이터 fetch
   useEffect(() => {
     const fetchCalendarData = async () => {
       try {
@@ -115,9 +94,8 @@ export default function DateCalendar() {
           `/calendar/month?year=${today.year()}&month=${today.month() + 1}`
         );
         if (response.success) {
-          const data = response.data.days;
+          const data = response.data.days as CalendarData[];
           setCalendarData(data);
-          console.log('Fetched calendar data:', data);
         } else {
           console.error('Failed to fetch calendar data:', response.message);
         }
@@ -128,74 +106,73 @@ export default function DateCalendar() {
     fetchCalendarData();
   }, [today]);
 
-  // 2) 전역 클릭 리스너 교체
-    useEffect(() => {
-      function handleDocClick(e: MouseEvent) {
-        // 기본 동작 막지 않음! (preventDefault 제거)
-        const el = e.target as HTMLElement | null;
-        // 달력 날짜 셀 내부를 클릭한 경우는 유지
-        if (el && el.closest('[data-calendar-day]')) return;
-        setSelectedDate(null);
-      }
+  // 날짜 문자열 → items 매핑 (인덱스 불일치 방지)
+  const itemsByIso = useMemo(() => {
+    const map = new Map<string, CalendarData['items']>();
+    for (const d of calendarData_fetched ?? []) {
+      const iso = dayjs(d?.date).format('YYYY-MM-DD');
+      map.set(iso, Array.isArray(d?.items) ? d.items : []);
+    }
+    return map;
+  }, [calendarData_fetched]);
 
-      // 버블 단계에서만 가볍게 처리 (capture 불필요)
-      document.addEventListener('click', handleDocClick);
-
-      // 정확한 cleanup (같은 참조로 제거)
-      return () => {
-        document.removeEventListener('click', handleDocClick);
-      };
-    }, []);
-
+  // 문서 클릭: 달력 바깥 클릭 시 선택 해제
+  useEffect(() => {
+    function handleDocClick(e: MouseEvent) {
+      const el = e.target as HTMLElement | null;
+      if (el && el.closest('[data-calendar-day]')) return;
+      setSelectedDate(null);
+    }
+    document.addEventListener('click', handleDocClick);
+    return () => document.removeEventListener('click', handleDocClick);
+  }, []);
 
   return (
     <ShadowBox>
       {/* Date Calendar */}
       <div className="z-[200]">
-        {/* 달력 모달과 연도 선택 모달이 둘 다 켜진 경우, 구분을 위해 달력 모달에 배경색을 입힌다. */}
         <div className="pb-[16px]">
-          {selectedDate &&
-            calendarData_fetched[selectedDate[1]].items.length > 0 && (
-              <div className="absolute w-max text-[10px] top-[60px] left-[50%] translate-x-[-50%] rounded-[10px] backdrop-blur-[2px] bg-[#111111A3] text-white pt-[9px] pb-[13px] px-[13px] z-[200]">
-                <div className="ml-[13px] font-normal">
-                  {selectedDate[2].format('MM.DD')}
-                </div>
-                {calendarData_fetched[selectedDate[1]].items.map((item, i) => (
-                  <div key={i}>
-                    <div className="flex items-center mt-[2px]">
-                      <div
-                        className={clsx(
-                          'h-[6px] aspect-square rounded-full',
-                          item.department === 'COMPUTER_SCI'
-                            ? 'bg-main'
-                            : item.department === 'EMBEDDED'
-                            ? 'bg-[#87B9BA]'
-                            : item.department === 'INFO_COMM'
-                            ? 'bg-[#FE908A]'
-                            : item.department === 'OTHERS'
-                            ? 'bg-[#FBE08D]'
-                            : 'bg-main'
-                        )}
-                      />
-                      <span className="ml-[7px] leading-[14px]">
-                        {item.content}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+          {/* 선택된 날짜 툴팁: 날짜 문자열 매핑으로 표시 */}
+          {selectedDate && (itemsByIso.get(selectedDate[0])?.length ?? 0) > 0 && (
+            <div className="absolute w-max text-[10px] top-[60px] left-[50%] translate-x-[-50%] rounded-[10px] backdrop-blur-[2px] bg-[#111111A3] text-white pt-[9px] pb-[13px] px-[13px] z-[200]">
+              <div className="ml-[13px] font-normal">
+                {selectedDate[2].format('MM.DD')}
               </div>
-            )}
+              {(itemsByIso.get(selectedDate[0]) ?? []).map((item, i) => (
+                <div key={i}>
+                  <div className="flex items-center mt-[2px]">
+                    <div
+                      className={clsx(
+                        'h-[6px] aspect-square rounded-full',
+                        item.department === 'COMPUTER_SCI'
+                          ? 'bg-main'
+                          : item.department === 'EMBEDDED'
+                          ? 'bg-[#87B9BA]'
+                          : item.department === 'INFO_COMM'
+                          ? 'bg-[#FE908A]'
+                          : item.department === 'OTHERS'
+                          ? 'bg-[#FBE08D]'
+                          : 'bg-main'
+                      )}
+                    />
+                    <span className="ml-[7px] leading-[14px]">
+                      {item.content}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-          {/* 달력의 헤더 */}
+          {/* 헤더 */}
           <header>
             <div className="relative flex justify-between pt-[18px] pb-[15px] border-b border-[#D4D4D4] p-[9px]">
-              {/* 이전 달로 변경 */}
               <div className="left-4">
                 <div onClick={onClickPastMonth}>
                   <LeftArrow />
                 </div>
               </div>
-              {/* 연도 선택 버튼 */}
+
               <div
                 onClick={showYearModalBtn}
                 className="flex items-center cursor-pointer"
@@ -205,7 +182,7 @@ export default function DateCalendar() {
                   {today.format('MMMM YYYY')}
                 </span>
               </div>
-              {/* 다음 달로 변경 */}
+
               <div className="right-4">
                 <div onClick={onClickNextMonth}>
                   <RightArrow />
@@ -235,7 +212,6 @@ export default function DateCalendar() {
                     ))}
                   </ul>
 
-                  {/* 연도 모달 닫기 버튼 */}
                   <div
                     className="flex flex-row justify-end pt-2"
                     onClick={showYearModalBtn}
@@ -269,16 +245,14 @@ export default function DateCalendar() {
           <main className="px-[3.5px]">
             <ul className="flex flex-row flex-wrap">
               {calenderData.map((date, index) => (
-                <li
-                  key={index}
-                  className="w-[14.28%] mt-[11px]"
-                >
+                <li key={index} className="w-[14.28%] mt-[11px]">
                   {date !== null && (
                     <div className="relative flex flex-col items-center">
-                      {/* <div
-                        id="calendar-day"
+                      <div
+                        data-calendar-day
                         onClick={() =>
-                          onClickChangeDate(date, index - emptyDates.length + 1)
+                          // ✅ 0-based 인덱스 유지 ( +1 제거 )
+                          onClickChangeDate(date, index - emptyDates.length)
                         }
                         className={clsx(
                           'cursor-pointer flex justify-center items-center text-[10px] font-bold w-[25px] aspect-square rounded-full',
@@ -291,49 +265,39 @@ export default function DateCalendar() {
                             dayjs().format('YYYY-MM-DD')
                             ? 'bg-main !text-white'
                             : 'bg-sub text-sub hover:bg-gray',
-                          selectedDate &&
-                            selectedDate[0] ===
-                              date.date.format('YYYY-MM-DD') &&
-                            selectedDate[0] !== dayjs().format('YYYY-MM-DD') &&
-                            'border-[2px] border-[#AEAEAE]'
+                          // 선택된 날짜면 파란 배경 + 흰 글자
+                          selectedDate?.[0] === date.date.format('YYYY-MM-DD') &&
+                            'border-[2px] border-[#AEAEAE] bg-[#0D99FF] text-white'
                         )}
-                      >
-                        {date.date.format('D')}
-                      </div> */}
-                      <div
-                        data-calendar-day
-                        onClick={() =>
-                          onClickChangeDate(date, index - emptyDates.length + 1)
-                        }
-                        className={clsx(/* ... */)}
                       >
                         {date.date.format('D')}
                       </div>
 
+                      {/* 하단 점 표시: 날짜 문자열 매핑으로 렌더 */}
                       <div className="flex mt-[5px] h-[6px] gap-[3px]">
-                        {calendarData_fetched &&
-                          calendarData_fetched[index - emptyDates.length + 1] &&
-                          calendarData_fetched[index - emptyDates.length + 1]
-                            .items.length > 0 &&
-                          calendarData_fetched[
-                            index - emptyDates.length + 1
-                          ].items.map((item, i) => (
-                            <div
-                              key={i}
-                              className={clsx(
-                                'h-[6px] aspect-square rounded-full',
-                                item.department === 'COMPUTER_SCI'
-                                  ? 'bg-main'
-                                  : item.department === 'EMBEDDED'
-                                  ? 'bg-[#87B9BA]'
-                                  : item.department === 'INFO_COMM'
-                                  ? 'bg-[#FE908A]'
-                                  : item.department === 'OTHERS'
-                                  ? 'bg-[#FBE08D]'
-                                  : 'bg-main'
-                              )}
-                            />
-                          ))}
+                        {(() => {
+                          const iso = date.date.format('YYYY-MM-DD');
+                          const items = itemsByIso.get(iso) ?? [];
+                          return items.length > 0
+                            ? items.map((item, i) => (
+                                <div
+                                  key={i}
+                                  className={clsx(
+                                    'h-[6px] aspect-square rounded-full',
+                                    item.department === 'COMPUTER_SCI'
+                                      ? 'bg-main'
+                                      : item.department === 'EMBEDDED'
+                                      ? 'bg-[#87B9BA]'
+                                      : item.department === 'INFO_COMM'
+                                      ? 'bg-[#FE908A]'
+                                      : item.department === 'OTHERS'
+                                      ? 'bg-[#FBE08D]'
+                                      : 'bg-main'
+                                  )}
+                                />
+                              ))
+                            : null;
+                        })()}
                       </div>
                     </div>
                   )}
@@ -342,36 +306,21 @@ export default function DateCalendar() {
             </ul>
           </main>
 
-          {/* 모달 하단 부분 */}
-          {/* <section className="flex flex-row justify-between items-center px-2">
-            초기화 버튼
-            <button
-              type="button"
-              onClick={onClickResetBtn}
-              className="text-blue-500 hover:underline"
-            >
+          {/* 모달 하단 (주석 유지)
+          <section className="flex flex-row justify-between items-center px-2">
+            <button type="button" onClick={onClickResetBtn} className="text-blue-500 hover:underline">
               초기화
             </button>
-
-            켈린더 모달 전체 닫기 버튼
-            <BlackBtn
-              type={'button'}
-              onClick={showDateCalendarModalBtn}
-              px={'4'}
-              py={'2'}
-              textSize={'sm'}
-              text={'닫기'}
-            />
-          </section> */}
+            <BlackBtn type={'button'} onClick={showDateCalendarModalBtn} px={'4'} py={'2'} textSize={'sm'} text={'닫기'} />
+          </section>
+          */}
         </div>
       </div>
 
       {/* DateCalendar 모달 바깥 부분 */}
       <div
         className="fixed top-0 left-0 w-full h-full z-[199]"
-        style={{
-          display: showYearModal ? 'block' : 'none',
-        }}
+        style={{ display: showYearModal ? 'block' : 'none' }}
         onClick={showDateCalendarModalBtn}
       ></div>
     </ShadowBox>
