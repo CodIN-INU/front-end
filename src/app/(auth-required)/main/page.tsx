@@ -214,7 +214,7 @@ const MainPage: FC = () => {
         </div>
       )}
 
-      <ShadowBox className="pl-[19px] pr-[14px] pt-[28px] pb-[25px] h-[213px]">
+      {/* <ShadowBox className="pl-[19px] pr-[14px] pt-[28px] pb-[25px] h-[213px]">
         <div>
           <div className="ml-[4px] mb-[10px]">
             <h1 className="text-[22px] font-bold">
@@ -236,12 +236,10 @@ const MainPage: FC = () => {
         <div className="absolute bottom-[25px] right-[14px]">
           <WorkingTogether />
         </div>
-      </ShadowBox>
+      </ShadowBox> */}
 
       {/* 캘린더 */}
-      <div className="font-bold text-[16px] mt-[34px] mb-[11px]">
-        정보기술대학 캘린더
-      </div>
+      <div className="font-bold text-[16px] mb-[11px]">정보기술대학 캘린더</div>
       <DateCalendar />
 
       {/* 메뉴 섹션 */}

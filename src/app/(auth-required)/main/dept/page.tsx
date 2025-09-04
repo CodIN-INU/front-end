@@ -157,7 +157,7 @@ export default function DeptPage() {
         )}
       </ShadowBox>
 
-      <ShadowBox
+      {/* <ShadowBox
         id="ananymous-voice-box"
         className="mt-[22px] pb-[22px]"
       >
@@ -198,7 +198,7 @@ export default function DeptPage() {
             목소리를 찾을 수 없습니다
           </div>
         )}
-      </ShadowBox>
+      </ShadowBox> */}
     </>
   );
 }

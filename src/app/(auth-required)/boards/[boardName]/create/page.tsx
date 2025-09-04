@@ -96,7 +96,7 @@ const CreatePostPage = () => {
 
       const postId = response?.data?.data?.postId;
       if (postId) {
-        const newPath = `/main/boards/${boardName}?postId=${postId}`;
+        const newPath = `/boards/${boardName}?postId=${postId}`;
         router.push(newPath);
       }
 

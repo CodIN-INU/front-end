@@ -10,6 +10,7 @@ import Logo from './Logo';
 import Notice from './Notice';
 import DownloadButton from './DownloadButton';
 import ReloadButton from './ReloadButton';
+import { useRouter } from 'next/navigation';
 
 type NavItem = { title: string; path: string };
 
@@ -24,6 +25,7 @@ interface HeaderProps {
   title?: string;
   showBack?: boolean;
   backOnClick?: () => void;
+  tempBackOnClick?: string; // 임시 백버튼 함수
   showLogo?: boolean;
 
   showSearch?: boolean;
@@ -43,6 +45,7 @@ const Header: React.FC<HeaderProps> = ({
   title,
   showBack = false,
   backOnClick = undefined,
+  tempBackOnClick = undefined,
   showLogo = false,
   showSearch = false,
   searchOnClick = () => {},
@@ -54,6 +57,7 @@ const Header: React.FC<HeaderProps> = ({
   topBarSetCenter = false,
   className = '',
 }) => {
+  const router = useRouter();
   return (
     <header
       className={`
@@ -67,7 +71,15 @@ const Header: React.FC<HeaderProps> = ({
           {/* Left Area */}
           <div className="absolute left-[12px] flex items-center gap-2">
             {showBack ? (
-              <BackButton onClick={backOnClick ? backOnClick : undefined} />
+              <BackButton
+                onClick={
+                  tempBackOnClick
+                    ? () => router.push(tempBackOnClick)
+                    : backOnClick
+                    ? backOnClick
+                    : undefined
+                }
+              />
             ) : null}
             {showLogo ? <Logo /> : null}
           </div>

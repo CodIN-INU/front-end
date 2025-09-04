@@ -30,6 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Header
         title="강의실 현황"
         showBack
+        tempBackOnClick="/main"
         topNav={topNav}
       />
       <DefaultBody hasHeader={2}>{children}</DefaultBody>

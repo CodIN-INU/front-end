@@ -23,11 +23,11 @@ export default function DeptBoardsHeader({
       path: `/dept-boards/faq`,
       params: `?dept=${dept}`,
     },
-    {
-      title: '익명의 소리함',
-      path: `/dept-boards/opinion`,
-      params: `?dept=${dept}`,
-    },
+    // {
+    //   title: '익명의 소리함',
+    //   path: `/dept-boards/opinion`,
+    //   params: `?dept=${dept}`,
+    // },
   ];
 
   const parsingTitle = (str: string) => {
@@ -47,6 +47,7 @@ export default function DeptBoardsHeader({
       <Header
         topNav={topNav}
         title={parsingTitle(dept) + ' 게시판'}
+        tempBackOnClick="/main/dept"
         topBarSetCenter
         showBack
       />
