@@ -140,6 +140,7 @@ const MyBoardPage: FC = () => {
       <Header
         title={headerTitle}
         showBack
+        tempBackOnClick="/mypage"
       />
       <DefaultBody hasHeader={1}>
         <PostList
