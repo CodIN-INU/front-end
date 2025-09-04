@@ -18,9 +18,7 @@ export default function SnackDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState<TicketEvent | null>(null);
-  const [ticketStatus, setTicketStatus] = useState<
-    'available' | 'upcoming' | 'countdown' | 'closed'
-  >('closed');
+  const [ticketStatus, setTicketStatus] = useState<'available' | 'upcoming' | 'countdown' | 'closed'>('closed');
   const [remainingTime, setRemainingTime] = useState('00:00');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSelected, setIsSelected] = useState<'info' | 'note'>('info');
@@ -86,9 +84,7 @@ export default function SnackDetail() {
       console.log('[SSE] ticketing-stock-sse DATA:', evt.data);
       let payload: any = evt.data;
       if (typeof payload === 'string') {
-        try {
-          payload = JSON.parse(payload);
-        } catch {}
+        try { payload = JSON.parse(payload); } catch {}
       }
 
       // 서버 시각 보정 (가능할 때만)
@@ -97,25 +93,15 @@ export default function SnackDetail() {
         if (serverMs !== null) {
           const clientMs = Date.now();
           serverOffsetRef.current = serverMs - clientMs;
-          console.log(
-            '[TIME] offset(ms)=',
-            serverOffsetRef.current,
-            ' server=',
-            new Date(serverMs).toISOString()
-          );
+          console.log('[TIME] offset(ms)=', serverOffsetRef.current, ' server=', new Date(serverMs).toISOString());
         }
       }
 
       // 수량 업데이트
       if (typeof payload?.quantity === 'number') {
-        setEventData(prev =>
-          prev ? { ...prev, currentQuantity: payload.quantity } : prev
-        );
+        setEventData(prev => (prev ? { ...prev, currentQuantity: payload.quantity } : prev));
       } else {
-        console.warn(
-          '[SSE] ticketing-stock-sse: quantity 없음/형식 불일치:',
-          payload
-        );
+        console.warn('[SSE] ticketing-stock-sse: quantity 없음/형식 불일치:', payload);
       }
     };
 
@@ -125,14 +111,14 @@ export default function SnackDetail() {
     };
 
     // 혹시 기본 메시지도 올 수 있으니 로깅
-    es.onmessage = evt => {
+    es.onmessage = (evt) => {
       console.log('[SSE] DEFAULT message:', evt.data);
     };
 
     es.addEventListener('ticketing-stock-sse', onStock as EventListener);
     es.addEventListener('heartbeat', onHeartbeat as EventListener);
 
-    es.onerror = err => {
+    es.onerror = (err) => {
       console.error('[SSE] ERROR (readyState=', es.readyState, '):', err);
       // 자동 재연결이 서버/브라우저 기본 동작임. 명시적으로 닫지 않음.
     };
@@ -151,18 +137,14 @@ export default function SnackDetail() {
     const fetchDetail = async () => {
       setIsLoading(true);
       try {
-        const response = await fetchClient<FetchSnackDetailResponse>(
-          `/ticketing/event/${idStr}`
-        );
+        const response = await fetchClient<FetchSnackDetailResponse>(`/ticketing/event/${idStr}`);
         setEventData(response.data);
         setIsInfo(response.data.existParticipationData);
         if (response.data.existParticipationData === false) setShowModal(true);
         console.log('[DETAIL] loaded:', response);
       } catch (err) {
         console.error('❌ 이벤트 상세 불러오기 실패:', err);
-        setErrorMessage(
-          '이벤트 정보를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.'
-        );
+        setErrorMessage('이벤트 정보를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.');
       } finally {
         setIsLoading(false);
       }
@@ -171,57 +153,58 @@ export default function SnackDetail() {
   }, [idStr]);
 
   // 서버 시각 보정 기반 상태 업데이트 (ms 단위) --------------------------------------
-  useEffect(() => {
-    if (!eventData) return;
+    useEffect(() => {
+        if (!eventData) return;
 
-    const updateTicketStatus = () => {
-      const ticketMs = new Date(eventData.eventTime).getTime();
-      const nowMs = Date.now() + serverOffsetRef.current; // 서버 시간 보정
-      const diffMs = ticketMs - nowMs;
+        const updateTicketStatus = () => {
+            const ticketMs = new Date(eventData.eventTime).getTime();
+            const nowMs = Date.now() + serverOffsetRef.current; // 서버 시간 보정
+            const diffMs = ticketMs - nowMs;
 
-      if (eventData.eventStatus === 'ENDED') {
-        setTicketStatus('closed');
-        setUpcomingLabel('');
-        return;
-      }
+            if (eventData.eventStatus === 'ENDED') {
+            setTicketStatus('closed');
+            setUpcomingLabel('');
+            return;
+            }
 
-      if (diffMs <= 0) {
-        setTicketStatus('available');
-        setRemainingTime('00:00');
-        setUpcomingLabel('');
-        return;
-      }
+            if (diffMs <= 0) {
+            setTicketStatus('available');
+            setRemainingTime('00:00');
+            setUpcomingLabel('');
+            return;
+            }
 
-      // 하루 이상 남음 → "오픈 n일 전"
-      if (diffMs >= 86_400_000) {
-        setTicketStatus('upcoming');
-        const days = Math.floor(diffMs / 86_400_000);
-        setUpcomingLabel(`오픈 ${days}일 전`);
-        return;
-      }
+            // 하루 이상 남음 → "오픈 n일 전"
+            if (diffMs >= 86_400_000) {
+            setTicketStatus('upcoming');
+            const days = Math.floor(diffMs / 86_400_000);
+            setUpcomingLabel(`오픈 ${days}일 전`);
+            return;
+            }
 
-      // 하루 미만 → "오픈 n시간 n분 전"
-      if (diffMs > 180_000) {
-        setTicketStatus('upcoming');
-        const hours = Math.floor(diffMs / 3_600_000);
-        const minutes = Math.floor((diffMs % 3_600_000) / 60_000);
-        setUpcomingLabel(`오픈 ${hours}시간 ${minutes}분 전`);
-        return;
-      }
+            // 하루 미만 → "오픈 n시간 n분 전"
+            if (diffMs > 180_000) {
+            setTicketStatus('upcoming');
+            const hours = Math.floor(diffMs / 3_600_000);
+            const minutes = Math.floor((diffMs % 3_600_000) / 60_000);
+            setUpcomingLabel(`오픈 ${hours}시간 ${minutes}분 전`);
+            return;
+            }
 
-      // 3분 이하 → 기존 카운트다운
-      setTicketStatus('countdown');
-      const sec = Math.ceil(diffMs / 1000);
-      const mm = String(Math.floor(sec / 60)).padStart(2, '0');
-      const ss = String(sec % 60).padStart(2, '0');
-      setRemainingTime(`${mm}:${ss}`);
-      setUpcomingLabel('');
-    };
+            // 3분 이하 →  카운트다운
+            setTicketStatus('countdown');
+            const sec = Math.ceil(diffMs / 1000);
+            const mm = String(Math.floor(sec / 60)).padStart(2, '0');
+            const ss = String(sec % 60).padStart(2, '0');
+            setRemainingTime(`${mm}:${ss}`);
+            setUpcomingLabel('');
+        };
 
-    updateTicketStatus();
-    const interval = setInterval(updateTicketStatus, 250);
-    return () => clearInterval(interval);
-  }, [eventData]);
+        updateTicketStatus();
+        const interval = setInterval(updateTicketStatus, 250);
+        return () => clearInterval(interval);
+        }, [eventData]);
+
 
   // 클릭 시 안전 버퍼 + 타임스탬프 로깅 + 헤더로 전달
   const handleTicketClick = async () => {
@@ -240,11 +223,7 @@ export default function SnackDetail() {
 
     const clientSentAt = new Date();
     const clientSentAtISO = clientSentAt.toISOString();
-    console.log(
-      '[TICKET] 클릭 -> 요청 보냄:',
-      clientSentAt.toLocaleString(),
-      clientSentAtISO
-    );
+    console.log('[TICKET] 클릭 -> 요청 보냄:', clientSentAt.toLocaleString(), clientSentAtISO);
 
     setIsLoading(true);
     try {
@@ -256,11 +235,7 @@ export default function SnackDetail() {
       });
 
       const clientReceivedAt = new Date();
-      console.log(
-        '[TICKET] 응답 수신:',
-        clientReceivedAt.toLocaleString(),
-        clientReceivedAt.toISOString()
-      );
+      console.log('[TICKET] 응답 수신:', clientReceivedAt.toLocaleString(), clientReceivedAt.toISOString());
 
       if ((res as any).code === 200) {
         router.push(`/ticketing/result?status=success&eventId=${idStr}`);
@@ -279,10 +254,7 @@ export default function SnackDetail() {
 
   return (
     <Suspense>
-      <Header
-        title="간식나눔"
-        showBack
-      />
+      <Header showBack title='간식나눔'/>
 
       <DefaultBody hasHeader={1}>
         {isLoading && <LoadingOverlay />}
@@ -305,46 +277,32 @@ export default function SnackDetail() {
         )}
 
         {!isLoading && !eventData && !errorMessage && (
-          <div className="text-gray-500 text-center mt-4">
-            이벤트 정보를 불러올 수 없습니다.
-          </div>
+          <div className="text-gray-500 text-center mt-4">이벤트 정보를 불러올 수 없습니다.</div>
         )}
 
         {!isLoading && eventData && (
           <div className="flex flex-col items-center gap-4">
             <div className="w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] py-[29px] px-4">
-              <img
-                src={eventData.eventImageUrls || '/images/default.svg'}
-                alt="간식 이미지"
-              />
+              <img src={eventData.eventImageUrls || "/images/default.svg"} alt="간식 이미지" />
             </div>
 
             <div className="w-full">
               <div className="flex justify-between items-center">
                 <div className="flex flex-row items-start font-semibold text-[18px]">
-                  잔여 수량
-                  <span className="text-[#0D99FF] ml-1 mt-[-10px]">•</span>
+                  잔여 수량<span className="text-[#0D99FF] ml-1 mt-[-10px]">•</span>
                 </div>
                 <div className="text-[#0D99FF] font-semibold text-[18px]">
                   {eventData.currentQuantity}개
                 </div>
               </div>
-              <div className="text-[12px] text-black mt-1">
-                실시간으로 업데이트 됩니다.
-              </div>
+              <div className="text-[12px] text-black mt-1">실시간으로 업데이트 됩니다.</div>
             </div>
 
             <div className="w-full border-t border-[#D4D4D4]" />
 
             <div className="flex flex-col items-center">
               <div className="text-sm text-black mt-2 text-center font-medium leading-[17px]">
-                {isInfo ? (
-                  '수령자 정보를 이미 입력했어요.'
-                ) : (
-                  <>
-                    빠른 티켓팅을 위해 수령자 <br /> 정보를 먼저 입력해주세요.
-                  </>
-                )}
+                {isInfo ? '수령자 정보를 이미 입력했어요.' : <>빠른 티켓팅을 위해 수령자 <br /> 정보를 먼저 입력해주세요.</>}
               </div>
               <button
                 className="mt-3 text-white text-[12px] px-[22px] py-[6px] gap-[10px] bg-[#0D99FF] rounded-[20px]"
@@ -356,17 +314,13 @@ export default function SnackDetail() {
 
             <div className="w-full flex justify-end text-[11px] text-[#0D99FF] gap-3">
               <button
-                className={`${
-                  isSelected === 'note' && 'text-[#AEAEAE]'
-                } underline`}
+                className={`${isSelected === 'note' && 'text-[#AEAEAE]'} underline`}
                 onClick={() => setIsSelected('info')}
               >
                 상세정보
               </button>
               <button
-                className={`${
-                  isSelected === 'info' && 'text-[#AEAEAE]'
-                } underline`}
+                className={`${isSelected === 'info' && 'text-[#AEAEAE]'} underline`}
                 onClick={() => setIsSelected('note')}
               >
                 유의사항
@@ -376,31 +330,15 @@ export default function SnackDetail() {
             <div className="flex flex-col w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] p-4 text-[12px] text-black gap-y-1">
               {isSelected === 'info' && (
                 <>
-                  <div className="font-bold text-[14px] mb-2">
-                    {eventData.eventTitle}
-                  </div>
-                  <div>
-                    일시: {formatDateTimeWithDay(eventData.eventEndTime)}
-                  </div>
+                  <div className="font-bold text-[14px] mb-2">{eventData.eventTitle}</div>
+                  <div>일시: {formatDateTimeWithDay(eventData.eventEndTime)}</div>
                   <div>장소: {eventData.locationInfo}</div>
                   <div>대상: {eventData.target}</div>
                   <div>수량: {eventData.quantity}</div>
-                  <div>
-                    티켓팅 가능 시간:{' '}
-                    {formatDateTimeWithDay(eventData.eventTime)}
-                  </div>
-                  <div className="text-black/50 self-center mt-[18px]">
-                    {eventData.description}
-                  </div>
-                  <a
-                    href={eventData.promotionLink}
-                    className="text-[#0D99FF] mt-[18px]"
-                  >
-                    학생회 간식나눔 홍보글 링크
-                  </a>
-                  <div className="self-end text-[#AEAEAE]">
-                    문의: {eventData.inquiryNumber}
-                  </div>
+                  <div>티켓팅 가능 시간: {formatDateTimeWithDay(eventData.eventTime)}</div>
+                  <div className="text-black/50 self-center mt-[18px]">{eventData.description}</div>
+                  <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px]">학생회 간식나눔 홍보글 링크</a>
+                  <div className="self-end text-[#AEAEAE]">문의: {eventData.inquiryNumber}</div>
                 </>
               )}
 
@@ -408,62 +346,32 @@ export default function SnackDetail() {
                 <>
                   <div className="font-bold text-[13px]">예매 안내</div>
                   <div>
-                    • <span className="text-[#0D99FF]">1인 1매</span>만 예매
-                    가능합니다. <br />• 반드시{' '}
-                    <span className="text-[#0D99FF]">본인의 학과·학번</span>으로
-                    예매해야 하며, 수령 시 학생증으로 본인 여부를 확인합니다.{' '}
-                    <span className="text-[#eb2e2e]">
-                      (학생증 미지참 시 수령 불가){' '}
-                    </span>
-                    <br />• 티켓은 한정 수량으로, 소진 시 조기 마감될 수
-                    있습니다.
+                    • <span className="text-[#0D99FF]">1인 1매</span>만 예매 가능합니다. <br />
+                    • 반드시 <span className="text-[#0D99FF]">본인의 학과·학번</span>으로 예매해야 하며, 수령 시 학생증으로 본인 여부를 확인합니다. <span className="text-[#eb2e2e]">(학생증 미지참 시 수령 불가) </span><br />
+                    • 티켓은 한정 수량으로, 소진 시 조기 마감될 수 있습니다.
                   </div>
                   <div className="font-bold text-[13px] mt-1">수령 안내</div>
                   <div>
-                    • 티켓팅 성공 시 발급된{' '}
-                    <span className="text-[#0D99FF]">
-                      간식나눔 교환권과 학생증
-                    </span>
-                    을 제시해야 수령 가능합니다. <br />•{' '}
-                    <span className="text-[#0D99FF]">
-                      간식나눔 시작 후 ○분 내
-                    </span>{' '}
-                    미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
+                    • 티켓팅 성공 시 발급된 <span className="text-[#0D99FF]">간식나눔 교환권과 학생증</span>을 제시해야 수령 가능합니다.  <br />
+                    • <span className="text-[#0D99FF]">간식나눔 시작 후 ○분 내</span> 미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
                   </div>
-                  <div className="font-bold text-[13px] mt-1">
-                    양도·거래 금지
-                  </div>
+                  <div className="font-bold text-[13px] mt-1">양도·거래 금지</div>
                   <div>
-                    • 티켓의{' '}
-                    <span className="text-[#0D99FF]">
-                      양도, 판매, 거래를 금지
-                    </span>
-                    하며, 적발 시 판매자와 구매자 모두 수령 불가 처리됩니다.
+                    • 티켓의 <span className="text-[#0D99FF]">양도, 판매, 거래를 금지</span>하며, 적발 시 판매자와 구매자 모두 수령 불가 처리됩니다.
                   </div>
                   <div className="font-bold text-[13px] mt-1">취소 안내</div>
                   <div>
-                    • 티켓팅 마감시간까지 자유롭게 취소할 수 있습니다. <br />•
-                    취소는{' '}
-                    <span className="text-[#0D99FF]">
-                      [마이페이지 → 간식나눔 → 티켓팅 내역]
-                    </span>
-                    에서 진행할 수 있습니다. <br />• 기재된 시간 내 미수령 시,
-                    자동으로 취소됩니다.
+                    • 티켓팅 마감시간까지 자유롭게 취소할 수 있습니다.  <br />
+                    • 취소는 <span className="text-[#0D99FF]">[마이페이지 → 간식나눔 → 티켓팅 내역]</span>에서 진행할 수 있습니다. <br />
+                    • 기재된 시간 내 미수령 시, 자동으로 취소됩니다.
                   </div>
                   <div className="font-bold text-[13px] mt-1">문의</div>
                   <div>
-                    • 서비스 이용 문의:{' '}
-                    <a
-                      href="https://www.instagram.com/codin_inu?igsh=bnZ0YmhjaWxtMXp4"
-                      className="underline text-[#0D99FF]"
-                    >
-                      CodIN 인스타그램{' '}
-                    </a>{' '}
-                    DM <br />• 간식나눔 관련 문의: 주관처(학생회)
+                    • 서비스 이용 문의: <a href="https://www.instagram.com/codin_inu?igsh=bnZ0YmhjaWxtMXp4" className="underline text-[#0D99FF]">CodIN 인스타그램 </a> DM <br />
+                    • 간식나눔 관련 문의: 주관처(학생회)
                   </div>
                   <div className="text-[#AEAEAE] text-center mt-2">
-                    온라인 문의 시 고객님의 학과와 학번, 성함을 남겨주시면{' '}
-                    <br /> 더 빠른 처리가 가능합니다.
+                    온라인 문의 시 고객님의 학과와 학번, 성함을 남겨주시면 <br /> 더 빠른 처리가 가능합니다.
                   </div>
                 </>
               )}
@@ -486,25 +394,18 @@ export default function SnackDetail() {
             {ticketStatus === 'upcoming' && (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-white rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
                 {/* <img src="/icons/alert.svg" alt="alert" /> 오픈 전 알림 받기 */}
-                {upcomingLabel}
+                {upcomingLabel} 
               </button>
             )}
 
             {ticketStatus === 'countdown' && (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-[#EBF0F7] rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
-                <img
-                  src="/icons/timer.svg"
-                  alt="timer"
-                />{' '}
-                <span>{remainingTime}</span>
+                <img src="/icons/timer.svg" alt="timer" /> <span>{remainingTime}</span>
               </button>
             )}
 
             {ticketStatus === 'closed' && (
-              <button
-                className="w-full h-[50px] bg-[#A6A6AB] text-[#808080] rounded-[5px] text-[18px] font-bold max-w-[500px]"
-                disabled
-              >
+              <button className="w-full h-[50px] bg-[#A6A6AB] text-[#808080] rounded-[5px] text-[18px] font-bold max-w-[500px]" disabled>
                 티켓팅 마감
               </button>
             )}
