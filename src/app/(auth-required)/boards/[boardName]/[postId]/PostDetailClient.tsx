@@ -44,9 +44,9 @@ export default function PostDetailClient({ postId }: PostDetailClientProps) {
   const toggleAction = async (action: 'like' | 'bookmark') => {
     try {
       // API 요청 URL 및 데이터 설정
-      const url = action === 'like' ? '/likes' : `/scraps/${postId}`;
+      const url = action === 'like' ? `/likes` : `/scraps/${postId}`;
       const requestData =
-        action === 'like' ? { likeType: 'POST', id: post?._id } : undefined;
+        action === 'like' ? { likeType: 'POST', likeTypeId: post?._id } : undefined;
 
       // API 호출
       const response = await apiClient.post(url, requestData);
