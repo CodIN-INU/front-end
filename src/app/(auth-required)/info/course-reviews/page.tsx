@@ -153,6 +153,7 @@ const CourseReviewPage = () => {
     <Suspense>
       <Header
         showBack
+        tempBackOnClick="/main"
         title="수강 후기"
       />
       <DefaultBody hasHeader={1}>

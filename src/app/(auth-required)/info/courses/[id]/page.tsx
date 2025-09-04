@@ -142,18 +142,24 @@ export default function CourseDetailPage() {
             <BoldWithText text="교수명">{course.professor}</BoldWithText>
             <BoldWithText text="학년">{course.grade}학년</BoldWithText>
             <BoldWithText text="학점">{course.credit}학점</BoldWithText>
-            <div className="flex">
-              <Bold>시간 :&nbsp;</Bold>
-              {/* 알고리즘 필요 */}
-              <div>
-                <p>{`화 09:00 ~ 10:30`}</p>
-                <p>{`화 09:00 ~ 10:30`}</p>
+            {course.schedule.length > 0 && (
+              <div className="flex">
+                <Bold>시간 :&nbsp;</Bold>
+                {/* 알고리즘 필요 */}
+                <div>
+                  {course.schedule.map((time, index) => (
+                    <p
+                      key={index}
+                      className="text-sr"
+                    >{`${time.day} ${time.start} ~ ${time.end}`}</p>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
-          <div className="absolute bottom-[13px] right-[20px] p-[3px] border-b text-[11px] text-active border-b-[#0D99FF] cursor-pointer">
+          {/* <div className="absolute bottom-[13px] right-[20px] p-[3px] border-b text-[11px] text-active border-b-[#0D99FF] cursor-pointer">
             <span>강의 계획서 자세히 보기</span>
-          </div>
+          </div> */}
         </div>
         {course.preCourse !== null && course.preCourse.length > 0 && (
           <div className="mt-[33px]">
@@ -190,11 +196,11 @@ export default function CourseDetailPage() {
             </div>
           </div>
         )}
-        <div className="mt-[33px]">
-          <Title>다음 키워드와 연관있어요</Title>
-          <div className="relative h-[130px] px-[23px] py-[15px] mt-[15px] mb-[23px] shadow-05134 rounded-[15px] z-50">
-            <div className="flex items-start gap-x-[10px] gap-y-[18px] flex-wrap">
-              {course.tags.length > 0 ? (
+        {course.tags.length > 0 && (
+          <div className="mt-[33px]">
+            <Title>다음 키워드와 연관있어요</Title>
+            <div className="relative h-[130px] px-[23px] py-[15px] mt-[15px] shadow-05134 rounded-[15px] z-50">
+              <div className="flex items-start gap-x-[10px] gap-y-[18px] flex-wrap">
                 <>
                   {course.tags.map((tag, i) => (
                     <CourseTagDetail
@@ -221,15 +227,11 @@ export default function CourseDetailPage() {
                     </div>
                   )}
                 </>
-              ) : (
-                <div className="text-sub text-center">
-                  등록된 키워드가 없어요
-                </div>
-              )}
+              </div>
             </div>
           </div>
-        </div>
-        <div>
+        )}
+        <div className="mt-[23px]">
           <Title>수강 후기</Title>
           <div>
             <div className="relative flex justify-evenly h-fit mb-[22px]">

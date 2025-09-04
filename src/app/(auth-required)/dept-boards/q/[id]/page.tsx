@@ -125,7 +125,7 @@ function buildMergedTableHtml(matrix: any[][]): string {
 
   // 3) HTML 출력
   let html =
-    '<table style="border-collapse:collapse;width:100%;text-align:center;border:1px solid #e5e7eb;margin:8px 0;">';
+    '<div class="w-full overflow-x-scroll"><table style="border-collapse:collapse;text-align:center;border:1px solid #e5e7eb;margin:8px 0;">';
 
   for (let i = 0; i < H; i++) {
     html += '<tr>';
@@ -141,7 +141,7 @@ function buildMergedTableHtml(matrix: any[][]): string {
     }
     html += '</tr>';
   }
-  html += '</table>';
+  html += '</table></div>';
   return html;
 }
 
@@ -197,7 +197,7 @@ export default function FaqDetailPage() {
         title={parsingTitle(dept) + ' 게시판'}
       />
       <DefaultBody hasHeader={1}>
-        <ShadowBox>
+        <ShadowBox className="overflow-hidden">
           <div className="py-[15px] px-[12px]">
             <div className="flex items-center min-w-[106px] gap-[17px] overflow-hidden">
               <img
@@ -215,7 +215,7 @@ export default function FaqDetailPage() {
             </div>
           </div>
           <hr />
-          <div className="mt-[30px] pb-[20px] px-[20px]">
+          <div className="relative w-full mt-[30px] pb-[20px] px-[20px]">
             <div>{notice.title}</div>
             <div
               className="mt-[8px] leading-6 text-[14px]"

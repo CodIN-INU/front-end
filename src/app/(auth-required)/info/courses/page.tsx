@@ -123,6 +123,7 @@ export default function CoursePage() {
     <>
       <Header
         showBack
+        tempBackOnClick="/main"
         title="교과목 검색 및 추천"
       />
       <DefaultBody hasHeader={1}>
