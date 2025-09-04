@@ -262,6 +262,7 @@ export default function VoteDetail() {
       <Header
         showBack
         title="투표 게시글"
+        tempBackOnClick="/boards"
         MenuItems={() =>
           vote?.userInfo.mine ? (
             <MenuItem onClick={() => handleMenuAction('delete')}>
