@@ -5,8 +5,6 @@ import { Post } from '@/interfaces/Post';
 import apiClient from '@/api/clients/apiClient'; // 공통 apiClient 불러오기
 import CommentSection from '@/components/comment/CommentSection';
 import ZoomableImageModal from '@/components/modals/ZoomableImageModal';
-import { FaEye, FaHeart, FaRegCommentDots, FaBookmark } from 'react-icons/fa';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
 import { transStringToChartData } from './utils/textToChartData';
 
 interface PostDetailClientProps {

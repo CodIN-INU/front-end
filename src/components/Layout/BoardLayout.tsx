@@ -51,7 +51,7 @@ const BoardLayout: FC<BoardLayoutProps> = ({
       <Header
         title={name}
         showBack
-        showReload
+        showReload={showReloadButton}
         showSearch
       />
 
