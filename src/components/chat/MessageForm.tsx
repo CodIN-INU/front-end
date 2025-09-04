@@ -1,5 +1,5 @@
 'use client';
-import { FormEvent, useState, useRef } from 'react';
+import { FormEvent, useState } from 'react';
 
 interface Message {
     content: string;
@@ -19,12 +19,13 @@ interface MessageFormProps {
 
 const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: MessageFormProps) => {
     const [messageContent, setMessageContent] = useState<string>('');
-    const inputRef = useRef<HTMLInputElement | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+ 
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-
+        console.log('전송 버튼 클릭됨')
         const getCurrentTime = (date: Date) => {
             const year = date.getFullYear();
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -68,7 +69,9 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('버튼 클릭됨')
         if (e.target.files) {
+            console.log('이미지버튼클릭1')
             const file = e.target.files[0];
             setImageFile(file); // 선택한 파일 상태 업데이트
 
@@ -81,14 +84,8 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
         }
     };
 
-    const handleImageClick = () => {
-        if (inputRef.current) {
-            inputRef.current.value = ''; // 파일 입력 초기화
-            inputRef.current.click(); // 파일 선택 창 열기
-        }
-    };
-
     return (
+        <>
         <div id="imagePrevCont">
             {imagePreview && (
                 <div className="image-preview">
@@ -104,18 +101,25 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
                     <img id="imagePrev" src={imagePreview} alt="미리보기 이미지" />
                 </div>
             )}
+             </div>
             <div id="inputCont">
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    style={{ display: 'none' }}
-                    ref={inputRef}
-                />
-                <button id="imageSubmit" onClick={handleImageClick}>
-                 
-                </button>
-                <form onSubmit={handleSubmit} id="messagesendForm" autoComplete="off">
+               
+               <div className="flex items-center justify-center w-10 h-10">
+                
+                    <label
+                        id="imageSubmit"
+                        className="flex items-center justify-center cursor-pointer"
+                    >
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"                   
+                            onChange={handleImageUpload}
+                        />
+                    </label>
+                </div>
+               
+                <div id="messagesendForm" >
                     <input
                         id="messageInput"
                         type="text"
@@ -123,11 +127,13 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
                         onChange={(e) => setMessageContent(e.target.value)}
                         placeholder="메시지를 입력하세요"
                         autoFocus
+                        className='z-0'
+                        autoComplete='off'
                     />
-                    <button type="submit" id="sendBtn" className='z-[70]'></button>
-                </form>
+                    <button id="sendBtn" className='z-10' onClick={handleSubmit}></button>
+                </div>
             </div>
-        </div>
+       </>
     );
 };
 
