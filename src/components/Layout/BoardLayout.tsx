@@ -51,7 +51,8 @@ const BoardLayout: FC<BoardLayoutProps> = ({
       <Header
         title={name}
         showBack
-        showReload
+        backOnClick={()=>router.push('/main')}
+        showReload={showReloadButton}
         showSearch
       />
 

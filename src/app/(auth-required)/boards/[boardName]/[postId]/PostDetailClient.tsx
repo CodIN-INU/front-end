@@ -5,8 +5,6 @@ import { Post } from '@/interfaces/Post';
 import apiClient from '@/api/clients/apiClient'; // 공통 apiClient 불러오기
 import CommentSection from '@/components/comment/CommentSection';
 import ZoomableImageModal from '@/components/modals/ZoomableImageModal';
-import { FaEye, FaHeart, FaRegCommentDots, FaBookmark } from 'react-icons/fa';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
 import { transStringToChartData } from './utils/textToChartData';
 
 interface PostDetailClientProps {
@@ -44,9 +42,9 @@ export default function PostDetailClient({ postId }: PostDetailClientProps) {
   const toggleAction = async (action: 'like' | 'bookmark') => {
     try {
       // API 요청 URL 및 데이터 설정
-      const url = action === 'like' ? '/likes' : `/scraps/${postId}`;
+      const url = action === 'like' ? `/likes` : `/scraps/${postId}`;
       const requestData =
-        action === 'like' ? { likeType: 'POST', id: post?._id } : undefined;
+        action === 'like' ? { likeType: 'POST', likeTypeId: post?._id } : undefined;
 
       // API 호출
       const response = await apiClient.post(url, requestData);
