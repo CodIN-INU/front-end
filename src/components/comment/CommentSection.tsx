@@ -165,32 +165,6 @@ export default function CommentSection({
   // (추가) 댓글 입력창 열림/닫힘 상태
   const [showCommentInput, setShowCommentInput] = useState<boolean>(true);
 
-  // 좋아요 토글 함수
-  const toggleLike = async (likeType: string, id: string) => {
-    try {
-      // 요청 데이터
-      const requestData = {
-        likeType, // 예: "POST", "COMMENT", "REPLY" 등
-        id, // 댓글 또는 대댓글의 고유 ID
-      };
-
-      const { data } = await axios.post(
-          "https://codin.inu.ac.kr/api/likes",
-          requestData
-      );
-
-      if (data.success) {
-        console.log("좋아요 토글 성공:", data);
-        return true;
-      } else {
-        throw new Error(data.message || "좋아요 토글 실패");
-      }
-    } catch (error: any) {
-      console.error("좋아요 토글 오류:", error.message);
-      console.error("전송한 데이터:", { likeType, id });
-      return false;
-    }
-  };
 
   //수정된 좋아요 토글 함수
   const [isCommentLiked, setIsCommentLiked] = useState<{
@@ -203,29 +177,29 @@ export default function CommentSection({
   const handleLike = async (
       e: React.MouseEvent<HTMLButtonElement>,
       likeType: string,
-      id: string
+      likeTypeId: string
   ) => {
     e.preventDefault();
 
     // 댓글 좋아요 상태 반전
-    const newLikeStatus = !isCommentLiked[id];
+    const newLikeStatus = !isCommentLiked[likeTypeId];
 
     try {
-      await PostLike(likeType, id);
+      await PostLike(likeType, likeTypeId);
       // 상태 변경
       setIsCommentLiked((prev) => {
-        const updated = { ...prev, [id]: newLikeStatus };
+        const updated = { ...prev, [likeTypeId]: newLikeStatus };
         console.log("상태 변경", updated); // 상태 변경 후 로그 출력
         return updated;
       });
 
       setRepLikecount((prev) => {
-        const updatedLikeCount = prev[id]
-            ? prev[id] + (newLikeStatus ? 1 : -1)
+        const updatedLikeCount = prev[likeTypeId]
+            ? prev[likeTypeId] + (newLikeStatus ? 1 : -1)
             : newLikeStatus
                 ? 1
                 : 0; // likeCount 계산
-        const updated = { ...prev, [id]: updatedLikeCount };
+        const updated = { ...prev, [likeTypeId]: updatedLikeCount };
         console.log("likeCount 변경됨", updated); // 상태 변경 후 로그 출력
         return updated;
       });
@@ -233,7 +207,7 @@ export default function CommentSection({
       // 댓글 목록 업데이트
       setComments((prevComments) => {
         return prevComments.map((Comment: Comment) => {
-          if (Comment._id === id) {
+          if (Comment._id === likeTypeId) {
             // 댓글 좋아요 상태 반영
             console.log("좋아요 수 변경됨", Comment.likeCount);
             return {
