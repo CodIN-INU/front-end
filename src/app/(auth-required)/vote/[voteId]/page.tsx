@@ -120,7 +120,7 @@ export default function VoteDetail() {
       // API 요청 URL 및 데이터 설정
       const url = action === 'like' ? '/likes' : `/scraps/${voteId}`;
       const requestData =
-        action === 'like' ? { likeType: 'POST', id: vote?._id } : undefined;
+        action === 'like' ? { likeType: 'POST', likeTypeId: vote?._id } : undefined;
 
       // API 호출
       const response = await apiClient.post(url, requestData);
