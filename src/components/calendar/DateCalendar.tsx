@@ -128,18 +128,25 @@ export default function DateCalendar() {
     fetchCalendarData();
   }, [today]);
 
-  useEffect(() => {
-    document.addEventListener('click', e => {
-      e.preventDefault();
-      const target = e.target as HTMLElement;
-      if (!target.id.includes('calendar-day')) {
+  // 2) 전역 클릭 리스너 교체
+    useEffect(() => {
+      function handleDocClick(e: MouseEvent) {
+        // 기본 동작 막지 않음! (preventDefault 제거)
+        const el = e.target as HTMLElement | null;
+        // 달력 날짜 셀 내부를 클릭한 경우는 유지
+        if (el && el.closest('[data-calendar-day]')) return;
         setSelectedDate(null);
       }
-    });
-    return () => {
-      document.removeEventListener('click', () => null);
-    };
-  }, []);
+
+      // 버블 단계에서만 가볍게 처리 (capture 불필요)
+      document.addEventListener('click', handleDocClick);
+
+      // 정확한 cleanup (같은 참조로 제거)
+      return () => {
+        document.removeEventListener('click', handleDocClick);
+      };
+    }, []);
+
 
   return (
     <ShadowBox>
@@ -268,7 +275,7 @@ export default function DateCalendar() {
                 >
                   {date !== null && (
                     <div className="relative flex flex-col items-center">
-                      <div
+                      {/* <div
                         id="calendar-day"
                         onClick={() =>
                           onClickChangeDate(date, index - emptyDates.length + 1)
@@ -292,7 +299,17 @@ export default function DateCalendar() {
                         )}
                       >
                         {date.date.format('D')}
+                      </div> */}
+                      <div
+                        data-calendar-day
+                        onClick={() =>
+                          onClickChangeDate(date, index - emptyDates.length + 1)
+                        }
+                        className={clsx(/* ... */)}
+                      >
+                        {date.date.format('D')}
                       </div>
+
                       <div className="flex mt-[5px] h-[6px] gap-[3px]">
                         {calendarData_fetched &&
                           calendarData_fetched[index - emptyDates.length + 1] &&

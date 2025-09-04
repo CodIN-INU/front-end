@@ -1,7 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useEffect, useRef } from 'react';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { AuthContext } from '@/context/AuthContext';
 import { GetVoteData } from '@/api/vote/getVoteData';
 import { PostVoting } from '@/api/vote/postVoting';
@@ -13,10 +12,8 @@ import Title from '@/components/common/title';
 import clsx from 'clsx';
 
 export default function Vote() {
-  const router = useRouter();
   const authContext = useContext(AuthContext);
   const chatBoxRef = useRef<HTMLDivElement | null>(null);
-  const { Auth } = authContext;
   const [voteList, setVoteList] = useState<any>([]); // 초기값은 any로 두었지만 나중에 타입을 정의할 수 있음
   const [page, setPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
