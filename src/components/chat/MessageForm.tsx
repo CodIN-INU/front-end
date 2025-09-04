@@ -124,7 +124,7 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
                         placeholder="메시지를 입력하세요"
                         autoFocus
                     />
-                    <button type="submit" id="sendBtn"></button>
+                    <button type="submit" id="sendBtn" className='z-[70]'></button>
                 </form>
             </div>
         </div>

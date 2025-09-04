@@ -256,7 +256,7 @@ export default function ChatRoom() {
     }
 
     // 페이지 뒤로 가기
-    router.back(); // router.back()은 브라우저의 뒤로가기 기능을 수행
+    router.push('/chat');
   };
 
   return (
