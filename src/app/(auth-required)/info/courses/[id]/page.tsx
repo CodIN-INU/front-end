@@ -1,4 +1,5 @@
 'use client';
+
 import Title from '@/components/common/title';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Header from '@/components/Layout/header/Header';
@@ -202,12 +203,15 @@ export default function CourseDetailPage() {
             <div className="relative h-[130px] px-[23px] py-[15px] mt-[15px] shadow-05134 rounded-[15px] z-50">
               <div className="flex items-start gap-x-[10px] gap-y-[18px] flex-wrap">
                 <>
-                  {course.tags.map((tag, i) => (
-                    <CourseTagDetail
-                      key={i}
-                      tag={tag}
-                    />
-                  ))}
+                  <div className="flex w-full justify-around">
+                    {course.tags.slice(3).map((tag, i) => (
+                      <CourseTagDetail
+                        key={i}
+                        tag={tag}
+                        width="100px"
+                      />
+                    ))}
+                  </div>
                   {!course.openKeyword && (
                     <div
                       className="absolute top-[48px] left-0 w-full h-[calc(100%-48px)] backdrop-blur-[6.4px] rounded-[15px] z-10
@@ -219,11 +223,14 @@ export default function CourseDetailPage() {
                       <div className="text-active font-bold text-[12px]">
                         수강후기 3개를 달면 키워드를 모두 확인할 수 있어요
                       </div>
-                      <div className="border-b border-b-[#808080]">
+                      <Link
+                        href={'/info/course-reviews/write-review'}
+                        className="border-b border-b-[#808080] cursor-pointer"
+                      >
                         <span className="px-[4px] py-[3px] text-[11px] text-[#808080]">
                           수강 후기 남기러 가기
                         </span>
-                      </div>
+                      </Link>
                     </div>
                   )}
                 </>

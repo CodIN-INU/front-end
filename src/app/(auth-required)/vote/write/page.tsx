@@ -27,6 +27,19 @@ export default function Vote() {
     setSelectedDate(date);
   };
 
+  const convertTo24Hour = (time12h: string) => {
+    const [time, modifier] = time12h.split(' ');
+    if (!time || !modifier) return time12h; // 예외 처리
+    let [hours, minutes] = time.split(':');
+
+    // 오전/오후에 따른 시간 처리
+    if (modifier === '오후' && +hours < 12) hours = `${+hours + 12}`; // 오후 12시 이후에 12를 더해줌
+    if (modifier === '오전' && +hours === 12) hours = '00'; // 오전 12시는 00으로 설정
+
+    // 변환된 24시간 형식 시간 반환
+    return `${hours}:${minutes}`;
+  };
+
   const handletitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setTitle(e.target.value);
   };

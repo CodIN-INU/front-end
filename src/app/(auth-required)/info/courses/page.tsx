@@ -188,6 +188,7 @@ export default function CoursePage() {
           <div className="grid grid-cols-2 gap-[18px] pt-[12px]">
             {courses.map((v, i) => {
               const isLast = i === courses.length - 1;
+              if (v.tags.length > 0) console.log(v.title, '찾음 tags:', v.tags);
               return (
                 <CourseCard
                   key={v.id}
