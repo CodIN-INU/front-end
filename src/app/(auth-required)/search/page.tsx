@@ -5,11 +5,9 @@ import apiClient from '@/api/clients/apiClient';
 import PostList from '@/components/board/PostList';
 import { Post } from '@/interfaces/Post';
 import { FaSearch } from 'react-icons/fa'; // FaSearch 아이콘 import
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { Suspense } from 'react';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import CommonBtn from '@/components/buttons/commonBtn';
 
 const SearchPage: FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');

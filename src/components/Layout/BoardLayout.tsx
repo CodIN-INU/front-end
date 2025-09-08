@@ -35,15 +35,7 @@ const BoardLayout: FC<BoardLayoutProps> = ({
     console.log('BoardLayout: board', board);
   }, [activeTab]);
 
-  // backLink 정보가 있으면 해당 URL로, 없으면 기본 router.back() 실행
-  const handleBack = () => {
-    console.log('backLink', backLink);
-    if (backLink) {
-      router.push(backLink);
-    } else {
-      router.back();
-    }
-  };
+
 
   return (
     <>
@@ -51,9 +43,10 @@ const BoardLayout: FC<BoardLayoutProps> = ({
       <Header
         title={name}
         showBack
-        backOnClick={()=>router.push('/main')}
+        backOnClick={()=>router.push('/boards')}
         showReload={showReloadButton}
         showSearch
+        searchOnClick={()=>router.push('/search')}
       />
 
       <DefaultBody hasHeader={1}>
@@ -61,7 +54,7 @@ const BoardLayout: FC<BoardLayoutProps> = ({
         {hasTabs && (
           <div
             id="scrollbar-hidden"
-            className="w-full bg-white z-50 overflow-x-scroll fixed pb-[8px] pr-[40px]"
+            className="w-full bg-white z-50 overflow-x-scroll fixed pb-[8px] pr-[40px] mt-[-3px]"
           >
             <Tabs
               tabs={tabs}
