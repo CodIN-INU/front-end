@@ -119,6 +119,19 @@ export default function CoursePage() {
     }
   }, [page, filters]);
 
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     if (e.key === 'Enter') {
+  //       handleSearch();
+  //     }
+  //   };
+
+  //   document.addEventListener('keydown', handleKeyDown);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, []);
+
   return (
     <>
       <Header
@@ -133,7 +146,10 @@ export default function CoursePage() {
               type="text"
               className="w-full px-[20px] text-[13px] bg-transparent placeholder:text-[#CDCDCD] outline-none"
               placeholder="과목명, 관심분야, 희망 직무를 검색해보세요"
-              onBlur={e => setSearchQuery(e.target.value)}
+              onChange={e => {
+                setSearchQuery(e.target.value);
+                if (e.target.value !== '') handleSearch();
+              }}
             />
             <div
               onClick={handleSearch}

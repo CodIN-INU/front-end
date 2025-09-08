@@ -2,7 +2,7 @@
 
 import { fetchClient } from '@/api/clients/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
-import { usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { NoticeData } from '../type';
@@ -31,8 +31,8 @@ function timeAgo(createdAt: string | number | Date) {
 }
 
 export default function DeptNoticePage() {
-  const param = usePathname();
-  const dept = param.split('?dept=')[1] || 'COMPUTER_SCI';
+  const param = useSearchParams();
+  const dept = param.get('dept') || 'COMPUTER_SCI';
 
   const [notices, setNotices] = useState<NoticeData[]>([]);
   const [page, setPage] = useState<number>(0); // 첫 페이지: 0

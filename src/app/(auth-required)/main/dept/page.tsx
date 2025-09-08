@@ -10,13 +10,14 @@ import QuestionContainer from '@/components/dept/questionContainer';
 import DeptHeader from '@/components/dept/header';
 import CustomSelect from '@/components/info/courses/customSelect';
 import { Tag } from '@/interfaces/partners';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { fetchClient } from '@/api/clients/fetchClient';
 import type {
   Faq,
   NoticeData,
   Opinion as OpinionType,
 } from '../../dept-boards/(nav)/type';
+import { useDeptStore } from '@/hooks/useDeptStore';
 
 function timeAgo(createdAt) {
   const now = new Date();
@@ -41,15 +42,14 @@ function timeAgo(createdAt) {
 }
 
 export default function DeptPage() {
+  const { dept, setDept } = useDeptStore();
   const departments = [
     ['컴퓨터공학부', 'COMPUTER_SCI'],
     ['컴퓨터공학부', 'COMPUTER_SCI'],
-    ['정보통신공학부', 'INFO_COMM'],
     ['임베디드 시스템공학부', 'EMBEDDED'],
   ];
-
-  const [dept, setDept] = useState<Tag>('COMPUTER_SCI');
   const handleDeptChange = (value: string) => {
+    localStorage.setItem('dept', value);
     setDept(value as Tag);
   };
 
@@ -70,7 +70,9 @@ export default function DeptPage() {
       console.error('Error fetching FAQs:', error);
     }
   };
+
   useEffect(() => {
+    if (!dept) return;
     const fetchOpinions = async () => {
       try {
         // Fetch opinions from the server (dummy endpoint used here)
@@ -78,7 +80,7 @@ export default function DeptPage() {
           `/voice-box?department=${dept}&page=${page}`
         );
         const data: OpinionType = response.data;
-        console.log(data);
+        console.log('익명의소리함', data);
         setVoices(data.contents);
       } catch (error) {
         console.error('Error fetching opinions:', error);
@@ -98,12 +100,26 @@ export default function DeptPage() {
     fetchNoticeData();
   }, [dept]);
 
+  const mappingDept = useMemo(() => {
+    switch (dept) {
+      case 'COMPUTER_SCI':
+        return '컴퓨터공학부';
+      case 'INFO_COMM':
+        return '정보통신공학부';
+      case 'EMBEDDED':
+        return '임베디드시스템공학부';
+      default:
+        return '컴퓨터공학부';
+    }
+  }, [dept]);
+
   return (
     <>
       <div className="flex items-center mb-[11px]">
         <CustomSelect
           onChange={handleDeptChange}
           options={departments}
+          defaultValue={mappingDept || '컴퓨터공학부'}
           onlyText
         />
         <span className="pl-[6px] font-bold text-black">학과 게시판</span>

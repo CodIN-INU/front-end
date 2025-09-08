@@ -8,14 +8,16 @@ interface CustomSelectProps {
   onChange: (value: string) => void;
   options: string[][];
   onlyText?: boolean;
+  defaultValue?: string;
 }
 
 export default function CustomSelect({
   onChange,
   options,
   onlyText = false,
+  defaultValue,
 }: CustomSelectProps) {
-  const [selected, setSelected] = useState(options[0][0]);
+  const [selected, setSelected] = useState(defaultValue || options[0][0]);
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
