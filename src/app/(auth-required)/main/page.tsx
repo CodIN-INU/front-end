@@ -212,7 +212,6 @@ const MainPage: FC = () => {
           🚧 이곳은 개발 서버입니다.
         </div>
       )}
-      
 
       {/* <ShadowBox className="pl-[19px] pr-[14px] pt-[28px] pb-[25px] h-[213px]">
         <div>
@@ -242,6 +241,7 @@ const MainPage: FC = () => {
       <div className="font-bold text-[16px] mb-[11px]">정보기술대학 캘린더</div>
       <DateCalendar />
 
+      <Link href={'/test'}>asdf</Link>
       {/* 메뉴 섹션 */}
       <section className="mt-[32px] relative flex flex-col">
         <div className="flex justify-between gap-y-[24px]">

@@ -118,7 +118,9 @@ export default function VoteDetail() {
       // API 요청 URL 및 데이터 설정
       const url = action === 'like' ? '/likes' : `/scraps/${voteId}`;
       const requestData =
-        action === 'like' ? { likeType: 'POST', likeTypeId: vote?._id } : undefined;
+        action === 'like'
+          ? { likeType: 'POST', likeTypeId: vote?._id }
+          : undefined;
 
       // API 호출
       const response = await apiClient.post(url, requestData);
@@ -177,18 +179,22 @@ export default function VoteDetail() {
     voteId: string
   ) => {
     e.preventDefault();
-    
-    if(selectedOptions.length === 0) {alert('투표 옵션을 선택해주세요');}
 
-    else try {
-      const response = await PostVoting(voteId, selectedOptions[voteId] || []);
-      console.log('결과:', response);
-      window.location.reload();
-    } catch (error) {
-      console.error('투표 실패', error);
-      const message = error.response.data.message;
-      alert(message);
-    }
+    if (selectedOptions.length === 0) {
+      alert('투표 옵션을 선택해주세요');
+    } else
+      try {
+        const response = await PostVoting(
+          voteId,
+          selectedOptions[voteId] || []
+        );
+        console.log('결과:', response);
+        window.location.reload();
+      } catch (error) {
+        console.error('투표 실패', error);
+        const message = error.response.data.message;
+        alert(message);
+      }
   };
 
   const blockUser = async () => {
@@ -263,7 +269,7 @@ export default function VoteDetail() {
       <Header
         showBack
         title="투표 게시글"
-        tempBackOnClick="/boards"
+        tempBackOnClick="/vote"
         MenuItems={() =>
           vote?.userInfo.mine ? (
             <MenuItem onClick={() => handleMenuAction('delete')}>
