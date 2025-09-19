@@ -15,8 +15,7 @@ import { fetchClient } from '@/api/clients/fetchClient';
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParamsHook = useSearchParams();
-  const next = searchParamsHook.get('next') || '/main';
+  const [next, setNext] = useState('/main');
   const [studentId, setStudentId] = useState<string>('');
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [password, setPassword] = useState<string>('');
@@ -162,7 +161,8 @@ export default function LoginPage() {
     try {
       if (!isLoginPressed) {
         setTimeout(() => {
-          const redirectUrl = window.location.origin + next;
+          const params = searchParams.get('next') || '/main';
+          const redirectUrl = window.location.origin + params;
           console.log(redirectUrl);
           window.location.href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent(
             redirectUrl
@@ -196,7 +196,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense>
       <DefaultBody>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <img

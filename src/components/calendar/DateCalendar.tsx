@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
@@ -24,7 +24,8 @@ export default function DateCalendar() {
 
   // 연도 목록
   const years: string[] = [];
-  for (let year = currentYear; year >= pastYear; year--) years.push(String(year));
+  for (let year = currentYear; year >= pastYear; year--)
+    years.push(String(year));
 
   // 요일
   const dayOfTheWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -47,8 +48,9 @@ export default function DateCalendar() {
 
   // 상태
   const [today, setToday] = useState(dayjs());
-  const [selectedDate, setSelectedDate] =
-    useState<[string, number, dayjs.Dayjs] | null>(null);
+  const [selectedDate, setSelectedDate] = useState<
+    [string, number, dayjs.Dayjs] | null
+  >(null);
   const [calendarData_fetched, setCalendarData] = useState<CalendarData[]>([]);
 
   // 달 정보
@@ -133,36 +135,37 @@ export default function DateCalendar() {
       <div className="z-[200]">
         <div className="pb-[16px]">
           {/* 선택된 날짜 툴팁: 날짜 문자열 매핑으로 표시 */}
-          {selectedDate && (itemsByIso.get(selectedDate[0])?.length ?? 0) > 0 && (
-            <div className="absolute w-max text-[10px] top-[60px] left-[50%] translate-x-[-50%] rounded-[10px] backdrop-blur-[2px] bg-[#111111A3] text-white pt-[9px] pb-[13px] px-[13px] z-[200]">
-              <div className="ml-[13px] font-normal">
-                {selectedDate[2].format('MM.DD')}
-              </div>
-              {(itemsByIso.get(selectedDate[0]) ?? []).map((item, i) => (
-                <div key={i}>
-                  <div className="flex items-center mt-[2px]">
-                    <div
-                      className={clsx(
-                        'h-[6px] aspect-square rounded-full',
-                        item.department === 'COMPUTER_SCI'
-                          ? 'bg-main'
-                          : item.department === 'EMBEDDED'
-                          ? 'bg-[#87B9BA]'
-                          : item.department === 'INFO_COMM'
-                          ? 'bg-[#FE908A]'
-                          : item.department === 'OTHERS'
-                          ? 'bg-[#FBE08D]'
-                          : 'bg-main'
-                      )}
-                    />
-                    <span className="ml-[7px] leading-[14px]">
-                      {item.content}
-                    </span>
-                  </div>
+          {selectedDate &&
+            (itemsByIso.get(selectedDate[0])?.length ?? 0) > 0 && (
+              <div className="absolute w-max text-[10px] top-[60px] left-[50%] translate-x-[-50%] rounded-[10px] backdrop-blur-[2px] bg-[#111111A3] text-white pt-[9px] pb-[13px] px-[13px] z-[200]">
+                <div className="ml-[13px] font-normal">
+                  {selectedDate[2].format('MM.DD')}
                 </div>
-              ))}
-            </div>
-          )}
+                {(itemsByIso.get(selectedDate[0]) ?? []).map((item, i) => (
+                  <div key={i}>
+                    <div className="flex items-center mt-[2px]">
+                      <div
+                        className={clsx(
+                          'h-[6px] aspect-square rounded-full',
+                          item.department === 'COMPUTER_SCI'
+                            ? 'bg-main'
+                            : item.department === 'EMBEDDED'
+                            ? 'bg-[#87B9BA]'
+                            : item.department === 'INFO_COMM'
+                            ? 'bg-[#FE908A]'
+                            : item.department === 'OTHERS'
+                            ? 'bg-[#FBE08D]'
+                            : 'bg-main'
+                        )}
+                      />
+                      <span className="ml-[7px] leading-[14px]">
+                        {item.content}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
           {/* 헤더 */}
           <header>
@@ -245,7 +248,10 @@ export default function DateCalendar() {
           <main className="px-[3.5px]">
             <ul className="flex flex-row flex-wrap">
               {calenderData.map((date, index) => (
-                <li key={index} className="w-[14.28%] mt-[11px]">
+                <li
+                  key={index}
+                  className="w-[14.28%] mt-[11px]"
+                >
                   {date !== null && (
                     <div className="relative flex flex-col items-center">
                       <div
@@ -256,18 +262,18 @@ export default function DateCalendar() {
                         }
                         className={clsx(
                           'cursor-pointer flex justify-center items-center text-[10px] font-bold w-[25px] aspect-square rounded-full',
-                          date.date.day() === 0
-                            ? '!text-[#FE908A]'
-                            : date.date.day() === 6
-                            ? '!text-active'
-                            : 'text-sub',
                           date.date.format('YYYY-MM-DD') ===
                             dayjs().format('YYYY-MM-DD')
                             ? 'bg-main !text-white'
-                            : 'bg-sub text-sub hover:bg-gray',
-                          // 선택된 날짜면 파란 배경 + 흰 글자
-                          selectedDate?.[0] === date.date.format('YYYY-MM-DD') &&
-                            'border-[2px] border-[#AEAEAE] bg-[#0D99FF] text-white'
+                            : 'bg-sub hover:bg-gray',
+                          selectedDate?.[0] ===
+                            date.date.format('YYYY-MM-DD') &&
+                            'border-[2px] border-[#AEAEAE] bg-[#0D99FF] text-white',
+                          date.date.day() === 0
+                            ? 'text-[#FE908A]'
+                            : date.date.day() === 6
+                            ? 'text-active'
+                            : 'text-sub'
                         )}
                       >
                         {date.date.format('D')}

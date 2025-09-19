@@ -34,7 +34,8 @@ export const PostReissue = async (): Promise<any> => {
       typeof window !== 'undefined' &&
       window.location.pathname !== '/login'
     ) {
-      window.location.href = '/login';
+      window.location.href =
+        '/login?next=' + encodeURIComponent(window.location.pathname);
     }
 
     throw error;
