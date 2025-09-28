@@ -2,7 +2,7 @@
 name: Issue Template
 about: 이슈 템플릿
 title: ''
-labels: "\U0001F4C3 Docs"
+labels: ''
 assignees: ''
 
 ---
