@@ -152,31 +152,31 @@ export default function LoginPage() {
   //     );
   // }
 
-  // 구글 로그인 버튼 클릭 시 구글 로그인 페이지로 리디렉션
+  /** 구글 로그인 버튼 클릭 시 실행되는 함수 */
   const handleGoogleLogin = async (
     e: React.MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    console.log('구글 로그인 버튼 클릭됨');
-    try {
-      if (!isLoginPressed) {
-        setTimeout(() => {
-          const params = searchParams.get('next') || '/main';
-          const redirectUrl = window.location.origin + params;
-          console.log(redirectUrl);
-          window.location.href = `https://codin.inu.ac.kr/api/auth/google?redirect_url=${encodeURIComponent(
-            redirectUrl
-          )}`;
-        }, 2500);
-      }
-      setIsLoginPressed(true);
-      // 구글 로그인 URL로 리디렉션
-    } catch (error) {
-      console.error('로그인 실패', error);
-      setIsLoginPressed(false);
-      alert('로그인 오류');
-    }
-  };
+      ): Promise<void> => {
+        e.preventDefault();
+        console.log("구글 로그인 버튼 클릭됨");
+        try {
+          if (!isLoginPressed) {
+            const path = searchParams.get("next") || "";
+            const host = window.location.origin;
+
+            console.log("redirect path:", path);
+
+            window.location.href = `https://codin.inu.ac.kr/api/auth/google?redirect_host=${encodeURIComponent(
+              host
+            )}&redirect_path=${encodeURIComponent(path)}`;
+          }
+          setIsLoginPressed(true);
+        } catch (error) {
+          console.error("로그인 실패", error);
+          setIsLoginPressed(false);
+          alert("로그인 오류");
+        }
+};
+
 
   const handleappleLogin = async (
     e: React.MouseEvent<HTMLButtonElement>
