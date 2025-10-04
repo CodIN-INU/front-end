@@ -352,6 +352,7 @@ export default function Vote() {
       <Header
         showBack
         title={`익명 투표`}
+        tempBackOnClick='/boards'
       />
       <DefaultBody hasHeader={1}>
         <div
