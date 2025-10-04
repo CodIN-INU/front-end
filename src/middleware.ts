@@ -7,6 +7,7 @@ const PUBLIC_PATHS = [
   /^\/_next/,
   /^\/auth\/.*/,
   /^\/main/,
+  /^\/vote/,
   /^\/test/,
   /^\/.*\.(?:js|css|png|jpg|svg|ico)$/, // 정적 자산
 ];
