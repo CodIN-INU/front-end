@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 
 const TicketingResultInner = dynamic(
   () => import('./TicketingResultInner'),
-  { ssr: false } // ✅ 핵심: 빌드/SSR에서 제외 → CSR만
+  { ssr: false } 
 );
 
 export default function Page() {

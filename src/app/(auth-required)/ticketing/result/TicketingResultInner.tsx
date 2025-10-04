@@ -54,7 +54,6 @@ export default function TicketingResultInner() {
   if (!status || !eventId) return null;
   if (isLoading && !ticket) return <div />;
 
-  // --- 아래는 당신이 준 JSX 거의 그대로 ---
   switch (status) {
     case 'success':
       return (
@@ -89,7 +88,7 @@ export default function TicketingResultInner() {
                   </p>
                 </div>
 
-                <div className="fixed bottom-0 left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
+                <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
                   <div className="text-[11px] text-center text-[#FF2525] font-normal">
                     {formatDateTimeWithDay(ticket.eventEndTime)}까지 오지 않으면
                     티켓이 자동 취소돼요.

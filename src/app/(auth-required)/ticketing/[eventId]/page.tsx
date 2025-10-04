@@ -327,7 +327,7 @@ export default function SnackDetail() {
               </button>
             </div>
 
-            <div className="flex flex-col w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] p-4 text-[12px] text-black gap-y-1">
+            <div className="flex flex-col w-full mb-[50px] bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] p-4 text-[12px] text-black gap-y-1">
               {isSelected === 'info' && (
                 <>
                   <div className="font-bold text-[14px] mb-2">{eventData.eventTitle}</div>
@@ -381,7 +381,7 @@ export default function SnackDetail() {
 
         {/* 하단 버튼 */}
         {eventData && (
-          <div className="fixed bottom-0 left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
+          <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
             {ticketStatus === 'available' && (
               <button
                 className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
