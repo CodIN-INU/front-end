@@ -15,13 +15,6 @@ import { fetchClient } from '@/api/clients/fetchClient';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [next, setNext] = useState('/main');
-  const [studentId, setStudentId] = useState<string>('');
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>('');
-
-  const [schoolLoginExplained, setSchoolLoginExplained] =
-    useState<boolean>(false);
   const authContext = useContext(AuthContext);
 
   const userContext = useContext(UserContext);
@@ -52,8 +45,6 @@ export default function LoginPage() {
     throw new Error('MyConsumer must be used within a MyProvider');
   }
 
-  const { User, updateUser } = userContext;
-
   if (!authContext) {
     throw new Error('AuthContext를 사용하려면 AuthProvider로 감싸야 합니다.');
   }
@@ -66,60 +57,6 @@ export default function LoginPage() {
     }
   }, [searchParams]);
 
-  const handleStudentIdChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setStudentId(e.target.value);
-  };
-
-  const handlePWChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setPassword(e.target.value);
-  };
-
-  const handleRememberMeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setRememberMe(e.target.checked);
-  };
-
-  const handleLogin = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    if (!studentId || !password) {
-      alert('아이디와 비밀번호를 입력해주세요.');
-      return;
-    }
-
-    try {
-      updateUser({ studentId: studentId });
-      console.log(`학번 업데이트: ${studentId}`);
-      const response = await PostPortal(studentId, password);
-      console.log(`로그인 결과: ${response}`);
-      const token = response.headers['authorization'];
-      const refreshToken = response.headers['x-refresh-token'];
-      const code = response.status;
-      if (token) {
-        console.log('Authorization 토큰:', token);
-        console.log('리프레시:', refreshToken);
-
-        // 토큰 저장 (localStorage 또는 sessionStorage)
-        localStorage.setItem('accessToken', token);
-        localStorage.setItem('refresh-token', `Bearer ${refreshToken}`);
-        // AuthContext 업데이트
-        updateAuth({ accessToken: token });
-
-        // 로그인 성공 후 메인 페이지로 이동
-        router.push('/main');
-      } else if (code === 201) {
-        router.push('/signup/profile');
-      }
-    } catch (error) {
-      console.error('로그인 실패', error);
-      alert(error);
-      //alert('이메일 혹은 비밀번호가 틀립니다. 다시 시도해주세요.');
-    }
-  };
 
   useEffect(() => {
     if (Auth.accessToken) {
@@ -154,27 +91,35 @@ export default function LoginPage() {
   /** 구글 로그인 버튼 클릭 시 실행되는 함수 */
   const handleGoogleLogin = async (
     e: React.MouseEvent<HTMLButtonElement>
-      ): Promise<void> => {
-        e.preventDefault();
-        console.log("구글 로그인 버튼 클릭됨");
-        try {
-          if (!isLoginPressed) {
-            const path = searchParams.get("next") || "";
-            const host = window.location.origin;
+  ): Promise<void> => {
+    e.preventDefault();
+    console.log("구글 로그인 버튼 클릭됨");
+    try {
+      if (!isLoginPressed) {
+        const path = searchParams.get("next");
+        const host = window.location.origin;
 
-            console.log("redirect path:", path);
+        console.log("redirect path:", path);
 
-            window.location.href = `https://codin.inu.ac.kr/api/auth/google?redirect_host=${encodeURIComponent(
-              host
-            )}&redirect_path=${encodeURIComponent(path)}`;
-          }
-          setIsLoginPressed(true);
-        } catch (error) {
-          console.error("로그인 실패", error);
-          setIsLoginPressed(false);
-          alert("로그인 오류");
+        // base url
+        let redirectUrl = `https://codin.inu.ac.kr/api/auth/google?redirect_host=${encodeURIComponent(host)}`;
+
+        // path가 있을 때만 붙이기
+        if (path) {
+          redirectUrl += `&redirect_path=${encodeURIComponent(path)}`;
         }
-};
+
+        window.location.href = redirectUrl;
+      }
+      setIsLoginPressed(true);
+      setIsClient(false);
+    } catch (error) {
+      console.error("로그인 실패", error);
+      setIsLoginPressed(false);
+      alert("로그인 오류");
+    }
+  };
+
 
 
   const handleappleLogin = async (
