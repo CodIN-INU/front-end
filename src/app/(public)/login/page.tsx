@@ -41,9 +41,8 @@ export default function LoginPage() {
     //토큰 꺼내서 있으면 자동 로그인으로
     const autoLogin = async () => {
       const response = await fetchClient('/users');
-      const result = await response.json();
-      if (result.success) {
-        router.push('/main/home');
+      if (response.success) {
+        router.push('/main');
       }
     };
     autoLogin();
