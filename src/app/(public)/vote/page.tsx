@@ -368,7 +368,7 @@ export default function Vote() {
           <VoteList voteList={voteList} />
         </div>
         <Link
-          href={`/vote/write`}
+          href={`/write/vote`}
           className="fixed bottom-[108px] right-[17px] bg-main text-white rounded-full shadow-lg p-4 hover:bg-blue-600 transition duration-300"
           aria-label="글쓰기"
         >
