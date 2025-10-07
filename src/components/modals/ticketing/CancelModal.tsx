@@ -33,7 +33,7 @@ const CancelModal: FC<CancelModalProps> = ({
 
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex justify-center items-center">
       <div className="bg-white w-[75%] max-w-[400px] rounded-xl shadow-lg p-7 relative text-center">
 
         <p className="text-[14px] font-medium mb-[26px] text-[#212121]">
