@@ -335,7 +335,7 @@ export default function SnackDetail() {
                   <div>장소: {eventData.locationInfo}</div>
                   <div>대상: {eventData.target}</div>
                   <div>수량: {eventData.quantity}</div>
-                  <div>티켓팅 가능 시간: {formatDateTimeWithDay(eventData.eventTime)}</div>
+                  <div>티켓팅 시작 시간: {formatDateTimeWithDay(eventData.eventTime)}</div>
                   <div className="text-black/50 self-center mt-[18px]">{eventData.description}</div>
                   <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px]">학생회 간식나눔 홍보글 링크</a>
                   <div className="self-end text-[#AEAEAE]">문의: {eventData.inquiryNumber}</div>
