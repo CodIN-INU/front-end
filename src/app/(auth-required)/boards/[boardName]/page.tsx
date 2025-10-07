@@ -66,9 +66,7 @@ const BoardPage: FC = () => {
 
       if (response.data.success) {
         const contents = Array.isArray(response.data.data.contents)
-          ? response.data.data.contents
-+              .filter(item => item != null && item.post != null)
-+              .map(item => item.post)
+          ? response.data.data.contents.map(item => item.post) // ✅ post만 추출
           : [];
 
         console.log('가져온 데이터 (post만):', contents);
