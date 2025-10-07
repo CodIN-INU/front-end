@@ -28,20 +28,25 @@ export default function VoteDetail() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   interface vote {
-    title: string;
-    content: string;
-    likeCount: number;
-    scrapCount: number;
-    commentCount: number;
-    hits: number;
-    createdAt: Date;
-    userInfo: {
-      scrap: boolean;
-      like: boolean;
-      mine: boolean;
-    };
-    userImageUrl: string;
-    nickname: string;
+    post: {
+      title: string;
+      content: string;
+      likeCount: number;
+      scrapCount: number;
+      commentCount: number;
+      hits: number;
+      createdAt: Date;
+      userInfo: {
+        scrap: boolean;
+        like: boolean;
+        mine: boolean;
+      };
+      userImageUrl: string;
+      nickname: string; 
+      anonymous: boolean;
+      userId: string;
+      _id: string;
+    }
     poll: {
       pollOptions: string[];
       multipleChoice: boolean;
@@ -52,9 +57,7 @@ export default function VoteDetail() {
       hasUserVoted: boolean;
       pollFinished: boolean;
     };
-    anonymous: boolean;
-    userId: string;
-    _id: string;
+   
   }
 
   useEffect(() => {
@@ -119,7 +122,7 @@ export default function VoteDetail() {
       const url = action === 'like' ? '/likes' : `/scraps/${voteId}`;
       const requestData =
         action === 'like'
-          ? { likeType: 'POST', likeTypeId: vote?._id }
+          ? { likeType: 'POST', likeTypeId: vote?.post._id }
           : undefined;
 
       // API 호출
@@ -129,23 +132,26 @@ export default function VoteDetail() {
       if (response.data.success && vote) {
         setVote({
           ...vote,
-          userInfo: {
-            ...vote.userInfo,
-            [action === 'like' ? 'like' : 'scrap']:
-              !vote.userInfo[action === 'like' ? 'like' : 'scrap'],
-          },
-          likeCount:
-            action === 'like'
-              ? vote.userInfo.like
-                ? vote.likeCount - 1
-                : vote.likeCount + 1
-              : vote.likeCount,
-          scrapCount:
-            action === 'bookmark'
-              ? vote.userInfo.scrap
-                ? vote.scrapCount - 1
-                : vote.scrapCount + 1
-              : vote.scrapCount,
+          post: {
+            ...vote.post,
+            userInfo: {
+              ...vote.post.userInfo,
+              [action === 'like' ? 'like' : 'scrap']:
+                !vote.post.userInfo[action === 'like' ? 'like' : 'scrap'],
+            },
+            likeCount:
+              action === 'like'
+                ? vote.post.userInfo.like
+                  ? vote.post.likeCount - 1
+                  : vote.post.likeCount + 1
+                : vote.post.likeCount,
+            scrapCount:
+              action === 'bookmark'
+                ? vote.post.userInfo.scrap
+                  ? vote.post.scrapCount - 1
+                  : vote.post.scrapCount + 1
+                : vote.post.scrapCount,
+          }
         });
       } else {
         console.error(
@@ -204,7 +210,7 @@ export default function VoteDetail() {
           '해당 유저의 게시물이 목록에 노출되지 않으며, 다시 해제하실 수 없습니다.'
         )
       ) {
-        await PostBlockUser(vote.userId);
+        await PostBlockUser(vote.post.userId);
         alert('유저를 차단하였습니다');
       }
     } catch (error) {
@@ -217,7 +223,7 @@ export default function VoteDetail() {
   const startChat = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await PostChatRoom(vote.title, vote.userId, vote._id);
+      const response = await PostChatRoom(vote.post.title, vote.post.userId, vote.post._id);
 
       console.log('채팅방 생성이 완료되었습니다');
       if (response?.data.data.chatRoomId) {
@@ -233,7 +239,7 @@ export default function VoteDetail() {
   const deletePost = async () => {
     try {
       if (confirm('정말로 게시물을 삭제하시겠습니까?')) {
-        await DeletePost(vote._id);
+        await DeletePost(vote.post._id);
         alert('게시물이 삭제되었습니다.');
       }
     } catch (error) {
@@ -255,7 +261,7 @@ export default function VoteDetail() {
       alert('채팅하기 클릭됨');
       startChat();
     } else if (action === 'report') {
-      openReportModal('POST', vote._id);
+      openReportModal('POST', vote.post._id);
     } else if (action === 'block') {
       blockUser();
     } else if (action === 'delete') {
@@ -271,7 +277,7 @@ export default function VoteDetail() {
         title="투표 게시글"
         tempBackOnClick="/vote"
         MenuItems={() =>
-          vote?.userInfo.mine ? (
+          vote?.post.userInfo.mine ? (
             <MenuItem onClick={() => handleMenuAction('delete')}>
               삭제하기
             </MenuItem>
@@ -294,15 +300,15 @@ export default function VoteDetail() {
         {/* 프로필 */}
         <div className="flex items-center space-x-[12px] mb-[20px]">
           <div className="w-[36px] h-[36px] bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-            {vote?.anonymous ? (
+            {vote?.post.anonymous ? (
               <img
                 src="/images/anonymousUserImage.png" // 정적 경로의 익명 이미지
                 alt="Anonymous profile"
                 className="w-full h-full object-cover"
               />
-            ) : vote?.userImageUrl ? (
+            ) : vote?.post.userImageUrl ? (
               <img
-                src={vote?.userImageUrl}
+                src={vote?.post.userImageUrl}
                 alt="User profile"
                 className="w-full h-full object-cover"
               />
@@ -313,9 +319,9 @@ export default function VoteDetail() {
 
           <div>
             <h4 className="text-sm">
-              {vote?.anonymous ? '익명' : vote?.nickname || '익명'}
+              {vote?.post.anonymous ? '익명' : vote?.post.nickname || '익명'}
             </h4>
-            <p className="text-sr text-sub">{`${vote?.createdAt}`}</p>
+            <p className="text-sr text-sub">{`${vote?.post.createdAt}`}</p>
           </div>
         </div>
 
@@ -331,14 +337,14 @@ export default function VoteDetail() {
                 id="voteTitle"
                 className="text-[16px] font-medium"
               >
-                {vote.title}
+                {vote.post.title}
               </h3>
 
               <p
                 id="voteContent"
                 className="text-[14px] font-normal"
               >
-                {vote.content}
+                {vote.post.content}
               </p>
 
               <div
@@ -359,21 +365,21 @@ export default function VoteDetail() {
                             type="checkBox"
                             key={i}
                             className="hidden peer"
-                            id={`pollOptionCheckBox-${vote._id}-${i}`}
+                            id={`pollOptionCheckBox-${vote.post._id}-${i}`}
                             onChange={() =>
                               handleCheckboxChange(
-                                vote._id,
+                                vote.post._id,
                                 i,
                                 vote.poll.multipleChoice
                               )
                             }
                             checked={
-                              selectedOptions[vote._id]?.includes(i) || false
+                              selectedOptions[vote.post._id]?.includes(i) || false
                             }
                             disabled={vote.poll.pollFinished}
                           ></input>
                           <label
-                            htmlFor={`pollOptionCheckBox-${vote._id}-${i}`}
+                            htmlFor={`pollOptionCheckBox-${vote.post._id}-${i}`}
                             className="w-[17px] h-[17px] rounded-full border border-gray-400 flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:bg-[#0D99FF] peer-checked:border-[#0D99FF] relative"
                           >
                             <img
@@ -393,12 +399,12 @@ export default function VoteDetail() {
                     <button
                       id="voteBtn"
                       className={
-                        selectedOptions[vote._id]?.length !== 0
+                        selectedOptions[vote.post._id]?.length !== 0
                           ? 'w-full rounded-[5px] bg-[#0D99FF] py-[8px] text-Mm text-white'
                           : 'w-full rounded-[5px] bg-sub py-[8px] text-Mm text-sub'
                       }
-                      disabled={selectedOptions[vote._id]?.length === 0}
-                      onClick={e => votingHandler(e, vote._id)}
+                      disabled={selectedOptions[vote.post._id]?.length === 0}
+                      onClick={e => votingHandler(e, vote.post._id)}
                     >
                       투표하기
                     </button>
@@ -482,7 +488,7 @@ export default function VoteDetail() {
                       width={16}
                       height={16}
                     />
-                    {vote.hits || 0}
+                    {vote.post.hits || 0}
                   </span>
                   <button
                     onClick={() => toggleAction('like')}
@@ -490,14 +496,14 @@ export default function VoteDetail() {
                   >
                     <img
                       src={
-                        vote.userInfo.like
+                        vote.post.userInfo.like
                           ? '/icons/board/active_heartIcon.svg'
                           : '/icons/board/heartIcon.svg'
                       }
                       width={16}
                       height={16}
                     />
-                    {vote.likeCount || 0}
+                    {vote.post.likeCount || 0}
                   </button>
                   <span className="flex items-center gap-[4.33px]">
                     <img
@@ -505,7 +511,7 @@ export default function VoteDetail() {
                       width={16}
                       height={16}
                     />
-                    {vote.commentCount || 0}
+                    {vote.post.commentCount || 0}
                   </span>
                 </div>
 
@@ -515,17 +521,17 @@ export default function VoteDetail() {
                 >
                   <img
                     src={
-                      vote.userInfo.scrap
+                      vote.post.userInfo.scrap
                         ? '/icons/board/active_BookmarkIcon.svg'
                         : '/icons/board/BookmarkIcon.svg'
                     }
                     width={16}
                     height={16}
                     className={`w-[16px] h-[16px] ${
-                      vote.userInfo.scrap ? 'text-yellow-300' : 'text-gray-500'
+                      vote.post.userInfo.scrap ? 'text-yellow-300' : 'text-gray-500'
                     }`}
                   />
-                  <span>{vote.scrapCount}</span>
+                  <span>{vote.post.scrapCount}</span>
                 </button>
               </div>
 
@@ -534,7 +540,7 @@ export default function VoteDetail() {
           )}
           <CommentSection
             postId={voteId.toString()}
-            postName={vote?.title}
+            postName={vote?.post.title}
           />
         </div>
       </DefaultBody>
