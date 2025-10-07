@@ -66,13 +66,12 @@ const BoardPage: FC = () => {
 
       if (response.data.success) {
         const contents = Array.isArray(response.data.data.contents)
-          ? response.data.data.contents.map(item => item.post) // ✅ post만 추출
+          ? response.data.data.contents
           : [];
 
-        console.log('가져온 데이터 (post만):', contents);
+        console.log('가져온 데이터:', contents);
 
         setPosts(prevPosts => [...prevPosts, ...contents]);
-
 
         if (response.data.data.nextPage === -1) {
           setHasMore(false);
