@@ -1,7 +1,6 @@
 'use client';
 import { FC, useState } from 'react';
 import { fetchClient } from '@/api/clients/fetchClient';
-import { dataUrlToFile } from '@/utils/dataUrlToFile';
 import { compressBase64Image } from '@/utils/compressBase64Image';
 interface AdminPasswordModalProps {
   onClose: () => void;
@@ -20,7 +19,6 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
   const [attempts, setAttempts] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const maxAttempts = 3;
-
   const dotColors = ['#409AF6', '#4EB1F8', '#5BC7FA', '#88D9FF'];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +52,7 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
     console.log('✅ 전송 성공:', response);
     onSubmit();
     onClose();
+    window.location.reload();
   } catch (error) {
     console.error('❌ 전송 실패:', error);
     alert('비밀번호가 틀렸거나 오류가 발생했습니다.');
