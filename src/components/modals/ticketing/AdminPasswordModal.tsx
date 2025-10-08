@@ -69,7 +69,7 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
 
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[350] flex justify-center items-center">
       <div className="bg-white w-[75%] max-w-[400px] rounded-xl shadow-lg p-6 relative text-center">
         {/* 닫기 버튼 */}
         <button className="absolute top-3 right-3 text-gray-400" onClick={onClose}>
