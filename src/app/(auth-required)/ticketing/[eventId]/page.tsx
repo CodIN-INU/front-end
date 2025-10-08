@@ -236,17 +236,17 @@ export default function SnackDetail() {
 
       const clientReceivedAt = new Date();
       console.log('[TICKET] 응답 수신:', clientReceivedAt.toLocaleString(), clientReceivedAt.toISOString());
-
       if ((res as any).code === 200) {
         router.push(`/ticketing/result?status=success&eventId=${idStr}`);
-      } else if ((res as any).code === 409) {
-        router.push(`/ticketing/result?status=soldout&eventId=${idStr}`);
-      } else {
-        router.push(`/ticketing/result?status=error&eventId=${idStr}`);
-      }
+      } 
     } catch (err) {
       console.error('티켓팅 실패', err);
-      router.push(`/ticketing/result?status=error&eventId=${idStr}`);
+      if (err.message === 'API 요청 실패: 400') {
+        router.push(`/ticketing/result?status=soldout&eventId=${idStr}`);
+      } else if (err.code !== 400){
+        router.push(`/ticketing/result?status=error&eventId=${idStr}`);
+        console.log(err.message);
+      }
     } finally {
       setIsLoading(false);
     }

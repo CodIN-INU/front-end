@@ -160,7 +160,7 @@ export default function TicketingResultInner() {
             <div className="text-balck text-[16px] font-bold text-center mt-4 mb-[45px]">
               아쉽게도 티켓이 모두 매진되었어요.
             </div>
-            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white">
+            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white" onClick={router.back}>
               취소표 확인하러 가기
             </button>
           </div>
@@ -176,7 +176,7 @@ export default function TicketingResultInner() {
               일시적인 오류로 서비스 접속에 실패했습니다. <br /> 잠시 후 다시
               시도해주세요.
             </div>
-            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white">
+            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white" onClick={router.back}>
               다시 시도하기
             </button>
           </div>
