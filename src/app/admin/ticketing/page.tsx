@@ -111,6 +111,7 @@ const TicketingPage: FC = () => {
       onTabChange={(tab) => setActiveTab(tab)}
       showSearchButton={false}
       showReloadButton={true}
+      backOnClick='/main'
     >
       {isLoading && snacks.length === 0 && (
         <div className="text-center my-4 text-gray-500">로딩 중...</div>
