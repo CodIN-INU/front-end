@@ -33,6 +33,7 @@ export interface TicketEvent { // 이벤트 상세
     inquiryNumber: string;
     promotionLink?: string;
     existParticipationData:boolean;
+    userParticipatedInEvent:boolean;
     status:string;
 }
 

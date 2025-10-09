@@ -18,7 +18,7 @@ export default function SnackDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState<TicketEvent | null>(null);
-  const [ticketStatus, setTicketStatus] = useState<'available' | 'upcoming' | 'countdown' | 'closed'>('closed');
+  const [ticketStatus, setTicketStatus] = useState<'available' | 'upcoming' | 'countdown' | 'closed' | 'completed'>('closed');
   const [remainingTime, setRemainingTime] = useState('00:00');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSelected, setIsSelected] = useState<'info' | 'note'>('info');
@@ -167,8 +167,15 @@ export default function SnackDetail() {
             return;
             }
 
-            if (diffMs <= 0) {
+            if (diffMs <= 0 && eventData.userParticipatedInEvent === false) {
             setTicketStatus('available');
+            setRemainingTime('00:00');
+            setUpcomingLabel('');
+            return;
+            }
+
+            if (diffMs <= 0 && eventData.userParticipatedInEvent === true) {
+            setTicketStatus('completed');
             setRemainingTime('00:00');
             setUpcomingLabel('');
             return;
@@ -407,6 +414,15 @@ export default function SnackDetail() {
             {ticketStatus === 'closed' && (
               <button className="w-full h-[50px] bg-[#A6A6AB] text-[#808080] rounded-[5px] text-[18px] font-bold max-w-[500px]" disabled>
                 티켓팅 마감
+              </button>
+            )}
+            
+            {ticketStatus === 'completed' && (
+              <button
+                className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
+                onClick={handleTicketClick}
+              >
+                티켓 확인하기
               </button>
             )}
           </div>
