@@ -22,8 +22,8 @@ export default function PostDetailClient({ postId }: PostDetailClientProps) {
       try {
         const response = await apiClient.get(`/posts/${postId}`);
         if (response.data.success) {
-          setPost(response.data.data);
-          console.log(response.data.data);
+          setPost(response.data.data.post);
+          console.log(response.data.data.post);
         } else {
           setError(response.data.message || '게시물 로드 실패');
         }
