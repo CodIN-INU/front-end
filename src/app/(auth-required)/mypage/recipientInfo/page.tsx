@@ -3,7 +3,7 @@
 
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { FC, useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { useRouter } from 'next/navigation';
 
@@ -16,7 +16,7 @@ export default function RecipientInfo() {
 ];
 
   const [studentId, setStudentId] = useState<string>('');
-  const [selectedDept, setSelectedDept] = useState<string | null>(null);
+  const [selectedDept, setSelectedDept] = useState<string | null>();
 
   const putUserInfo = async () => {
     if (!selectedDept && !studentId) return;
