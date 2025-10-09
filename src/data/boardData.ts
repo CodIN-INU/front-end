@@ -93,6 +93,5 @@ export const boardData: Record<string, Board> = {
             { label: '티켓팅 취소', value: 'canceled', postCategory: 'CANCELED' },
         ],
         type: 'gallery',
-    },
-
+    }
 };
