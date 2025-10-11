@@ -64,7 +64,6 @@ export async function fetchClient<Response = any>(
 
     console.error('fetchClient 에러:', errorPayload);
 
-    // ✅ JSON 형태 그대로 throw
     throw errorPayload;
   }
 
