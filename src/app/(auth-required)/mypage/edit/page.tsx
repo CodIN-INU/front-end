@@ -22,6 +22,7 @@ const UserInfoEditPage = () => {
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
 
   const user = useAuth((s)=> s.user);
@@ -67,11 +68,14 @@ const UserInfoEditPage = () => {
         e.target.value = ''; // 선택한 파일 초기화
         return;
       }
-
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
       setProfileImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
     }
   };
 
+  // 컴포넌트 언마운트/이미지 교체 시 미리보기 URL 해제
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -134,9 +138,10 @@ const UserInfoEditPage = () => {
         {/* 프로필 사진 수정 */}
         <div className="flex flex-col items-center mt-[18px]">
           <div className="w-[96px] h-[96px]">
-            {userInfo.profileImageUrl ? (
+            {previewUrl || userInfo.profileImageUrl ? (
+              // 선택 이미지가 있으면 previewUrl 최우선, 없으면 기존 URL
               <img
-                src={userInfo.profileImageUrl}
+                src={previewUrl ?? userInfo.profileImageUrl}
                 alt="Profile Image"
                 className="w-full h-full object-cover rounded-full"
               />
