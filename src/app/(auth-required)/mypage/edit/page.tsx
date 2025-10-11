@@ -8,6 +8,7 @@ import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
 import { useAuth } from '@/store/userStore';
 import LoadingOverlay from '@/components/common/LoadingOverlay';
+import { fetchClient } from '@/api/clients/fetchClient';
 
 const UserInfoEditPage = () => {
   const [userInfo, setUserInfo] = useState({
@@ -80,21 +81,22 @@ const UserInfoEditPage = () => {
     setLoading(true);
 
     // 유저 정보 수정
-    try {
-      const userResponse = await axios.put(
-        'https://codin.inu.ac.kr/api/users',
-        userInfo,
-        {
+      try {
+        const userResponse = await fetchClient('/users', {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-        }
-      );
-      console.log('User Info Updated:', userResponse.data);
-    } catch (error) {
-      console.error(error);
+          body: JSON.stringify(userInfo),
+        });
+        updateUser({
+          nickname: userInfo.nickname
+        })
         alert('수정이 완료되었습니다.');
+        console.log('User Info Updated:', userResponse);
+      } catch (error) {
         alert(error.message);
+        console.log(error);
     }
 
     // 프로필 사진 수정
