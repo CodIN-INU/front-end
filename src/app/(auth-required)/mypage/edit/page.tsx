@@ -20,7 +20,6 @@ const UserInfoEditPage = () => {
   });
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -78,8 +77,6 @@ const UserInfoEditPage = () => {
   // 컴포넌트 언마운트/이미지 교체 시 미리보기 URL 해제
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
     // 유저 정보 수정
       try {
         const userResponse = await fetchClient('/users', {
@@ -124,10 +121,7 @@ const UserInfoEditPage = () => {
 
   };
 
-  // 뒤로 가기 버튼 클릭시 mypage로 이동
-  const handleBack = () => {
-    router.push('/mypage');
-  };
+
 
   return (
     <Suspense>
