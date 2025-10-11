@@ -19,7 +19,6 @@ const UserInfoEditPage = () => {
   });
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -93,8 +92,9 @@ const UserInfoEditPage = () => {
       );
       console.log('User Info Updated:', userResponse.data);
     } catch (error) {
-      setMessage('유저 정보 수정 중 오류가 발생했습니다.');
       console.error(error);
+        alert('수정이 완료되었습니다.');
+        alert(error.message);
     }
 
     // 프로필 사진 수정
@@ -113,13 +113,13 @@ const UserInfoEditPage = () => {
           }
         );
         console.log('Profile Image Updated:', imageResponse.data);
+        alert('수정이 완료되었습니다.');
       } catch (error) {
-        setMessage('프로필 사진 수정 중 오류가 발생했습니다.');
+        alert(error.message);
         console.error(error);
       }
     }
 
-    setMessage('수정이 완료되었습니다.');
   };
 
   // 뒤로 가기 버튼 클릭시 mypage로 이동
@@ -232,7 +232,6 @@ const UserInfoEditPage = () => {
 
           
             <div className="flex flex-col w-full items-start gap-[8px]">
-              {message && <p className="text-Mm text-active">{message}</p>}
               <CommonBtn
                 text="수정하기"
                 status={1}
