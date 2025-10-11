@@ -98,7 +98,7 @@ const CreatePostPage = () => {
         const newPath = `/boards/${boardName}?postId=${postId}`;
         router.push(newPath);
       }
-
+      router.back();
       previewImages.forEach(url => URL.revokeObjectURL(url));
       setPreviewImages([]);
       setPostImages([]);
