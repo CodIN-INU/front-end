@@ -45,28 +45,7 @@ type MenuItem = {
   icon: SvgIcon;
 };
 
-const menuItems = [
-  {
-    label: '정보대 소개',
-    href: '/info/department-info/phone',
-    icon: Intro as SvgIcon,
-  },
-  {
-    label: '교과목 검색 및 추천',
-    href: '/info/courses',
-    icon: Search as SvgIcon,
-  },
-  {
-    label: '비교과',
-    href: '/boards/extracurricular',
-    icon: Extra as SvgIcon,
-  },
-  {
-    label: '간식나눔 티켓팅',
-    href: '/ticketing',
-    icon: Ticket as SvgIcon,
-  },
-] satisfies MenuItem[];
+
 
 const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
   for (const boardKey in boardData) {
@@ -93,6 +72,29 @@ const MainPage: FC = () => {
     null,
   ]);
   const [floor, setFloor] = useState<number>(1);
+  
+  const menuItems = [
+  {
+    label: '정보대 소개',
+    href: '/info/department-info/phone',
+    icon: Intro as SvgIcon,
+  },
+  {
+    label: '교과목 검색 및 추천',
+    href: '/info/courses',
+    icon: Search as SvgIcon,
+  },
+  {
+    label: '비교과',
+    href: '/boards/extracurricular',
+    icon: Extra as SvgIcon,
+  },
+  {
+    label: '간식나눔 티켓팅',
+    href: user?.userRole === 'MANAGER' ? '/admin/ticketing' : '/ticketing',
+    icon: Ticket as SvgIcon,
+  },
+] satisfies MenuItem[];
 
 useEffect(() => {
   if (hasHydrated) fetchMe();
