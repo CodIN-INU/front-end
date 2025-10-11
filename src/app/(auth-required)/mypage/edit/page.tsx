@@ -76,6 +76,14 @@ const UserInfoEditPage = () => {
   };
 
   // 컴포넌트 언마운트/이미지 교체 시 미리보기 URL 해제
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const isNickChanged = initialNick !== userInfo.nickname;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유저 정보 수정
