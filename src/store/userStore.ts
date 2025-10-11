@@ -13,6 +13,7 @@ type AuthState = {
     hasHydrated: boolean;
 
     setUser: (u: User | null) => void;
+    updateUser: (patch: Partial<User>) => void;
     fetchMe: () => Promise<void>;
     logout: () => Promise<void>;
     setHasHydrated: (v: boolean) => void;
@@ -26,6 +27,13 @@ export const useAuth = create<AuthState>()(
             hasHydrated: false,
 
             setUser: (u) => set({ user: u, status: u ? 'authenticated' : 'unauthenticated' }),
+
+            updateUser: (patch) => {
+                const prev = get().user;
+                if (!prev) return; // 로그인 안 된 상태면 무시
+                const next = { ...prev, ...patch };
+                set({ user: next, status: 'authenticated' });
+            },
 
             fetchMe: async() => {
                  // 중복 호출 방지
