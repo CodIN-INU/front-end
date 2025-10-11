@@ -22,6 +22,7 @@ const UserInfoEditPage = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [initialNick, setInitialNick] = useState<string>('');
 
 
   const user = useAuth((s)=> s.user);
@@ -78,6 +79,7 @@ const UserInfoEditPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유저 정보 수정
+    if (isNickChanged){ // 변경 사항이 있을때만 api 전송
       try {
         const userResponse = await fetchClient('/users', {
           method: 'PUT',
@@ -94,6 +96,7 @@ const UserInfoEditPage = () => {
       } catch (error) {
         alert(error.message);
         console.log(error);
+      }
     }
 
     // 프로필 사진 수정
