@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
+import LoadingOverlay from '@/components/common/LoadingOverlay';
 
 const UserInfoEditPage = () => {
   const [userInfo, setUserInfo] = useState({
@@ -18,9 +19,9 @@ const UserInfoEditPage = () => {
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [editing, setEditing] = useState(false); // 수정 모드 상태
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
   // 기존 유저 정보 가져오기
   useEffect(() => {
@@ -139,6 +140,7 @@ const UserInfoEditPage = () => {
         showBack
       />
       <DefaultBody hasHeader={1}>
+        {loading && <LoadingOverlay/>}
         {/* 프로필 사진 수정 */}
         <div className="flex flex-col items-center mt-[18px]">
           <div className="w-[96px] h-[96px]">
