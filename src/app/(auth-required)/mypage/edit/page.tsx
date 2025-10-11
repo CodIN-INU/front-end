@@ -19,7 +19,6 @@ const UserInfoEditPage = () => {
   });
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [editing, setEditing] = useState(false); // 수정 모드 상태
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -116,8 +115,6 @@ const UserInfoEditPage = () => {
       }
     }
 
-    setLoading(false);
-    setEditing(false);
     setMessage('수정이 완료되었습니다.');
   };
 
@@ -195,7 +192,6 @@ const UserInfoEditPage = () => {
               value={userInfo.nickname}
               onChange={handleInputChange}
               className="defaultInput"
-              disabled={!editing}
             />
           </div>
 
@@ -229,23 +225,15 @@ const UserInfoEditPage = () => {
             />
           </div>
 
-          {/* 수정 모드로 전환 */}
-          {editing ? (
-            <CommonBtn
-              text="수정완료"
-              status={1}
-              type="submit"
-            />
-          ) : (
+          
             <div className="flex flex-col w-full items-start gap-[8px]">
               {message && <p className="text-Mm text-active">{message}</p>}
               <CommonBtn
                 text="수정하기"
                 status={1}
-                onClick={() => setEditing(true)}
               />
             </div>
-          )}
+         
         </form>
       </DefaultBody>
     </Suspense>
