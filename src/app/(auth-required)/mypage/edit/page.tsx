@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
+import { useAuth } from '@/store/userStore';
 import LoadingOverlay from '@/components/common/LoadingOverlay';
 
 const UserInfoEditPage = () => {
@@ -23,31 +24,23 @@ const UserInfoEditPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  // 기존 유저 정보 가져오기
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('https://codin.inu.ac.kr/api/users', {
-          headers: {},
-        });
 
-        const userData = response.data.data;
-        console.log('User Data:', userData);
-        setUserInfo({
-          name: userData.name,
-          nickname: userData.nickname,
-          department: userData.department,
-          profileImageUrl: userData.profileImageUrl || '',
-          email: userData.email || '', // 이메일 필드를 포함시킴
-        });
-      } catch (error) {
-        setMessage('유저 정보를 가져오는 중 오류가 발생했습니다.');
-        console.error(error);
-      }
-    };
+  const user = useAuth((s)=> s.user);
+  const updateUser = useAuth((s) => s.updateUser);
+  const fetchMe = useAuth((s) => s.fetchMe);
 
-    fetchUserData();
-  }, []);
+  useEffect(()=>{
+    if (!user) return;
+    setUserInfo({
+      name: user.name,
+      nickname: user.nickname,
+      department: user.department,
+      profileImageUrl: user.profileImageUrl,
+      email: user.email,
+    });
+    setInitialNick(user.nickname);
+    setLoading(false);
+  },[user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
