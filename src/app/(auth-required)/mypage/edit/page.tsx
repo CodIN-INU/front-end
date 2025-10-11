@@ -108,20 +108,19 @@ const UserInfoEditPage = () => {
         const imageResponse = await axios.put(
           'https://codin.inu.ac.kr/api/users/profile',
           formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
+          { headers: { 'Content-Type': 'multipart/form-data', }, withCredentials: true}
         );
+        fetchMe();
         console.log('Profile Image Updated:', imageResponse.data);
         alert('수정이 완료되었습니다.');
+
       } catch (error) {
         alert(error.message);
         console.error(error);
       }
     }
 
+    
   };
 
 
