@@ -41,14 +41,34 @@ export async function fetchClient<Response = any>(
       throw err;
     }
   }
-
-  if (!response.ok) {
-    // 200이 아닌 경우 에러
-    throw new Error(`API 요청 실패: ${response.status}`);
-  }
-
+  
   const contentType = response.headers.get('content-type') || '';
   const text = await response.text();
+  
+  if (!response.ok) {
+    let errorData: any = {};
+
+    try {
+      // 서버에서 보낸 JSON 파싱
+      errorData = text ? JSON.parse(text) : {};
+    } catch {
+      errorData = { message: text || 'Unknown error' };
+    }
+
+    // 에러 구조 표준화
+    const errorPayload = {
+      status: response.status,
+      message: errorData.message || '요청 실패',
+      code: errorData.code || null,
+    };
+
+    console.error('fetchClient 에러:', errorPayload);
+
+    // ✅ JSON 형태 그대로 throw
+    throw errorPayload;
+  }
+
+  
   if (!text.trim()) {
     // 바디가 비어 있으면 null 반환
     return null;
