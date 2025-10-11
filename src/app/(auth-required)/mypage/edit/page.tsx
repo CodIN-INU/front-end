@@ -241,6 +241,7 @@ const UserInfoEditPage = () => {
               <CommonBtn
                 text="수정하기"
                 status={1}
+                type="submit"
               />
             </div>
          
