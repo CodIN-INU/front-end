@@ -3,9 +3,11 @@
 
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/store/userStore';
+import LoadingOverlay from '@/components/common/LoadingOverlay';
 
 export default function RecipientInfo() {
   const router = useRouter();
@@ -17,6 +19,23 @@ export default function RecipientInfo() {
 
   const [studentId, setStudentId] = useState<string>('');
   const [selectedDept, setSelectedDept] = useState<string | null>();
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [initialStudentId, setInitialStudentId] = useState<string>('');
+  const [initialDept, setInitialDept] = useState<string | null>(null);
+
+  const user = useAuth((s)=> s.user);
+  const updateUser = useAuth((s) => s.updateUser);
+
+  useEffect(()=>{
+    if (!user) return;
+
+    setStudentId(user.studentId);
+    setSelectedDept(user.department);
+    setInitialStudentId(user.studentId ?? '');
+    setInitialDept(user.department ?? null);
+    setIsInitializing(false);
+
+  },[user])
 
   const putUserInfo = async () => {
     if (!selectedDept && !studentId) return;
@@ -32,6 +51,11 @@ export default function RecipientInfo() {
           studentId: studentId,
         }),
       });
+
+      updateUser({
+        department: selectedDept,
+        studentId: studentId,
+      });
       
       console.log('✅ 유저 정보 업데이트 성공:', response);
       alert('수령자 정보 수정 완료!');
@@ -42,6 +66,9 @@ export default function RecipientInfo() {
     }
   };
 
+  const hasChanges =
+    studentId !== initialStudentId || selectedDept !== initialDept;
+
   return (
     <Suspense>
       <Header
@@ -50,7 +77,7 @@ export default function RecipientInfo() {
       />
 
       <DefaultBody hasHeader={1}>
-        <div className='border border-[#D4D4D4] mb-[22px] h-0 mt-[-10px] z-[200]'></div>
+        {isInitializing && <LoadingOverlay />}
         <div className='flex flex-row justify-start items-start pl-2 mb-2'>
                 <p className="text-[16px] text-[#212121] mb-[9px] font-semibold">
                 학과 
@@ -116,8 +143,8 @@ export default function RecipientInfo() {
         
                           <button
                             className={`mt-3 w-full h-[50px]   rounded-[5px] text-[18px] font-bold max-w-[500px] ${
-                                (!selectedDept && !studentId) ? ' cursor-not-allowed text-[#808080] bg-[#EBF0F7] ' : 'text-white bg-[#0D99FF]'}`}
-                            disabled={!selectedDept && !studentId}
+                                (!hasChanges) ? ' cursor-not-allowed text-[#808080] bg-[#EBF0F7] ' : 'text-white bg-[#0D99FF]'}`}
+                            disabled={!hasChanges}
                             onClick={putUserInfo}
                           >
                             수정하기
