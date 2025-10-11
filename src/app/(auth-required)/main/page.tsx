@@ -18,6 +18,7 @@ import RoomItemHourly from '../roomstatus/components/roomItemHourly';
 import { Lecture, LectureDict } from '../roomstatus/interfaces/page_interface';
 import { TIMETABLE_LENGTH } from '../roomstatus/constants/timeTableData';
 import PageBar from '@/components/Layout/pageBar';
+import { useAuth } from '@/store/userStore';
 
 const timeAgo = (timestamp: string): string => {
   const now = new Date();
@@ -77,6 +78,9 @@ const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
 };
 
 const MainPage: FC = () => {
+  const fetchMe = useAuth((s) => s.fetchMe);
+  const user = useAuth((s) => s.user);
+  const hasHydrated = useAuth((s) => s.hasHydrated);
   const [rankingPosts, setRankingPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -89,6 +93,11 @@ const MainPage: FC = () => {
     null,
   ]);
   const [floor, setFloor] = useState<number>(1);
+
+useEffect(() => {
+  if (hasHydrated) fetchMe();
+}, [hasHydrated, fetchMe]);
+
 
   // const [hasNewAlarm, setHasNewAlarm] = useState(false); // 알람 여부
 
