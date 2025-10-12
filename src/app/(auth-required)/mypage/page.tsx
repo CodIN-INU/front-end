@@ -89,7 +89,7 @@ export default function MyPage() {
     { label: '좋아요', href: '/mypage/board/likes' },
     { label: '스크랩', href: '/mypage/board/scraps', isSpacer: true },
     { label: '이용약관', href: '/mypage/condition', isSpacer: true },
-    { label: '알림 설정', href: '/mypage/notification', isSpacer: true },
+    //{ label: '알림 설정', href: '/mypage/notification', isSpacer: true },
     { label: '수령자 정보', href: '/mypage/recipientInfo' },
     { label: '티켓팅 내역', href: '/mypage/ticketing', isSpacer: true },
 
