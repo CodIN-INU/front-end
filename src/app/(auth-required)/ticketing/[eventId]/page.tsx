@@ -184,7 +184,7 @@ export default function SnackDetail() {
             // 하루 이상 남음 → "오픈 n일 전"
             if (diffMs >= 86_400_000) {
             setTicketStatus('upcoming');
-            const days = Math.floor(diffMs / 86_400_000);
+            const days = Math.ceil(diffMs / 86_400_000);
             setUpcomingLabel(`오픈 ${days}일 전`);
             return;
             }
