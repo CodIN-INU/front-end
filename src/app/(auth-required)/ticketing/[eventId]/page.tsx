@@ -190,7 +190,7 @@ export default function SnackDetail() {
               from.setHours(0, 0, 0, 0);
               to.setHours(0, 0, 0, 0);
               const d = Math.ceil((to.getTime() - from.getTime()) / DAY);
-              return Math.max(d, 1);
+              return Math.max(d, 0);
             };
 
             if (diffMs >= DAY) {
