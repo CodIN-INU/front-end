@@ -360,7 +360,7 @@ export default function SnackDetail() {
                   <div className="font-bold text-[13px] mt-1">수령 안내</div>
                   <div>
                     • 티켓팅 성공 시 발급된 <span className="text-[#0D99FF]">간식나눔 교환권과 학생증</span>을 제시해야 수령 가능합니다.  <br />
-                    • <span className="text-[#0D99FF]">간식나눔 시작 후 ○분 내</span> 미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
+                    • <span className="text-[#0D99FF]">간식나눔 시작 후 30분 내</span> 미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
                   </div>
                   <div className="font-bold text-[13px] mt-1">양도·거래 금지</div>
                   <div>
