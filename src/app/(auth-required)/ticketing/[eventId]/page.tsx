@@ -181,13 +181,25 @@ export default function SnackDetail() {
             return;
             }
 
-            // 하루 이상 남음 → "오픈 n일 전"
-            if (diffMs >= 86_400_000) {
-            setTicketStatus('upcoming');
-            const days = Math.ceil(diffMs / 86_400_000);
-            setUpcomingLabel(`오픈 ${days}일 전`);
-            return;
+            const DAY = 86_400_000;
+
+            const calendarDaysLeft = (fromMs: number, toMs: number) => {
+              const from = new Date(fromMs);
+              const to = new Date(toMs);
+              // 로컬 타임존 기준 자정으로 정규화 (KR은 DST 없어 안정적)
+              from.setHours(0, 0, 0, 0);
+              to.setHours(0, 0, 0, 0);
+              const d = Math.ceil((to.getTime() - from.getTime()) / DAY);
+              return Math.max(d, 0);
+            };
+
+            if (diffMs >= DAY) {
+              setTicketStatus('upcoming');
+              const days = calendarDaysLeft(nowMs, ticketMs);
+              setUpcomingLabel(`오픈 ${days}일 전`);
+              return;
             }
+
 
             // 하루 미만 → "오픈 n시간 n분 전"
             if (diffMs > 180_000) {
