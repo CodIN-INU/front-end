@@ -10,6 +10,7 @@ import CancelModal from '@/components/modals/ticketing/CancelModal';
 import { formatDateTimeWithDay } from '@/utils/date';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { TicketInfo } from '@/interfaces/SnackEvent';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
 
 export default function TicketingResultInner() {
   const searchParams = useSearchParams();
@@ -95,7 +96,7 @@ export default function TicketingResultInner() {
 
                 <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
                   <div className="text-[11px] text-center text-[#FF2525] font-normal">
-                    {formatDateTimeWithDay(extendedEndTime.toISOString())}까지 오지 않으면
+                    {convertToKoreanDate("2025.10.15 (Wed) 12:30")}까지 오지 않으면
                     티켓이 자동 취소돼요.
                     <br /> 그 전에 꼭 방문해 주세요!
                   </div>

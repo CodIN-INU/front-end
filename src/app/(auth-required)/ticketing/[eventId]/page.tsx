@@ -9,6 +9,8 @@ import UserInfoModal from '@/components/modals/ticketing/UserInfoModal';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { FetchSnackDetailResponse, TicketEvent } from '@/interfaces/SnackEvent';
 import { formatDateTimeWithDay } from '@/utils/date';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
+
 
 export default function SnackDetail() {
   const router = useRouter();
@@ -54,6 +56,34 @@ export default function SnackDetail() {
       return null;
     }
   };
+
+  // "2025.10.15 (Wed) 12:00" 같은 문자열을 로컬시간으로 파싱 → ms
+const parseBackendLocalMs = (raw: string): number | null => {
+  if (!raw) return null;
+
+  // 괄호 속 요일(영/한) 제거: (Mon|Tue|...|Sun|월|화|수|목|금|토|일)
+  const cleaned = raw.replace(
+    /\s*\((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|월|화|수|목|금|토|일)\)\s*/i,
+    ' '
+  ).trim();
+
+  // 기대 포맷: YYYY.MM.DD HH:mm  또는  YYYY-MM-DD HH:mm
+  const m = cleaned.match(
+    /^(\d{4})[.\-](\d{2})[.\-](\d{2})\s+(\d{2}):(\d{2})$/
+  );
+
+  if (m) {
+    const [, y, mo, d, hh, mm] = m.map(Number);
+    // 로컬(KST) 기준 Date 생성
+    const dt = new Date(y, mo - 1, d, hh, mm, 0, 0);
+    return dt.getTime();
+  }
+
+  // 혹시 다른 변형이 와도 마지막으로 Date.parse 시도
+  const fallback = Date.parse(cleaned);
+  return Number.isNaN(fallback) ? null : fallback;
+};
+
 
   // --- SSE 구독: 재고 실시간 업데이트 + 서버 시각 보정 ---------------------------------
   useEffect(() => {
@@ -157,7 +187,13 @@ export default function SnackDetail() {
         if (!eventData) return;
 
         const updateTicketStatus = () => {
-            const ticketMs = new Date(eventData.eventTime).getTime();
+            const ticketMs = parseBackendLocalMs(eventData.eventTime);
+            if (ticketMs === null) {
+              console.warn('[TIME] eventTime 파싱 실패:', eventData.eventTime);
+              setTicketStatus('closed');
+              return;
+            }
+
             const nowMs = Date.now() + serverOffsetRef.current; // 서버 시간 보정
             const diffMs = ticketMs - nowMs;
 
@@ -229,11 +265,17 @@ export default function SnackDetail() {
   const handleTicketClick = async () => {
     if (!eventData) return;
 
-    const ticketMs = new Date(eventData.eventTime).getTime();
-    const nowAdj = Date.now() + serverOffsetRef.current;
-    const diff = ticketMs - nowAdj;
+      const ticketMs = parseBackendLocalMs(eventData.eventTime);
+      if (ticketMs === null) {
+        alert('이벤트 시작 시간을 해석할 수 없습니다. 잠시 후 다시 시도해주세요.');
+        return;
+      }
 
-    const safetyMs = 300; // 경계 보호용 버퍼
+      const nowAdj = Date.now() + serverOffsetRef.current;
+      const diff = ticketMs - nowAdj;
+
+      const safetyMs = 300; // 경계 보호용 버퍼
+      
     if (diff > safetyMs) {
       console.log(`[TICKET] too early by ${diff}ms (safety ${safetyMs})`);
       alert('오픈까지 잠시만 기다려주세요!');
@@ -350,11 +392,11 @@ export default function SnackDetail() {
               {isSelected === 'info' && (
                 <>
                   <div className="font-bold text-[14px] mb-2">{eventData.eventTitle}</div>
-                  <div>일시: {formatDateTimeWithDay(eventData.eventEndTime)}</div>
+                  <div>일시: {convertToKoreanDate(eventData.eventEndTime)}</div>
                   <div>장소: {eventData.locationInfo}</div>
                   <div>대상: {eventData.target}</div>
                   <div>수량: {eventData.quantity}</div>
-                  <div>티켓팅 시작 시간: {formatDateTimeWithDay(eventData.eventTime)}</div>
+                  <div>티켓팅 시작 시간: {convertToKoreanDate(eventData.eventTime)}</div>
                   <div className="text-black/50 self-center mt-[18px]">{eventData.description}</div>
                   <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px]">학생회 간식나눔 홍보글 링크</a>
                   <div className="self-end text-[#AEAEAE]">문의: {eventData.inquiryNumber}</div>
