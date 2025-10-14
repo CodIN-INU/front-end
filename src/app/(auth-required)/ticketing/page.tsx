@@ -136,7 +136,7 @@ const TicketingPage: FC = () => {
                   <div className="mt-[5px] text-[12px] text-black">{convertToKoreanDate(snack.eventEndTime || '')}</div>
                   <div className="text-[12px] text-black">{snack.locationInfo}</div>
                   <div className="text-[12px] text-black">{snack.quantity}명</div>
-                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {convertToKoreanDate(snack.eventEndTime || '')}</div>
+                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {convertToKoreanDate(snack.eventTime || '')}</div>
                 </div>
                 <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-1 border-[#d4d4d4] rounded-[10px] p-2 ml-[23px]"></img>
               </div>
