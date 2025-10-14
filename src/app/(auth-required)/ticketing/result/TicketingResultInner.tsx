@@ -94,7 +94,7 @@ export default function TicketingResultInner() {
 
                 <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
                   <div className="text-[11px] text-center text-[#FF2525] font-normal">
-                    {formatDateTimeWithDay(extendedEndTime.toISOString())}까지 오지 않으면
+                    {formatDateTimeWithDay(ticket.eventEndTime)} 30분 전까지 오지 않으면
                     티켓이 자동 취소돼요.
                     <br /> 그 전에 꼭 방문해 주세요!
                   </div>
