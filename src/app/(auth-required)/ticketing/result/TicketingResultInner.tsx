@@ -44,7 +44,6 @@ export default function TicketingResultInner() {
           `/ticketing/event/participation/${eventId}`
         );
         if (!ignore) setTicket(res.data);
-        
       } catch (err) {
         console.error(err);
       } finally {
@@ -55,7 +54,7 @@ export default function TicketingResultInner() {
       ignore = true;
     };
   }, [eventId]);
-const extendedEndTime = new Date(new Date(ticket.eventEndTime).getTime() + 30 * 60 * 1000);
+
   if (!status || !eventId) return null;
   if (isLoading && !ticket) return <div />;
 
@@ -95,7 +94,7 @@ const extendedEndTime = new Date(new Date(ticket.eventEndTime).getTime() + 30 * 
 
                 <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
                   <div className="text-[11px] text-center text-[#FF2525] font-normal">
-                    {formatDateTimeWithDay(extendedEndTime.toISOString())}까지 오지 않으면
+                    {formatDateTimeWithDay(ticket.eventEndTime)} 이후 30분까지 오지 않으면
                     티켓이 자동 취소돼요.
                     <br /> 그 전에 꼭 방문해 주세요!
                   </div>
