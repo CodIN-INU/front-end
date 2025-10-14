@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { fetchClient } from "@/api/clients/fetchClient";
 import { SnackEvent, FetchSnackResponse } from "@/interfaces/SnackEvent";
 import { formatDateTimeWithDay } from '@/utils/date';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
 
 const TicketingPage: FC = () => {
   const board = boardData['ticketing'];
@@ -132,10 +133,10 @@ const TicketingPage: FC = () => {
               </div>
               <div className="flex flex-row justify-center items-start w-full">
                 <div className="flex flex-col justify-start w-full">
-                  <div className="mt-[5px] text-[12px] text-black">{formatDateTimeWithDay(snack.eventEndTime)}</div>
+                  <div className="mt-[5px] text-[12px] text-black">{convertToKoreanDate(snack.eventEndTime || '')}</div>
                   <div className="text-[12px] text-black">{snack.locationInfo}</div>
                   <div className="text-[12px] text-black">{snack.quantity}명</div>
-                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {formatDateTimeWithDay(snack.eventTime)}</div>
+                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {convertToKoreanDate(snack.eventEndTime || '')}</div>
                 </div>
                 <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-1 border-[#d4d4d4] rounded-[10px] p-2 ml-[23px]"></img>
               </div>
