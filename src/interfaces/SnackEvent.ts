@@ -61,6 +61,7 @@ export interface TicketInfo {
     locationInfo: string;
     eventEndTime: string;
     signatureImgUrl: string;
+    eventReceivedEndTime: string;
     status: 'WAITING' | 'COMPLETED' ;
   };
 
