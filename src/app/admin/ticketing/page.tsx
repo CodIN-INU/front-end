@@ -131,14 +131,14 @@ const TicketingPage: FC = () => {
                 cursor-pointer
               "
               onClick={() => {
-                if (snack.eventStatus !== 'ENDED') {
+                
                   router.push(`/admin/ticketing/${snack.eventId}`);
-                }
+                
               }}
             >
               {/* 오버레이: 이벤트 종료 시 */}
               {snack.eventStatus === 'ENDED' && (
-                <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 cursor-not-allowed" />
+                <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 " />
               )}
             <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-[#d4d4d4] rounded-[10px] p-2 mr-[14px]"></img>
             <div className="flex flex-col items-start">
