@@ -4,6 +4,7 @@ import { FC, useState, useRef } from 'react';
 import { fetchClient } from '@/api/clients/fetchClient';
 import SignatureCanvas from 'react-signature-canvas';
 import { compressBase64Image } from '@/utils/compressBase64Image';
+
 interface ChangeStatusModalProps {
   eventId: string | string[];
   userInfo:{
@@ -58,10 +59,34 @@ const ChangeStatusModal: FC<ChangeStatusModalProps> = ({ onClose, onComplete, us
     }
   };
 
+  const handleCancle = async()=>{
+    const confirmed = confirm('해당 유저의 티켓을 취소하시겠습니까?');
+    if (!confirmed) return;
+
+    try{
+      await fetchClient(`/ticketing/admin/event/${eventId}/management/cancel/${userInfo.userId}`
+        ,{
+            method: 'DELETE'
+          })
+      alert('취소하였습니다');
+      window.location.reload();
+    }catch(error){
+      console.error();
+      alert('취소 중 오류가 발생했습니다. 다시 시도해주세요');
+      window.location.reload();
+    }
+    
+  }
+
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-[70] ">
         <div className="bg-white rounded-2xl w-[80%] px-6 py-[14px] shadow-xl text-center relative max-w-[500px]">
+
+          {/* 닫기 버튼 */}
+        <button className="absolute top-3 right-3 text-gray-400" onClick={onClose}>
+          ✕
+        </button>
           {/* STEP 1 - Intro */}
         {step === 1 && (
           <>
@@ -81,16 +106,16 @@ const ChangeStatusModal: FC<ChangeStatusModalProps> = ({ onClose, onComplete, us
                 <div className='text-[12px] text-[#0D99FF] font-bold'>{userInfo.studentId}</div>
             </div>
 
-            <div className='text-[14px] text-[#212121] font-bold mt-[11px]'> 수령 완료로 변경하시겠어요?</div>
+           
         
         {/* 버튼 */}
 
             <div className='flex flex-row gap-[15px] items-center justify-center mt-[13px]'>
                 <button className='w-[119px] h-10 bg-[#EBF0F7] rounded-[5px] text-[#808080] text-[14px]'
-                        onClick={onClose}>취소</button>
+                        onClick={handleCancle}>수령 취소</button>
 
                 <button className='w-[119px] h-10 bg-[#0D99FF] rounded-[5px] text-white text-[14px]'
-                        onClick={()=>setStep(2)}>확인</button>
+                        onClick={()=>setStep(2)}>수령 완료</button>
             </div>
       </>)}
 
