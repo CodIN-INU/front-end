@@ -443,7 +443,7 @@ const parseBackendLocalMs = (raw: string): number | null => {
         {/* 하단 버튼 */}
         {eventData && (
           <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
-            {ticketStatus === 'available' && (
+            {(ticketStatus === 'available') && (eventData.currentQuantity !== 0) && (
               <button
                 className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
                 onClick={handleTicketClick}
@@ -452,26 +452,26 @@ const parseBackendLocalMs = (raw: string): number | null => {
               </button>
             )}
 
-            {ticketStatus === 'upcoming' && (
+            {(ticketStatus === 'upcoming') && (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-white rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
                 {/* <img src="/icons/alert.svg" alt="alert" /> 오픈 전 알림 받기 */}
                 {upcomingLabel} 
               </button>
             )}
 
-            {ticketStatus === 'countdown' && (
+            {(ticketStatus === 'countdown')&& (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-[#EBF0F7] rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
                 <img src="/icons/timer.svg" alt="timer" /> <span>{remainingTime}</span>
               </button>
             )}
 
-            {ticketStatus === 'closed' && (
+            {(eventData.currentQuantity === 0) && ((ticketStatus !== 'completed')) && (
               <button className="w-full h-[50px] bg-[#A6A6AB] text-[#808080] rounded-[5px] text-[18px] font-bold max-w-[500px]" disabled>
                 티켓팅 마감
               </button>
             )}
             
-            {ticketStatus === 'completed' && (
+            {(ticketStatus === 'completed') && (
               <button
                 className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
                 onClick={handleTicketClick}
