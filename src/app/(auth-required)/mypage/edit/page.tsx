@@ -23,6 +23,8 @@ const UserInfoEditPage = () => {
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [initialNick, setInitialNick] = useState<string>('');
+  const [initialName, setInitialName] = useState<string>('');
+
 
 
   const user = useAuth((s)=> s.user);
@@ -39,6 +41,7 @@ const UserInfoEditPage = () => {
       email: user.email,
     });
     setInitialNick(user.nickname);
+    setInitialName(user.name);
     setLoading(false);
   },[user])
 
@@ -83,11 +86,12 @@ const UserInfoEditPage = () => {
   }, [previewUrl]);
 
   const isNickChanged = initialNick !== userInfo.nickname;
+  const isNameChanged = initialName !== userInfo.name;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유저 정보 수정
-    if (isNickChanged){ // 변경 사항이 있을때만 api 전송
+    if (isNickChanged || isNameChanged){ // 변경 사항이 있을때만 api 전송
       try {
         const userResponse = await fetchClient('/users', {
           method: 'PUT',
@@ -97,6 +101,7 @@ const UserInfoEditPage = () => {
           body: JSON.stringify(userInfo),
         });
         updateUser({
+          name: userInfo.name,
           nickname: userInfo.nickname
         })
         alert('수정이 완료되었습니다.');
@@ -188,7 +193,6 @@ const UserInfoEditPage = () => {
               value={userInfo.name}
               onChange={handleInputChange}
               className="defaultInput"
-              disabled={true}
             />
           </div>
 
