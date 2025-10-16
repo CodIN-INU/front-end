@@ -6,8 +6,8 @@ import BoardLayout from "@/components/Layout/BoardLayout";
 import { useRouter } from "next/navigation";
 import { fetchClient } from "@/api/clients/fetchClient";
 import { MySnackEvent, FetchMySnackResponse } from "@/interfaces/SnackEvent";
-import { formatDateTimeWithDay } from '@/utils/date';
 import CancelModal from '@/components/modals/ticketing/CancelModal';
+import { convertToKoreanDate } from "@/utils/convertToKoreanDate";
 
 const TicketingPage: FC = () => {
   const board = boardData['myTicketing'];
@@ -132,7 +132,7 @@ const TicketingPage: FC = () => {
                     <p className="font-semibold text-[14px]">{snack.title}</p>
                     <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
                 </div>
-                <div className="mt-[22px] text-[12px] text-black">{formatDateTimeWithDay(snack.eventTime)}</div>
+                <div className="mt-[22px] text-[12px] text-black">{convertToKoreanDate(snack.eventTime)}</div>
                 <div className="text-[12px] text-black">{snack.locationInfo}</div>
                 <div className="text-[12px] text-black">티켓팅 완료</div>
                 
