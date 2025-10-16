@@ -91,7 +91,7 @@ const UserInfoEditPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 유저 정보 수정
-    if (isNickChanged || isNameChanged){ // 변경 사항이 있을때만 api 전송
+    if (isNickChanged){ // 변경 사항이 있을때만 api 전송
       try {
         const userResponse = await fetchClient('/users', {
           method: 'PUT',
@@ -101,8 +101,27 @@ const UserInfoEditPage = () => {
           body: JSON.stringify(userInfo),
         });
         updateUser({
-          name: userInfo.name,
           nickname: userInfo.nickname
+        })
+        alert('수정이 완료되었습니다.');
+        console.log('User Info Updated:', userResponse);
+      } catch (error) {
+        alert(error.message);
+        console.log(error);
+      }
+    }
+
+    if (isNameChanged){ // 변경 사항이 있을때만 api 전송
+      try {
+        const userResponse = await fetchClient('/users/name', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userInfo),
+        });
+        updateUser({
+          name: userInfo.name,
         })
         alert('수정이 완료되었습니다.');
         console.log('User Info Updated:', userResponse);
