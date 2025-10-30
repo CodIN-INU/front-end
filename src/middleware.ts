@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   /^\/auth\/.*/,
   /^\/main/,
   /^\/test/,
+  /^\/vote/,
   /^\/.*\.(?:js|css|png|jpg|svg|ico)$/, // 정적 자산
 ];
 
@@ -31,6 +32,7 @@ export default function middleware(req: NextRequest) {
 
   if (!access && !isPublic(pathname)) {
     // 원래 가려던 경로를 next에 실어 로그인으로
+    console.log('[MIDDLEWARE] 인증 필요 - 로그인 페이지로 리다이렉트');
     const loginUrl = new URL('/login', req.url);
     const returnTo = pathname + search;
     loginUrl.searchParams.set('next', returnTo);

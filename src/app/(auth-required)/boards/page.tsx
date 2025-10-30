@@ -26,10 +26,13 @@ const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
 const timeAgo = (timestamp: string): string => {
   const now = new Date();
   const createdAt = new Date(timestamp);
-  const diffInSeconds = Math.floor((now.getTime() - createdAt.getTime()) / 1000);
+  const diffInSeconds = Math.floor(
+    (now.getTime() - createdAt.getTime()) / 1000
+  );
   if (diffInSeconds < 60) return '방금 전';
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}분 전`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}시간 전`;
+  if (diffInSeconds < 86400)
+    return `${Math.floor(diffInSeconds / 3600)}시간 전`;
   return `${Math.floor(diffInSeconds / 86400)}일 전`;
 };
 
@@ -139,12 +142,19 @@ export default function Board() {
 
   return (
     <>
-      <Header showBack title="커뮤니티" tempBackOnClick="/main"/>
+      <Header
+        showBack
+        title="커뮤니티"
+        tempBackOnClick="/main"
+      />
       <DefaultBody hasHeader={1}>
         {/* 🔎 검색 바: sticky + form submit */}
-        <form onSubmit={handleSearch} className=' bg-white fixed top-[80px]
-        left-1/2 -translate-x-1/2 right-0 z-50 w-full max-w-[410px] '>
-          <div className="fixed top-[0px] flex relative justify-center items-center bg-[#F9F9F9] w-full h-[46px] px-[20px] rounded-[14px] shadow-[0px_6px_7.2px_#B6B6B64D] gap-[16px] z-[60]">
+        <form
+          onSubmit={handleSearch}
+          className=" bg-white fixed top-[80px]
+        left-1/2 -translate-x-1/2 right-0 z-50 w-full max-w-[410px] "
+        >
+          <div className="fixed pt-[3px] top-[-3px] flex relative justify-center items-center bg-[#F9F9F9] w-full h-[46px] px-[20px] rounded-[14px] shadow-[0px_6px_7.2px_#B6B6B64D] gap-[16px] z-[60]">
             <input
               type="text"
               className="w-full px-[20px] text-[13px] bg-transparent placeholder:text-[#CDCDCD] outline-none"
@@ -158,7 +168,10 @@ export default function Board() {
               className="cursor-pointer"
               aria-label="검색"
             >
-              <Search width={20} height={20} />
+              <Search
+                width={20}
+                height={20}
+              />
             </button>
           </div>
         </form>
@@ -167,12 +180,18 @@ export default function Board() {
         {isSearching ? (
           <>
             {/* 검색 결과 목록 */}
-            <div className='mt-[50px]'>
-              <PostList posts={posts} boardName="search" boardType="listWithCategory" />
+            <div className="mt-[50px]">
+              <PostList
+                posts={posts}
+                boardName="search"
+                boardType="listWithCategory"
+              />
             </div>
             {/* 로딩 상태 표시 */}
             {isLoading && (
-              <div className="text-center my-[18px] text-sub text-Lm">검색 중...</div>
+              <div className="text-center my-[18px] text-sub text-Lm">
+                검색 중...
+              </div>
             )}
 
             {/* 검색 결과가 없을 때 표시 */}
@@ -186,7 +205,10 @@ export default function Board() {
           <>
             {/* 기본 섹션들 */}
             <ShadowBox className="px-[15px] py-[1px] mt-[70px]">
-              <Link href={'/boards/need-help'} className="flex items-center py-[15px]">
+              <Link
+                href={'/boards/need-help'}
+                className="flex items-center py-[15px]"
+              >
                 <div className="flex justify-center items-center w-[48px] aspect-square rounded-full shadow-05134">
                   <NeedHelp />
                 </div>
@@ -198,7 +220,10 @@ export default function Board() {
                 </div>
               </Link>
               <hr />
-              <Link href={'/boards/communicate'} className="flex items-center py-[15px]">
+              <Link
+                href={'/boards/communicate'}
+                className="flex items-center py-[15px]"
+              >
                 <div className="flex justify-center items-center w-[48px] aspect-square rounded-full shadow-05134">
                   <Communicate />
                 </div>
@@ -210,7 +235,10 @@ export default function Board() {
                 </div>
               </Link>
               <hr />
-              <Link href={'/vote'} className="flex items-center py-[15px]">
+              <Link
+                href={'/vote'}
+                className="flex items-center py-[15px]"
+              >
                 <div className="flex justify-center items-center w-[48px] aspect-square rounded-full shadow-05134">
                   <Vote />
                 </div>
@@ -237,7 +265,9 @@ export default function Board() {
                   <p className="text-center text-sub">{error}</p>
                 ) : rankingPosts.length > 0 ? (
                   rankingPosts.map((post, index) => {
-                    const boardPath = mapPostCategoryToBoardPath(post.postCategory);
+                    const boardPath = mapPostCategoryToBoardPath(
+                      post.postCategory
+                    );
                     return boardPath ? (
                       <Link
                         key={index}
@@ -300,7 +330,9 @@ export default function Board() {
                   })
                 ) : (
                   <>
-                    <p className="text-center text-gray-500">게시물이 없습니다.</p>
+                    <p className="text-center text-gray-500">
+                      게시물이 없습니다.
+                    </p>
                   </>
                 )}
               </div>

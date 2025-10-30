@@ -26,6 +26,7 @@ export default function TopNav({
             <Link
               key={item.path}
               href={`${item.path}${item.params ? item.params : ''}`}
+              className="min-w-[55px]"
             >
               <div
                 className={clsx(

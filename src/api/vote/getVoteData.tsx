@@ -34,14 +34,14 @@ export const GetVoteData = async (
           } catch (error) {
             console.error('❌ 토큰 재발급 실패', error);
             // 토큰 재발급 실패시 더 이상 재시도하지 않고 로그인 페이지로 이동
-            window.location.href =
-              '/login?next=' + encodeURIComponent(window.location.pathname);
+            // window.location.href =
+            //   '/login?next=' + encodeURIComponent(window.location.pathname);
           }
         }
 
         console.error('❌ 2번 재시도 후에도 실패. 로그인 페이지로 이동합니다.');
-        window.location.href =
-          '/login?next=' + encodeURIComponent(window.location.pathname);
+        // window.location.href =
+        //   '/login?next=' + encodeURIComponent(window.location.pathname);
       }
     } else if (error.request) {
       console.error('No response received:', error.request);
