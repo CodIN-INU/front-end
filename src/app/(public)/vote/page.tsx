@@ -21,17 +21,21 @@ export default function Vote() {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
   interface VoteData {
-    title: string;
-    content: string;
-    likeCount: number;
-    scrapCount: number;
-    commentCount: number;
-    hits: number;
-    createdAt: Date;
-    userInfo: {
-      scrap: boolean;
-      like: boolean;
-    };
+    post: {
+      title: string;
+      content: string;
+      likeCount: number;
+      scrapCount: number;
+      commentCount: number;
+      hits: number;
+      createdAt: Date;
+      userInfo: {
+        scrap: boolean;
+        like: boolean;
+      };
+      anonymous: boolean;
+      _id: string;
+    }
     poll: {
       pollOptions: string[];
       multipleChoice: boolean;
@@ -42,8 +46,7 @@ export default function Vote() {
       hasUserVoted: boolean;
       pollFinished: boolean;
     };
-    anonymous: boolean;
-    _id: string;
+    
   }
 
   interface VoteListProps {
@@ -147,22 +150,22 @@ export default function Vote() {
       >
         {voteList.map((vote, _) => (
           <ShadowBox
-            key={`${vote._id}${_}`}
+            key={`${vote.post._id}${_}`}
             // id="voteIndex"
             className="my-[18px] py-[20px] px-[21px] flex flex-col"
           >
-            <Link href={`/vote/${vote._id}`}>
+            <Link href={`/vote/${vote.post._id}`}>
               <Title
               // id="voteTitle"
               >
-                {vote.title}
+                {vote.post.title}
               </Title>
             </Link>
             <p
               id="voteContent"
               className="text-[14px] font-normal text-sub"
             >
-              {vote.content}
+              {vote.post.content}
             </p>
             <div
               id="voteContainer"
@@ -195,21 +198,21 @@ export default function Vote() {
                           type="checkBox"
                           key={i}
                           className="hidden peer"
-                          id={`pollOptionCheckBox-${vote._id}-${i}`}
+                          id={`pollOptionCheckBox-${vote.post._id}-${i}`}
                           onChange={() =>
                             handleCheckboxChange(
-                              vote._id,
+                              vote.post._id,
                               i,
                               vote.poll.multipleChoice
                             )
                           }
                           checked={
-                            selectedOptions[vote._id]?.includes(i) || false
+                            selectedOptions[vote.post._id]?.includes(i) || false
                           }
                           disabled={vote.poll.pollFinished}
                         ></input>
                         <label
-                          htmlFor={`pollOptionCheckBox-${vote._id}-${i}`}
+                          htmlFor={`pollOptionCheckBox-${vote.post._id}-${i}`}
                           className="w-[17px] h-[17px] rounded-full border border-gray-400 flex items-center justify-center cursor-pointer transition-all duration-300 peer-checked:bg-[#0D99FF] peer-checked:border-[#0D99FF] relative"
                         >
                           <img
@@ -230,12 +233,12 @@ export default function Vote() {
                     id="voteBtn"
                     className={clsx(
                       'mt-[15px] mb-[4px]',
-                      selectedOptions[vote._id]?.length !== 0
+                      selectedOptions[vote.post._id]?.length !== 0
                         ? 'w-full rounded-[5px] bg-[#0D99FF] py-[8px] text-Mm text-white'
                         : 'w-full rounded-[5px] bg-sub py-[8px] text-Mm text-sub'
                     )}
-                    disabled={selectedOptions[vote._id]?.length === 0}
-                    onClick={e => votingHandler(e, vote._id)}
+                    disabled={selectedOptions[vote.post._id]?.length === 0}
+                    onClick={e => votingHandler(e, vote.post._id)}
                   >
                     투표하기
                   </button>
@@ -311,7 +314,7 @@ export default function Vote() {
                     width={16}
                     height={16}
                   />
-                  {vote.hits || 0}
+                  {vote.post.hits || 0}
                 </span>
                 <span className="flex items-center gap-[4.33px]">
                   <img
@@ -319,7 +322,7 @@ export default function Vote() {
                     width={16}
                     height={16}
                   />
-                  {vote.likeCount || 0}
+                  {vote.post.likeCount || 0}
                 </span>
                 <span className="flex items-center gap-[4.33px]">
                   <img
@@ -327,7 +330,7 @@ export default function Vote() {
                     width={16}
                     height={16}
                   />
-                  {vote.commentCount || 0}
+                  {vote.post.commentCount || 0}
                 </span>
               </div>
               <div
@@ -352,6 +355,7 @@ export default function Vote() {
       <Header
         showBack
         title={`익명 투표`}
+        tempBackOnClick='/boards'
       />
       <DefaultBody hasHeader={1}>
         <div
@@ -364,7 +368,7 @@ export default function Vote() {
           <VoteList voteList={voteList} />
         </div>
         <Link
-          href={`/vote/write`}
+          href={`/write/vote`}
           className="fixed bottom-[108px] right-[17px] bg-main text-white rounded-full shadow-lg p-4 hover:bg-blue-600 transition duration-300"
           aria-label="글쓰기"
         >

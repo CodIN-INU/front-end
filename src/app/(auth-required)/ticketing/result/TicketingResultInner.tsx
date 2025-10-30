@@ -10,6 +10,7 @@ import CancelModal from '@/components/modals/ticketing/CancelModal';
 import { formatDateTimeWithDay } from '@/utils/date';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { TicketInfo } from '@/interfaces/SnackEvent';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
 
 export default function TicketingResultInner() {
   const searchParams = useSearchParams();
@@ -22,6 +23,9 @@ export default function TicketingResultInner() {
   const [showSignModal, setShowSignModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [ticket, setTicket] = useState<TicketInfo>();
+  
+
+
 
   useEffect(() => {
     if (!status || !eventId) {
@@ -50,13 +54,14 @@ export default function TicketingResultInner() {
       ignore = true;
     };
   }, [eventId]);
+  
 
   if (!status || !eventId) return null;
   if (isLoading && !ticket) return <div />;
 
-  // --- 아래는 당신이 준 JSX 거의 그대로 ---
   switch (status) {
     case 'success':
+      const extendedEndTime = new Date(new Date(ticket.eventEndTime).getTime() + 30 * 60 * 1000);
       return (
         <Suspense>
           <Header
@@ -89,9 +94,9 @@ export default function TicketingResultInner() {
                   </p>
                 </div>
 
-                <div className="fixed bottom-0 left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
+                <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
                   <div className="text-[11px] text-center text-[#FF2525] font-normal">
-                    {formatDateTimeWithDay(ticket.eventEndTime)}까지 오지 않으면
+                    {convertToKoreanDate(ticket.eventReceivedEndTime)}까지 오지 않으면
                     티켓이 자동 취소돼요.
                     <br /> 그 전에 꼭 방문해 주세요!
                   </div>
@@ -161,7 +166,7 @@ export default function TicketingResultInner() {
             <div className="text-balck text-[16px] font-bold text-center mt-4 mb-[45px]">
               아쉽게도 티켓이 모두 매진되었어요.
             </div>
-            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white">
+            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white" onClick={router.back}>
               취소표 확인하러 가기
             </button>
           </div>
@@ -177,7 +182,7 @@ export default function TicketingResultInner() {
               일시적인 오류로 서비스 접속에 실패했습니다. <br /> 잠시 후 다시
               시도해주세요.
             </div>
-            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white">
+            <button className="w-[220px] h-[50px] bg-[#0D99FF] shadow-[0px_4px_4px_rgba(0,0,0,0.25)] rounded-full text-white" onClick={router.back}>
               다시 시도하기
             </button>
           </div>

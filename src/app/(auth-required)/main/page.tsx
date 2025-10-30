@@ -18,6 +18,7 @@ import RoomItemHourly from '../roomstatus/components/roomItemHourly';
 import { Lecture, LectureDict } from '../roomstatus/interfaces/page_interface';
 import { TIMETABLE_LENGTH } from '../roomstatus/constants/timeTableData';
 import PageBar from '@/components/Layout/pageBar';
+import { useAuth } from '@/store/userStore';
 
 const timeAgo = (timestamp: string): string => {
   const now = new Date();
@@ -44,7 +45,35 @@ type MenuItem = {
   icon: SvgIcon;
 };
 
-const menuItems = [
+
+
+const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
+  for (const boardKey in boardData) {
+    const board = boardData[boardKey];
+    const tab = board.tabs.find(tab => tab.postCategory === postCategory);
+    if (tab) return boardKey; // 해당 게시판 경로 반환
+  }
+  return null; // 매칭되는 게시판이 없을 경우
+};
+
+const MainPage: FC = () => {
+  const fetchMe = useAuth((s) => s.fetchMe);
+  const user = useAuth((s) => s.user);
+  const hasHydrated = useAuth((s) => s.hasHydrated);
+  const [rankingPosts, setRankingPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [roomStatus, setRoomStatus] = useState<LectureDict[]>([
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  const [floor, setFloor] = useState<number>(1);
+  
+  const menuItems = [
   {
     label: '정보대 소개',
     href: '/info/department-info/phone',
@@ -62,33 +91,15 @@ const menuItems = [
   },
   {
     label: '간식나눔 티켓팅',
-    href: '/ticketing',
+    href: user?.userRole === 'MANAGER' ? '/admin/ticketing' : '/ticketing',
     icon: Ticket as SvgIcon,
   },
 ] satisfies MenuItem[];
 
-const mapPostCategoryToBoardPath = (postCategory: string): string | null => {
-  for (const boardKey in boardData) {
-    const board = boardData[boardKey];
-    const tab = board.tabs.find(tab => tab.postCategory === postCategory);
-    if (tab) return boardKey; // 해당 게시판 경로 반환
-  }
-  return null; // 매칭되는 게시판이 없을 경우
-};
+useEffect(() => {
+  if (hasHydrated) fetchMe();
+}, [hasHydrated, fetchMe]);
 
-const MainPage: FC = () => {
-  const [rankingPosts, setRankingPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [roomStatus, setRoomStatus] = useState<LectureDict[]>([
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
-  const [floor, setFloor] = useState<number>(1);
 
   // const [hasNewAlarm, setHasNewAlarm] = useState(false); // 알람 여부
 

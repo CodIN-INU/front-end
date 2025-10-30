@@ -32,7 +32,7 @@ const SignModal: FC<SignModalProps> = ({ onClose, eventId }) => {
 
 
   return (
-    <div className="fixed inset-0 z-50 bg-white justify-center bottom-0 left-0 flex flex-col items-center">
+    <div className="fixed inset-0 z-[200] bg-white justify-center bottom-0 left-0 flex flex-col items-center">
       <div className="bg-white w-full h-full p-4 relative  flex flex-col justify-center max-w-[500px]">
 
         <div className='f flex items-end justify-between
@@ -70,7 +70,7 @@ const SignModal: FC<SignModalProps> = ({ onClose, eventId }) => {
             <p className="text-center text-[12px] text-black/50 mt-2 mb-4">수령 확인 및 본인 확인 용도로 사용됩니다.</p>
         </div>
         {/* 버튼 영역 */}
-        <div className="fixed bottom-0 left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
+        <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
           <button
             className="mt-3 w-full h-[50px] bg-[#EBF0F7] text-[#808080] rounded-[5px] text-[18px] font-medium max-w-[500px]"
             onClick={handleClear}

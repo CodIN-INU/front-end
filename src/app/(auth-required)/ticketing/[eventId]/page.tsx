@@ -9,6 +9,8 @@ import UserInfoModal from '@/components/modals/ticketing/UserInfoModal';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { FetchSnackDetailResponse, TicketEvent } from '@/interfaces/SnackEvent';
 import { formatDateTimeWithDay } from '@/utils/date';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
+
 
 export default function SnackDetail() {
   const router = useRouter();
@@ -18,7 +20,7 @@ export default function SnackDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [eventData, setEventData] = useState<TicketEvent | null>(null);
-  const [ticketStatus, setTicketStatus] = useState<'available' | 'upcoming' | 'countdown' | 'closed'>('closed');
+  const [ticketStatus, setTicketStatus] = useState<'available' | 'upcoming' | 'countdown' | 'closed' | 'completed'>('closed');
   const [remainingTime, setRemainingTime] = useState('00:00');
   const [errorMessage, setErrorMessage] = useState('');
   const [isSelected, setIsSelected] = useState<'info' | 'note'>('info');
@@ -54,6 +56,34 @@ export default function SnackDetail() {
       return null;
     }
   };
+
+  // "2025.10.15 (Wed) 12:00" 같은 문자열을 로컬시간으로 파싱 → ms
+const parseBackendLocalMs = (raw: string): number | null => {
+  if (!raw) return null;
+
+  // 괄호 속 요일(영/한) 제거: (Mon|Tue|...|Sun|월|화|수|목|금|토|일)
+  const cleaned = raw.replace(
+    /\s*\((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|월|화|수|목|금|토|일)\)\s*/i,
+    ' '
+  ).trim();
+
+  // 기대 포맷: YYYY.MM.DD HH:mm  또는  YYYY-MM-DD HH:mm
+  const m = cleaned.match(
+    /^(\d{4})[.\-](\d{2})[.\-](\d{2})\s+(\d{2}):(\d{2})$/
+  );
+
+  if (m) {
+    const [, y, mo, d, hh, mm] = m.map(Number);
+    // 로컬(KST) 기준 Date 생성
+    const dt = new Date(y, mo - 1, d, hh, mm, 0, 0);
+    return dt.getTime();
+  }
+
+  // 혹시 다른 변형이 와도 마지막으로 Date.parse 시도
+  const fallback = Date.parse(cleaned);
+  return Number.isNaN(fallback) ? null : fallback;
+};
+
 
   // --- SSE 구독: 재고 실시간 업데이트 + 서버 시각 보정 ---------------------------------
   useEffect(() => {
@@ -157,7 +187,13 @@ export default function SnackDetail() {
         if (!eventData) return;
 
         const updateTicketStatus = () => {
-            const ticketMs = new Date(eventData.eventTime).getTime();
+            const ticketMs = parseBackendLocalMs(eventData.eventTime);
+            if (ticketMs === null) {
+              console.warn('[TIME] eventTime 파싱 실패:', eventData.eventTime);
+              setTicketStatus('closed');
+              return;
+            }
+
             const nowMs = Date.now() + serverOffsetRef.current; // 서버 시간 보정
             const diffMs = ticketMs - nowMs;
 
@@ -167,20 +203,39 @@ export default function SnackDetail() {
             return;
             }
 
-            if (diffMs <= 0) {
+            if (diffMs <= 0 && eventData.userParticipatedInEvent === false) {
             setTicketStatus('available');
             setRemainingTime('00:00');
             setUpcomingLabel('');
             return;
             }
 
-            // 하루 이상 남음 → "오픈 n일 전"
-            if (diffMs >= 86_400_000) {
-            setTicketStatus('upcoming');
-            const days = Math.floor(diffMs / 86_400_000);
-            setUpcomingLabel(`오픈 ${days}일 전`);
+            if (diffMs <= 0 && eventData.userParticipatedInEvent === true) {
+            setTicketStatus('completed');
+            setRemainingTime('00:00');
+            setUpcomingLabel('');
             return;
             }
+
+            const DAY = 86_400_000;
+
+            const calendarDaysLeft = (fromMs: number, toMs: number) => {
+              const from = new Date(fromMs);
+              const to = new Date(toMs);
+              // 로컬 타임존 기준 자정으로 정규화 (KR은 DST 없어 안정적)
+              from.setHours(0, 0, 0, 0);
+              to.setHours(0, 0, 0, 0);
+              const d = Math.ceil((to.getTime() - from.getTime()) / DAY);
+              return Math.max(d, 0);
+            };
+
+            if (diffMs >= DAY) {
+              setTicketStatus('upcoming');
+              const days = calendarDaysLeft(nowMs, ticketMs);
+              setUpcomingLabel(`오픈 ${days}일 전`);
+              return;
+            }
+
 
             // 하루 미만 → "오픈 n시간 n분 전"
             if (diffMs > 180_000) {
@@ -210,11 +265,17 @@ export default function SnackDetail() {
   const handleTicketClick = async () => {
     if (!eventData) return;
 
-    const ticketMs = new Date(eventData.eventTime).getTime();
-    const nowAdj = Date.now() + serverOffsetRef.current;
-    const diff = ticketMs - nowAdj;
+      const ticketMs = parseBackendLocalMs(eventData.eventTime);
+      if (ticketMs === null) {
+        alert('이벤트 시작 시간을 해석할 수 없습니다. 잠시 후 다시 시도해주세요.');
+        return;
+      }
 
-    const safetyMs = 300; // 경계 보호용 버퍼
+      const nowAdj = Date.now() + serverOffsetRef.current;
+      const diff = ticketMs - nowAdj;
+
+      const safetyMs = 300; // 경계 보호용 버퍼
+      
     if (diff > safetyMs) {
       console.log(`[TICKET] too early by ${diff}ms (safety ${safetyMs})`);
       alert('오픈까지 잠시만 기다려주세요!');
@@ -236,17 +297,17 @@ export default function SnackDetail() {
 
       const clientReceivedAt = new Date();
       console.log('[TICKET] 응답 수신:', clientReceivedAt.toLocaleString(), clientReceivedAt.toISOString());
-
       if ((res as any).code === 200) {
         router.push(`/ticketing/result?status=success&eventId=${idStr}`);
-      } else if ((res as any).code === 409) {
-        router.push(`/ticketing/result?status=soldout&eventId=${idStr}`);
-      } else {
-        router.push(`/ticketing/result?status=error&eventId=${idStr}`);
-      }
+      } 
     } catch (err) {
       console.error('티켓팅 실패', err);
-      router.push(`/ticketing/result?status=error&eventId=${idStr}`);
+      if (err.message === 'API 요청 실패: 400') {
+        router.push(`/ticketing/result?status=soldout&eventId=${idStr}`);
+      } else if (err.code !== 400){
+        router.push(`/ticketing/result?status=error&eventId=${idStr}`);
+        console.log(err.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -327,15 +388,15 @@ export default function SnackDetail() {
               </button>
             </div>
 
-            <div className="flex flex-col w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] p-4 text-[12px] text-black gap-y-1">
+            <div className="flex flex-col w-full mb-[50px] bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] p-4 text-[12px] text-black gap-y-1">
               {isSelected === 'info' && (
                 <>
                   <div className="font-bold text-[14px] mb-2">{eventData.eventTitle}</div>
-                  <div>일시: {formatDateTimeWithDay(eventData.eventEndTime)}</div>
+                  <div>일시: {convertToKoreanDate(eventData.eventEndTime)}</div>
                   <div>장소: {eventData.locationInfo}</div>
                   <div>대상: {eventData.target}</div>
                   <div>수량: {eventData.quantity}</div>
-                  <div>티켓팅 가능 시간: {formatDateTimeWithDay(eventData.eventTime)}</div>
+                  <div>티켓팅 시작 시간: {convertToKoreanDate(eventData.eventTime)}</div>
                   <div className="text-black/50 self-center mt-[18px]">{eventData.description}</div>
                   <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px]">학생회 간식나눔 홍보글 링크</a>
                   <div className="self-end text-[#AEAEAE]">문의: {eventData.inquiryNumber}</div>
@@ -353,7 +414,7 @@ export default function SnackDetail() {
                   <div className="font-bold text-[13px] mt-1">수령 안내</div>
                   <div>
                     • 티켓팅 성공 시 발급된 <span className="text-[#0D99FF]">간식나눔 교환권과 학생증</span>을 제시해야 수령 가능합니다.  <br />
-                    • <span className="text-[#0D99FF]">간식나눔 시작 후 ○분 내</span> 미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
+                    • <span className="text-[#0D99FF]">간식나눔 시작 후 30분 내</span> 미수령 시, 해당 티켓은 자동 취소되고 현장 배부로 전환됩니다.
                   </div>
                   <div className="font-bold text-[13px] mt-1">양도·거래 금지</div>
                   <div>
@@ -381,8 +442,8 @@ export default function SnackDetail() {
 
         {/* 하단 버튼 */}
         {eventData && (
-          <div className="fixed bottom-0 left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
-            {ticketStatus === 'available' && (
+          <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
+            {(ticketStatus === 'available') && (eventData.currentQuantity !== 0) && (
               <button
                 className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
                 onClick={handleTicketClick}
@@ -391,22 +452,31 @@ export default function SnackDetail() {
               </button>
             )}
 
-            {ticketStatus === 'upcoming' && (
+            {(ticketStatus === 'upcoming') && (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-white rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
                 {/* <img src="/icons/alert.svg" alt="alert" /> 오픈 전 알림 받기 */}
                 {upcomingLabel} 
               </button>
             )}
 
-            {ticketStatus === 'countdown' && (
+            {(ticketStatus === 'countdown')&& (
               <button className="w-full h-[50px] border border-[#0D99FF] text-[#0D99FF] bg-[#EBF0F7] rounded-[5px] text-[18px] font-bold flex items-center justify-center gap-2 max-w-[500px]">
                 <img src="/icons/timer.svg" alt="timer" /> <span>{remainingTime}</span>
               </button>
             )}
 
-            {ticketStatus === 'closed' && (
+            {(eventData.currentQuantity === 0) && ((ticketStatus !== 'completed')) && (
               <button className="w-full h-[50px] bg-[#A6A6AB] text-[#808080] rounded-[5px] text-[18px] font-bold max-w-[500px]" disabled>
                 티켓팅 마감
+              </button>
+            )}
+            
+            {(ticketStatus === 'completed') && (
+              <button
+                className="w-full h-[50px] bg-[#0D99FF] text-white rounded-[5px] text-[18px] font-bold max-w-[500px]"
+                onClick={handleTicketClick}
+              >
+                티켓 확인하기
               </button>
             )}
           </div>

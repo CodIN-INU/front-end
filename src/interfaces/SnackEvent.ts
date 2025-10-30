@@ -33,6 +33,7 @@ export interface TicketEvent { // 이벤트 상세
     inquiryNumber: string;
     promotionLink?: string;
     existParticipationData:boolean;
+    userParticipatedInEvent:boolean;
     status:string;
 }
 
@@ -41,7 +42,7 @@ export interface FetchSnackResponse {
   code: number;
   message: string;
   data: {
-    eventList: SnackEvent[] | AdminSnackEvent[];
+    eventList: SnackEvent[] | AdminSnackEvent[] ;
     lastPage: number;
     nextPage: number;
   };
@@ -60,6 +61,7 @@ export interface TicketInfo {
     locationInfo: string;
     eventEndTime: string;
     signatureImgUrl: string;
+    eventReceivedEndTime: string;
     status: 'WAITING' | 'COMPLETED' ;
   };
 
@@ -78,6 +80,8 @@ export interface AdminSnackEvent { // 이벤트 리스트
   eventStatus: string;
   waitQuantity:number;
 }
+
+
 
 export interface FetchUserResponse {
   success: boolean;
@@ -100,4 +104,26 @@ export interface eventParticipationProfileResponseList { // 참여 유저 리스
   studentId: string;
   department: string;
   imageURL: string;
+}
+
+//마이페이지 인터페이스
+export interface MySnackEvent { // 이벤트 리스트
+  eventId: number;
+  eventEndTime: string;
+  eventTime: string;
+  eventImageUrl: string;
+  title: string;
+  locationInfo: string;
+  status: string;
+}
+
+export interface FetchMySnackResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data: {
+    eventList: MySnackEvent[]
+    lastPage: number;
+    nextPage: number;
+  };
 }

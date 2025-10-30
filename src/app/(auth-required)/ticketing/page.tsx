@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { fetchClient } from "@/api/clients/fetchClient";
 import { SnackEvent, FetchSnackResponse } from "@/interfaces/SnackEvent";
 import { formatDateTimeWithDay } from '@/utils/date';
+import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
 
 const TicketingPage: FC = () => {
   const board = boardData['ticketing'];
@@ -101,6 +102,7 @@ const TicketingPage: FC = () => {
       activeTab={activeTab}
       onTabChange={(tab) => setActiveTab(tab)}
       showSearchButton={false}
+      backOnClick='/main'
     >
       {isLoading && snacks.length === 0 && (
         <div className="text-center my-4 text-gray-500">로딩 중...</div>
@@ -114,7 +116,7 @@ const TicketingPage: FC = () => {
         {snacks.map((snack) => (
           <div
             key={snack.eventId}
-            className="relative rounded-[15px] py-[29px] px-4 flex flex-col
+            className="relative rounded-[15px] py-[29px] flex flex-col
                 shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)]
                 cursor-pointer "
             onClick={() => {if (snack.eventStatus !== 'ENDED') { router.push(`/ticketing/${snack.eventId}`)}
@@ -124,20 +126,21 @@ const TicketingPage: FC = () => {
               {snack.eventStatus === 'ENDED' && (
                 <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 cursor-not-allowed" />
               )}
-            <div className="flex items-start mb-[13px]">
-              <p className="font-semibold text-[14px]">{snack.eventTitle}</p>
-              <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
-            </div>
-            <div className="flex flex-row justify-center items-start">
-              <div className="flex flex-col justify-start">
-                <div className="mt-[5px] text-[12px] text-black">{formatDateTimeWithDay(snack.eventEndTime)}</div>
-                <div className="text-[12px] text-black">{snack.locationInfo}</div>
-                <div className="text-[12px] text-black">{snack.quantity}명</div>
-                <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {formatDateTimeWithDay(snack.eventTime)}</div>
+            <div className="flex flex-col items-center px-4">
+              <div className="flex items-start mb-[13px] w-full">
+                <p className="font-semibold text-[14px]">{snack.eventTitle}</p>
+                <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
               </div>
-              <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-1 border-[#d4d4d4] rounded-[10px] p-2 mr-[14px] ml-[23px]"></img>
+              <div className="flex flex-row justify-center items-start w-full">
+                <div className="flex flex-col justify-start w-full">
+                  <div className="mt-[5px] text-[12px] text-black">{convertToKoreanDate(snack.eventEndTime || '')}</div>
+                  <div className="text-[12px] text-black">{snack.locationInfo}</div>
+                  <div className="text-[12px] text-black">{snack.quantity}명</div>
+                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {convertToKoreanDate(snack.eventTime || '')}</div>
+                </div>
+                <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-1 border-[#d4d4d4] rounded-[10px] p-2 ml-[23px]"></img>
+              </div>
             </div>
-            
           </div>
         ))}
       </div>

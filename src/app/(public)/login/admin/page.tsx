@@ -63,7 +63,7 @@ export default function LoginPage() {
       const response = await PostLogin(studentId, password);
       console.log(`로그인 결과: ${response}`);
       const code = response.status;
-      router.push('/main/home');
+      router.push('/main');
     } catch (error) {
       console.error('로그인 실패', error);
       alert(error);

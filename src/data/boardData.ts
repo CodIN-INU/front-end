@@ -85,4 +85,13 @@ export const boardData: Record<string, Board> = {
         type: 'gallery',
     },
 
+    'myTicketing': {
+        name: '티켓팅 내역',
+        tabs: [
+            { label: '간식 미수령', value: 'wating', postCategory: 'WAITING' },
+            { label: '사용 완료', value: 'completed', postCategory: 'COMPLETED' },          
+            { label: '티켓팅 취소', value: 'canceled', postCategory: 'CANCELED' },
+        ],
+        type: 'gallery',
+    }
 };

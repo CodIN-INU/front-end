@@ -86,10 +86,12 @@ export default function MyPage() {
   const menuItems: MenuItem[] = [
     { label: '프로필 편집', href: '/mypage/edit' },
     { label: '게시글', href: '/mypage/board/posts' },
-    { label: '좋아요', href: '/mypage/board/likes', isSpacer: true },
+    { label: '좋아요', href: '/mypage/board/likes' },
     { label: '스크랩', href: '/mypage/board/scraps', isSpacer: true },
     { label: '이용약관', href: '/mypage/condition', isSpacer: true },
-    { label: '알림 설정', href: '/mypage/notification' },
+    //{ label: '알림 설정', href: '/mypage/notification', isSpacer: true },
+    { label: '수령자 정보', href: '/mypage/recipientInfo' },
+    { label: '티켓팅 내역', href: '/mypage/ticketing', isSpacer: true },
 
     // {
     //   label: "문의하기",

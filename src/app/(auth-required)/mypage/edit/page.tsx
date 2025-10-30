@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
+import { useAuth } from '@/store/userStore';
+import LoadingOverlay from '@/components/common/LoadingOverlay';
+import { fetchClient } from '@/api/clients/fetchClient';
 
 const UserInfoEditPage = () => {
   const [userInfo, setUserInfo] = useState({
@@ -17,36 +20,30 @@ const UserInfoEditPage = () => {
   });
 
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [editing, setEditing] = useState(false); // 수정 모드 상태
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [initialNick, setInitialNick] = useState<string>('');
+  const [initialName, setInitialName] = useState<string>('');
 
-  // 기존 유저 정보 가져오기
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('https://codin.inu.ac.kr/api/users', {
-          headers: {},
-        });
 
-        const userData = response.data.data;
-        console.log('User Data:', userData);
-        setUserInfo({
-          name: userData.name,
-          nickname: userData.nickname,
-          department: userData.department,
-          profileImageUrl: userData.profileImageUrl || '',
-          email: userData.email || '', // 이메일 필드를 포함시킴
-        });
-      } catch (error) {
-        setMessage('유저 정보를 가져오는 중 오류가 발생했습니다.');
-        console.error(error);
-      }
-    };
 
-    fetchUserData();
-  }, []);
+  const user = useAuth((s)=> s.user);
+  const updateUser = useAuth((s) => s.updateUser);
+  const fetchMe = useAuth((s) => s.fetchMe);
+
+  useEffect(()=>{
+    if (!user) return;
+    setUserInfo({
+      name: user.name,
+      nickname: user.nickname,
+      department: user.department,
+      profileImageUrl: user.profileImageUrl,
+      email: user.email,
+    });
+    setInitialNick(user.nickname);
+    setInitialName(user.name);
+    setLoading(false);
+  },[user])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -74,30 +71,64 @@ const UserInfoEditPage = () => {
         e.target.value = ''; // 선택한 파일 초기화
         return;
       }
-
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
       setProfileImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
     }
   };
 
+  // 컴포넌트 언마운트/이미지 교체 시 미리보기 URL 해제
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const isNickChanged = initialNick !== userInfo.nickname;
+  const isNameChanged = initialName !== userInfo.name;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
     // 유저 정보 수정
-    try {
-      const userResponse = await axios.put(
-        'https://codin.inu.ac.kr/api/users',
-        userInfo,
-        {
+    if (isNickChanged){ // 변경 사항이 있을때만 api 전송
+      try {
+        const userResponse = await fetchClient('/users', {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-        }
-      );
-      console.log('User Info Updated:', userResponse.data);
-    } catch (error) {
-      setMessage('유저 정보 수정 중 오류가 발생했습니다.');
-      console.error(error);
+          body: JSON.stringify(userInfo),
+        });
+        updateUser({
+          nickname: userInfo.nickname
+        })
+        alert('수정이 완료되었습니다.');
+        console.log('User Info Updated:', userResponse);
+      } catch (error) {
+        alert(error.message);
+        console.log(error);
+      }
+    }
+
+    if (isNameChanged){ // 변경 사항이 있을때만 api 전송
+      try {
+        const userResponse = await fetchClient('/users/name', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userInfo),
+        });
+        updateUser({
+          name: userInfo.name,
+        })
+        alert('수정이 완료되었습니다.');
+        console.log('User Info Updated:', userResponse);
+      } catch (error) {
+        alert(error.message);
+        console.log(error);
+      }
     }
 
     // 프로필 사진 수정
@@ -109,28 +140,22 @@ const UserInfoEditPage = () => {
         const imageResponse = await axios.put(
           'https://codin.inu.ac.kr/api/users/profile',
           formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
+          { headers: { 'Content-Type': 'multipart/form-data', }, withCredentials: true}
         );
+        fetchMe();
         console.log('Profile Image Updated:', imageResponse.data);
+        alert('수정이 완료되었습니다.');
+
       } catch (error) {
-        setMessage('프로필 사진 수정 중 오류가 발생했습니다.');
+        alert(error.message);
         console.error(error);
       }
     }
 
-    setLoading(false);
-    setEditing(false);
-    setMessage('수정이 완료되었습니다.');
+    
   };
 
-  // 뒤로 가기 버튼 클릭시 mypage로 이동
-  const handleBack = () => {
-    router.push('/mypage');
-  };
+
 
   return (
     <Suspense>
@@ -139,12 +164,14 @@ const UserInfoEditPage = () => {
         showBack
       />
       <DefaultBody hasHeader={1}>
+        {loading && <LoadingOverlay/>}
         {/* 프로필 사진 수정 */}
         <div className="flex flex-col items-center mt-[18px]">
           <div className="w-[96px] h-[96px]">
-            {userInfo.profileImageUrl ? (
+            {previewUrl || userInfo.profileImageUrl ? (
+              // 선택 이미지가 있으면 previewUrl 최우선, 없으면 기존 URL
               <img
-                src={userInfo.profileImageUrl}
+                src={previewUrl ?? userInfo.profileImageUrl}
                 alt="Profile Image"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -185,7 +212,6 @@ const UserInfoEditPage = () => {
               value={userInfo.name}
               onChange={handleInputChange}
               className="defaultInput"
-              disabled={true}
             />
           </div>
 
@@ -200,7 +226,6 @@ const UserInfoEditPage = () => {
               value={userInfo.nickname}
               onChange={handleInputChange}
               className="defaultInput"
-              disabled={!editing}
             />
           </div>
 
@@ -234,23 +259,15 @@ const UserInfoEditPage = () => {
             />
           </div>
 
-          {/* 수정 모드로 전환 */}
-          {editing ? (
-            <CommonBtn
-              text="수정완료"
-              status={1}
-              type="submit"
-            />
-          ) : (
+          
             <div className="flex flex-col w-full items-start gap-[8px]">
-              {message && <p className="text-Mm text-active">{message}</p>}
               <CommonBtn
                 text="수정하기"
                 status={1}
-                onClick={() => setEditing(true)}
+                type="submit"
               />
             </div>
-          )}
+         
         </form>
       </DefaultBody>
     </Suspense>
