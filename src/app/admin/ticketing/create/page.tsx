@@ -4,39 +4,28 @@ import {  useRouter } from 'next/navigation';
 import { useState, Suspense, ChangeEvent, FormEvent } from 'react';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { TicketForm } from '@/app/admin/ticketing/create/types/ticketForm';
 import InputBlock from './components/InputBlock';
+import { CreateTicketEventRequest } from '@/interfaces/TicketEventRequest';
+import { fetchClient } from '@/api/clients/fetchClient';
 
-export default function SnackDetail() {
+export default function CreateEvent() {
   const router = useRouter();
  
-  const [form, setForm] = useState<TicketForm>({
-    title: "",
-    dateTime: "",
-    place: "",
-    target: "",
-    quantity: "",
-    ticketStartTime: "",
-    promoLink: "",
-  });
+  const [form, setForm] = useState<CreateTicketEventRequest>({});
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const isValid =
-    form.title.trim() &&
-    form.dateTime &&
-    form.place.trim() &&
-    form.target.trim() &&
-    form.quantity.trim() &&
-    form.ticketStartTime &&
-    form.promoLink.trim();
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm((prev) => ({
+        ...prev,
+        [name]: name === "quantity" ? Number(value) : value,
+    }));
   };
+
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,16 +33,38 @@ export default function SnackDetail() {
 
     const url = URL.createObjectURL(file);
     setImagePreview(url);
+    setImageFile(file); 
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!isValid) return;
 
-    // TODO: 여기서 실제 API 호출하면 됨
-    console.log("submit form:", form);
-    alert("간식나눔 이벤트가 생성되었습니다.");
+    const formData = new FormData();
+
+    // 이미지 먼저 추가
+    if (imageFile) formData.append("image", imageFile);
+
+    // form의 모든 필드를 자동으로 추가
+    Object.entries(form).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+        formData.append(key, String(value));
+        }
+    });
+
+    try{
+        
+        const res = fetchClient('/admin/event/create', {method: 'POST'});
+        console.log('등록 결과:', res);
+        alert("등록 성공!");
+    }catch(e){
+        alert("생성 실패");
+    }
+
+    
+
+    
   };
+
 
   return (
     <Suspense>
@@ -92,72 +103,90 @@ export default function SnackDetail() {
                 onChange={handleImageChange}
               />
             </label>
-                </div>
+            </div>
                  {/* 행사명 */}
-          <InputBlock
-            label="행사명"
-            name="title"
-            placeholder="내용을 입력하세요."
-            value={form.title}
-            onChange={handleChange}
-          />
+                <InputBlock
+                    label="행사명"
+                    name="eventTitle"
+                    placeholder="내용을 입력하세요."
+                    value={form.eventTitle}
+                    onChange={handleChange}
+                />
 
-          {/* 일시 */}
-          <InputBlock
-            label="일시"
-            name="dateTime"
-            type="datetime-local"
-            value={form.dateTime}
-            onChange={handleChange}
-            withIcon
-          />
+                {/* 일시 */}
+                <InputBlock
+                    label="일시"
+                    name="eventTime"
+                    type="datetime-local"
+                    value={form.eventTime}
+                    onChange={handleChange}
+                    withIcon
+                />
 
-          {/* 장소 */}
-          <InputBlock
-            label="장소"
-            name="place"
-            placeholder="내용을 입력하세요."
-            value={form.place}
-            onChange={handleChange}
-          />
+                {/* 장소 */}
+                <InputBlock
+                    label="장소"
+                    name="locationInfo"
+                    placeholder="내용을 입력하세요."
+                    value={form.locationInfo}
+                    onChange={handleChange}
+                />
 
-          {/* 대상 */}
-          <InputBlock
-            label="대상"
-            name="target"
-            placeholder="내용을 입력하세요."
-            value={form.target}
-            onChange={handleChange}
-          />
+                {/* 대상 */}
+                <InputBlock
+                    label="대상"
+                    name="target"
+                    placeholder="내용을 입력하세요."
+                    value={form.target}
+                    onChange={handleChange}
+                />
 
-          {/* 간식 수량 */}
-          <InputBlock
-            label="간식 수량"
-            name="quantity"
-            placeholder="내용을 입력하세요."
-            type="number"
-            value={form.quantity}
-            onChange={handleChange}
-          />
+                {/* 간식 수량 */}
+                <InputBlock
+                    label="간식 수량"
+                    name="quantity"
+                    placeholder="내용을 입력하세요."
+                    type="number"
+                    value={form.quantity}
+                    onChange={handleChange}
+                />
 
-          {/* 티켓팅 시작시간 */}
-          <InputBlock
-            label="티켓팅 시작시간"
-            name="ticketStartTime"
-            type="datetime-local"
-            value={form.ticketStartTime}
-            onChange={handleChange}
-            withIcon
-          />
+                {/* 티켓팅 시작시간 */}
+                <InputBlock
+                    label="티켓팅 시작시간"
+                    name="eventEndTime"
+                    type="datetime-local"
+                    value={form.eventEndTime}
+                    onChange={handleChange}
+                    withIcon
+                />
 
-          {/* 홍보글 링크 */}
-          <InputBlock
-            label="간식나눔 행사 홍보글 링크"
-            name="promoLink"
-            placeholder="내용을 입력하세요."
-            value={form.promoLink}
-            onChange={handleChange}
-          />
+                {/* 홍보글 링크 */}
+                <InputBlock
+                    label="간식나눔 행사 홍보글 링크"
+                    name="promotionLink"
+                    placeholder="내용을 입력하세요."
+                    value={form.promotionLink}
+                    onChange={handleChange}
+                />
+
+                {/* 문의 연락처 */}
+                <InputBlock
+                    label="문의 연락처"
+                    name="inquiryNumber"
+                    placeholder="내용을 입력하세요."
+                    value={form.inquiryNumber}
+                    onChange={handleChange}
+                />
+
+                {/* 행사 설명 */}
+                <InputBlock
+                    label="행사 설명"
+                    name="description"
+                    placeholder="내용을 입력하세요."
+                    value={form.description}
+                    onChange={handleChange}
+                />
 
             </div>
       </DefaultBody>
