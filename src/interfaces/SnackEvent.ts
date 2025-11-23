@@ -28,7 +28,7 @@ export interface TicketEvent { // 이벤트 상세
     eventTitle: string;
     eventStatus: string;
     locationInfo: string;
-    quantity: string;
+    quantity: number;
     target: string;
     inquiryNumber: string;
     promotionLink?: string;
