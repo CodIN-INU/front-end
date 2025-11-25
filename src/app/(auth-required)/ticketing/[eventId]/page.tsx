@@ -375,13 +375,13 @@ const parseBackendLocalMs = (raw: string): number | null => {
 
             <div className="w-full flex justify-end text-[11px] text-[#0D99FF] gap-3">
               <button
-                className={`${isSelected === 'note' && 'text-[#AEAEAE]'} underline`}
+                className={`${isSelected === 'note' && 'text-[#AEAEAE]'} underline underline-offset-[3px]`}
                 onClick={() => setIsSelected('info')}
               >
                 상세정보
               </button>
               <button
-                className={`${isSelected === 'info' && 'text-[#AEAEAE]'} underline`}
+                className={`${isSelected === 'info' && 'text-[#AEAEAE]'} underline underline-offset-[3px]`}
                 onClick={() => setIsSelected('note')}
               >
                 유의사항
@@ -392,13 +392,13 @@ const parseBackendLocalMs = (raw: string): number | null => {
               {isSelected === 'info' && (
                 <>
                   <div className="font-bold text-[14px] mb-2">{eventData.eventTitle}</div>
-                  <div>일시: {convertToKoreanDate(eventData.eventEndTime)}</div>
-                  <div>장소: {eventData.locationInfo}</div>
-                  <div>대상: {eventData.target}</div>
-                  <div>수량: {eventData.quantity}</div>
-                  <div>티켓팅 시작 시간: {convertToKoreanDate(eventData.eventTime)}</div>
+                  <div><span className='font-semibold'>일시:</span> {convertToKoreanDate(eventData.eventEndTime)}</div>
+                  <div><span className='font-semibold'>장소: </span> {eventData.locationInfo}</div>
+                  <div><span className='font-semibold'>대상:</span>  {eventData.target}</div>
+                  <div><span className='font-semibold'>수량:</span>  {eventData.quantity}</div>
+                  <div><span className='font-semibold'>티켓팅 시작 시간:</span>  {convertToKoreanDate(eventData.eventTime)}</div>
                   <div className="text-black/50 self-center mt-[18px]">{eventData.description}</div>
-                  <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px]">학생회 간식나눔 홍보글 링크</a>
+                  <a href={eventData.promotionLink} className="text-[#0D99FF] mt-[18px] underline underline-offset-[3px]">학생회 간식나눔 홍보글 링크</a>
                   <div className="self-end text-[#AEAEAE]">문의: {eventData.inquiryNumber}</div>
                 </>
               )}
