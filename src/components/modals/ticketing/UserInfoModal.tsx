@@ -85,6 +85,8 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
               <span className="w-[10px] h-[10px] bg-blue-500 rounded-full" />
               <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
               <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
+              <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
+              <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
             </div>
 
             <h2 className="text-[16px] font-bold text-[#212121] mb-5">
@@ -156,6 +158,8 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
               <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
               <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
               <span className="w-[10px] h-[10px] bg-blue-500 rounded-full" />
+              <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
+              <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
             </div>
 
             <h2 className="text-[16px] font-bold text-[#212121] mb-5">
@@ -198,6 +202,8 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
             </button>
             {/* 페이지 인디케이터 */}
             <div className="flex justify-center mb-5 mt-[-10px] ">
+              <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
+              <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
               <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
               <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
               <span className="w-[10px] h-[10px] bg-blue-500 rounded-full" />
