@@ -128,15 +128,15 @@ const TicketingPage: FC = () => {
               )}
             <div className="flex flex-col items-center px-4">
               <div className="flex items-start mb-[13px] w-full">
-                <p className="font-semibold text-[14px]">{snack.eventTitle}</p>
+                <p className="font-bold text-[14px]">{snack.eventTitle}</p>
                 <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
               </div>
               <div className="flex flex-row justify-center items-start w-full">
                 <div className="flex flex-col justify-start w-full">
-                  <div className="mt-[5px] text-[12px] text-black">{convertToKoreanDate(snack.eventEndTime || '')}</div>
-                  <div className="text-[12px] text-black">{snack.locationInfo}</div>
-                  <div className="text-[12px] text-black">{snack.quantity}명</div>
-                  <div className="text-[12px] text-[#0D99FF]">티켓팅 오픈: {convertToKoreanDate(snack.eventTime || '')}</div>
+                  <div className="mt-[5px] text-[12px] text-black"><span className="font-semibold">일시:</span> {convertToKoreanDate(snack.eventEndTime || '')}</div>
+                  <div className="text-[12px] text-black"><span className="font-semibold">장소:</span> {snack.locationInfo}</div>
+                  <div className="text-[12px] text-black"><span className="font-semibold">수량:</span> {snack.quantity}명</div>
+                  <div className="text-[12px] text-[#0D99FF]"><span className="font-semibold">티켓팅 오픈:</span> {convertToKoreanDate(snack.eventTime || '')}</div>
                 </div>
                 <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-1 border-[#d4d4d4] rounded-[10px] p-2 ml-[23px]"></img>
               </div>
