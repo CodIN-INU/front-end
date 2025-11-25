@@ -343,8 +343,8 @@ const parseBackendLocalMs = (raw: string): number | null => {
 
         {!isLoading && eventData && (
           <div className="flex flex-col items-center gap-4">
-            <div className="w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] py-[29px] px-4">
-              <img src={eventData.eventImageUrls || "/images/default.svg"} alt="간식 이미지" />
+            <div className="w-full bg-white rounded-[15px] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] py-[29px] px-4 flex justify-center">
+              <img src={eventData.eventImageUrls || "/images/default.svg"} alt="간식 이미지"/>
             </div>
 
             <div className="w-full">
