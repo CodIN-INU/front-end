@@ -1,5 +1,5 @@
 export interface CreateTicketEventRequest {
-  eventTitle?: string;
+  title?: string;
   eventTime?: string;
   locationInfo?: string;
   target?: string;
@@ -8,4 +8,5 @@ export interface CreateTicketEventRequest {
   promotionLink?: string;
   inquiryNumber?: string;
   description?: string;
+  campus?:string;
 }
