@@ -1,12 +1,13 @@
 'use client';
 
 import {  useRouter } from 'next/navigation';
-import { useState, Suspense, ChangeEvent, FormEvent } from 'react';
+import { useState, Suspense, ChangeEvent, FormEvent, useEffect } from 'react';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import InputBlock from './components/InputBlock';
 import { CreateTicketEventRequest } from '@/interfaces/TicketEventRequest';
 import { fetchClient } from '@/api/clients/fetchClient';
+import CommonBtn from '@/components/buttons/commonBtn';
 
 export default function CreateEvent() {
   const router = useRouter();
@@ -15,17 +16,66 @@ export default function CreateEvent() {
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  
+  const toFullDateTime = (value: string) => {
+    if (!value) return value;
+
+    // datetime-local 기본 형태: YYYY-MM-DDTHH:mm (길이 16)
+    if (value.length === 16) {
+      return `${value}:00`;
+    }
+
+    // 이미 초까지 들어 있으면 그대로
+    return value;
+  };
 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
+    let newValue: string | number = value;
+
+    // 숫자 필드
+    if (name === "quantity") {
+      newValue = Number(value);
+    }
+
+    if (name === "eventTime" || name === "eventEndTime") {
+      newValue = toFullDateTime(value);
+    }
+
     setForm((prev) => ({
-        ...prev,
-        [name]: name === "quantity" ? Number(value) : value,
+      ...prev,
+      [name]: newValue,
     }));
+
+    console.log(name,':',newValue);
   };
 
+
+  useEffect(() => {
+    const requiredFields = [
+      "title",
+      "eventTime",
+      "campus",
+      "locationInfo",
+      "target",
+      "quantity",
+      "eventEndTime",
+      "promotionLink",
+      "inquiryNumber",
+      "description",
+    ];
+
+    const allFilled = requiredFields.every((key) => {
+      const value = (form as any)[key];
+      return value !== undefined && value !== "" && value !== null;
+    });
+
+    setIsFormValid(allFilled && !!imageFile);
+  }, [form, imageFile]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,34 +86,43 @@ export default function CreateEvent() {
     setImageFile(file); 
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
 
-    const formData = new FormData();
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
 
-    // 이미지 먼저 추가
-    if (imageFile) formData.append("image", imageFile);
+    console.log(name, ':', value);
+  };
 
-    // form의 모든 필드를 자동으로 추가
-    Object.entries(form).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-        formData.append(key, String(value));
-        }
+ const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  console.log("form:", form);
+
+  const formData = new FormData();
+
+  formData.append("eventContent", JSON.stringify(form));
+
+  if (imageFile) {
+    formData.append("eventImage", imageFile);
+  }
+
+  try {
+    const res = await fetchClient('/ticketing/admin/event/create', {
+      method: 'POST',
+      body: formData
     });
 
-    try{
-        
-        const res = fetchClient('/admin/event/create', {method: 'POST'});
-        console.log('등록 결과:', res);
-        alert("등록 성공!");
-    }catch(e){
-        alert("생성 실패");
-    }
+    console.log('등록 결과:', res);
+    alert("생성 성공!");
+    router.back();
+  } catch (error: any) {
+    alert(`생성 실패 : ${error.message}`);
+  }
+};
 
-    
-
-    
-  };
 
 
   return (
@@ -107,21 +166,43 @@ export default function CreateEvent() {
                  {/* 행사명 */}
                 <InputBlock
                     label="행사명"
-                    name="eventTitle"
+                    name="title"
                     placeholder="내용을 입력하세요."
-                    value={form.eventTitle}
+                    value={form.title}
                     onChange={handleChange}
                 />
 
-                {/* 일시 */}
+                {/* 티켓팅 시작시간 */}
                 <InputBlock
-                    label="일시"
+                    label="티켓팅 시작시간"
                     name="eventTime"
                     type="datetime-local"
                     value={form.eventTime}
                     onChange={handleChange}
                     withIcon
                 />
+
+                {/* 일시 */}
+                <InputBlock
+                    label="일시"
+                    name="eventEndTime"
+                    type="datetime-local"
+                    value={form.eventEndTime}
+                    onChange={handleChange}
+                    withIcon
+                />
+                {/* 캠퍼스 */}
+                <select
+                  name="campus"
+                  value={form.campus ?? ''}
+                  onChange={handleSelectChange}
+                  defaultValue={'송도 캠퍼스'}
+                  className="w-full rounded-[5px] border border-gray-200 bg-white text-sm px-3 py-3 outline-none placeholder:text-gray-400 font-normal"
+                >
+                  <option value="">캠퍼스를 선택하세요</option>
+                  <option value="송도 캠퍼스">송도 캠퍼스</option>
+                  <option value="미추홀 캠퍼스">미추홀 캠퍼스</option>
+                </select>
 
                 {/* 장소 */}
                 <InputBlock
@@ -151,15 +232,7 @@ export default function CreateEvent() {
                     onChange={handleChange}
                 />
 
-                {/* 티켓팅 시작시간 */}
-                <InputBlock
-                    label="티켓팅 시작시간"
-                    name="eventEndTime"
-                    type="datetime-local"
-                    value={form.eventEndTime}
-                    onChange={handleChange}
-                    withIcon
-                />
+               
 
                 {/* 홍보글 링크 */}
                 <InputBlock
@@ -187,6 +260,8 @@ export default function CreateEvent() {
                     value={form.description}
                     onChange={handleChange}
                 />
+
+                <CommonBtn text='생성하기' status={isFormValid? 1 : 0} onClick={handleSubmit}></CommonBtn>
 
             </div>
       </DefaultBody>
