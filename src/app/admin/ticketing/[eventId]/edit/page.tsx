@@ -6,13 +6,17 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import InputBlock from '../../create/components/InputBlock';
 import { fetchClient } from '@/api/clients/fetchClient';
-import { FetchSnackDetailResponse, TicketEvent } from '@/interfaces/SnackEvent';
+import { CreateTicketEventRequest } from '@/interfaces/TicketEventRequest';
+import { FetchSnackDetailResponse } from '@/interfaces/SnackEvent';
+import CommonBtn from '@/components/buttons/commonBtn';
+import { parseBackendDateToLocalDateTime } from '@/utils/date';
 
 export default function EditEvent() {
   const router = useRouter();
   const { eventId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [form, setForm] = useState<TicketEvent>();
+  const [form, setForm] = useState<CreateTicketEventRequest>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
    
@@ -20,27 +24,94 @@ export default function EditEvent() {
     const idStr = Array.isArray(eventId) ? eventId[0] : String(eventId ?? '');
 
     useEffect(() => {
-        const fetchDetail = async () => {
-          setIsLoading(true);
-          try {
-            const response = await fetchClient<FetchSnackDetailResponse>(`/ticketing/event/${idStr}`);
-            setForm(response.data);
-            console.log('[DETAIL] loaded:', response.data);
-          } catch (err) {
-            console.error('❌ 이벤트 상세 불러오기 실패:', err);
-          } finally {
-            setIsLoading(false);
-          }
-        };
-        if (idStr) fetchDetail();
-      }, [idStr]);
+  
+      const fetchDetail = async () => {
+        setIsLoading(true);
+        try {
+          const response = await fetchClient<FetchSnackDetailResponse>(`/ticketing/event/${idStr}`);
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+          const data = response.data;
+
+          setForm({
+            title: data.eventTitle,
+            eventTime: parseBackendDateToLocalDateTime(data.eventTime),
+            eventEndTime: parseBackendDateToLocalDateTime(data.eventEndTime),
+            locationInfo: data.locationInfo,
+            campus: data.campus == "SONGDO_CAMPUS"? '송도 캠퍼스' : '미추홀 캠퍼스',
+            target: data.target,
+            stock: data.currentQuantity,
+            promotionLink: data.promotionLink,
+            inquiryNumber: data.inquiryNumber,
+            description: data.description,
+          });
+
+          
+          // 이미지 프리뷰 처리
+          setImagePreview(
+            Array.isArray(data.eventImageUrls)
+              ? data.eventImageUrls[0]
+              : data.eventImageUrls
+          );
+
+          console.log('[DETAIL] loaded:', data);
+
+        } catch (err) {
+          console.error('❌ 이벤트 상세 불러오기 실패:', err);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      if (idStr) fetchDetail();
+    }, [idStr]);
+
+    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    console.log(name, ':', value);
   };
+
+
+   const toFullDateTime = (value: string) => {
+    if (!value) return value;
+
+    // datetime-local 기본 형태: YYYY-MM-DDTHH:mm (길이 16)
+    if (value.length === 16) {
+      return `${value}:00`;
+    }
+
+    // 이미 초까지 들어 있으면 그대로
+    return value;
+  };
+
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    let newValue: string | number = value;
+
+    // 숫자 필드
+    if (name === "quantity") {
+      newValue = Number(value);
+    }
+
+    if (name === "eventTime" || name === "eventEndTime") {
+      newValue = toFullDateTime(value);
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
+
+    console.log(name,':',newValue);
+  };
+
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,16 +119,44 @@ export default function EditEvent() {
 
     const url = URL.createObjectURL(file);
     setImagePreview(url);
+    setImageFile(file); 
+
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+     e.preventDefault();
+      console.log("form:", form);
+
+      const formData = new FormData();
+
+      formData.append("eventUpdateRequest", JSON.stringify(form));
+
+      if (imageFile) {
+        formData.append("eventImage", imageFile);
+      }
+
+    try{
+        const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'PUT', body: formData});
+        console.log('등록 결과:', res);
+        alert("생성 성공!");
+        router.back();
+    }catch(error){
+        alert(`생성 실패 :${error.message}`);
+    }
     
-
-    // TODO: 여기서 실제 API 호출하면 됨
-    console.log("submit form:", form);
-    alert("간식나눔 이벤트가 생성되었습니다.");
+    
   };
+
+  const handleDelete = async () => {
+    try{
+      const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'DELETE'})
+      console.log('삭제 결과:', res);
+        alert("삭제 완료");
+        router.back();
+    }catch(error){
+        alert(`삭제 실패 :${error.message}`);
+    }
+  }
     if (isLoading || !form) {
   return (
     <Suspense>
@@ -72,6 +171,10 @@ export default function EditEvent() {
 
       <DefaultBody hasHeader={1}>
             <div className='w-full flex flex-col justify-start items-start font-notosans font-medium text-[16px] leading-[19px] text-black gap-y-[15px]'>
+              <button className='text-[#FF2525] text-[11px] underline self-end mt-[-40px] z-50 fixed underline-offset-[3px]'
+                onClick={handleDelete}>
+                삭제하기
+              </button>
                 {/* 간식 이미지 */}
                 <div className='flex flex-col w-full'>
                     <div>간식 이미지</div>
@@ -104,91 +207,109 @@ export default function EditEvent() {
               />
             </label>
                 </div>
+                
                  {/* 행사명 */}
-          <InputBlock
-            label="행사명"
-            name="eventTitle"
-            placeholder="내용을 입력하세요."
-            value={form.eventTitle}
-            onChange={handleChange}
-          />
+                <InputBlock
+                  label="행사명"
+                  name="title"
+                  placeholder="내용을 입력하세요."
+                  value={form.title}
+                  onChange={handleChange}
+                />
+                
+                {/* 티켓팅 시작시간 */}
+                <InputBlock
+                  label="티켓팅 시작시간"
+                  name="eventTime"
+                  type="datetime-local"
+                  value={form.eventTime}
+                  onChange={handleChange}
+                  withIcon
+                />
 
-          {/* 일시 */}
-          <InputBlock
-            label="일시"
-            name="eventTime"
-            type="datetime-local"
-            value={form.eventTime}
-            onChange={handleChange}
-            withIcon
-          />
+                {/* 일시 */}
+                <InputBlock
+                  label="일시"
+                  name="eventEndTime"
+                  type="datetime-local"
+                  value={form.eventEndTime}
+                  onChange={handleChange}
+                  withIcon
+                />
 
-          {/* 장소 */}
-          <InputBlock
-            label="장소"
-            name="locationInfo"
-            placeholder="내용을 입력하세요."
-            value={form.locationInfo}
-            onChange={handleChange}
-          />
+                {/* 장소 */}
+                <InputBlock
+                  label="장소"
+                  name="locationInfo"
+                  placeholder="내용을 입력하세요."
+                  value={form.locationInfo}
+                  onChange={handleChange}
+                />
 
-          {/* 대상 */}
-          <InputBlock
-            label="대상"
-            name="target"
-            placeholder="내용을 입력하세요."
-            value={form.target}
-            onChange={handleChange}
-          />
+                {/* 캠퍼스 */}
+                <select
+                  name="campus"
+                  value={form.campus ?? ''}
+                  onChange={handleSelectChange}
+                  defaultValue={'송도 캠퍼스'}
+                  className="w-full rounded-[5px] border border-gray-200 bg-white text-sm px-3 py-3 outline-none placeholder:text-gray-400 font-normal"
+                >
+                  <option value="">캠퍼스를 선택하세요</option>
+                  <option value="송도 캠퍼스">송도 캠퍼스</option>
+                  <option value="미추홀 캠퍼스">미추홀 캠퍼스</option>
+                </select>
 
-          {/* 간식 수량 */}
-          <InputBlock
-            label="간식 수량"
-            name="quantity"
-            placeholder="내용을 입력하세요."
-            type="number"
-            value={form.quantity}
-            onChange={handleChange}
-          />
 
-          {/* 티켓팅 시작시간 */}
-          <InputBlock
-            label="티켓팅 시작시간"
-            name="eventEndTime"
-            type="datetime-local"
-            value={form.eventEndTime}
-            onChange={handleChange}
-            withIcon
-          />
 
-          {/* 홍보글 링크 */}
-          <InputBlock
-            label="간식나눔 행사 홍보글 링크"
-            name="promotionLink"
-            placeholder="내용을 입력하세요."
-            value={form.promotionLink}
-            onChange={handleChange}
-          />
+                {/* 대상 */}
+                <InputBlock
+                  label="대상"
+                  name="target"
+                  placeholder="내용을 입력하세요."
+                  value={form.target}
+                  onChange={handleChange}
+                />
 
-           {/* 문의 연락처 */}
-          <InputBlock
-            label="문의 연락처"
-            name="inquiryNumber"
-            placeholder="내용을 입력하세요."
-            value={form.inquiryNumber}
-            onChange={handleChange}
-          />
+                {/* 잔여 수량 */}
+                <InputBlock
+                  label="잔여 수량"
+                  name="stock"
+                  placeholder="내용을 입력하세요."
+                  type="number"
+                  value={form.stock}
+                  onChange={handleChange}
+                />
 
-           {/* 행사 설명 */}
-          <InputBlock
-            label="행사 설명"
-            name="description"
-            placeholder="내용을 입력하세요."
-            value={form.description}
-            onChange={handleChange}
-          />
+                {/* 홍보글 링크 */}
+                <InputBlock
+                  label="간식나눔 행사 홍보글 링크"
+                  name="promotionLink"
+                  placeholder="내용을 입력하세요."
+                  value={form.promotionLink}
+                  onChange={handleChange}
+                />
 
-            </div>
+                {/* 문의 연락처 */}
+                <InputBlock
+                  label="문의 연락처"
+                  name="inquiryNumber"
+                  placeholder="내용을 입력하세요."
+                  value={form.inquiryNumber}
+                  onChange={handleChange}
+                />
+
+                {/* 행사 설명 */}
+                <InputBlock
+                  label="행사 설명"
+                  name="description"
+                  placeholder="내용을 입력하세요."
+                  value={form.description}
+                  onChange={handleChange}
+                />
+                
+                <CommonBtn text='편집하기' status={1} onClick={handleSubmit}></CommonBtn>
+
+          </div>
       </DefaultBody>
     </Suspense>
   );
