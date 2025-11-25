@@ -5,7 +5,7 @@ import { fetchClient } from '@/api/clients/fetchClient';
 interface UserInfoModalProps {
   onClose: () => void;
   onComplete: () => void;
-  initialStep?: 1 | 2 | 3;
+  initialStep?: 1 | 2 | 3 | 4;
 }
 
 const departments = [
@@ -15,9 +15,12 @@ const departments = [
 ];
 
 const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialStep = 1 }) => {
-  const [step, setStep] = useState<1 | 2 | 3>(initialStep);
+  const [step, setStep] = useState<1 | 2 | 3 | 4>(initialStep);
   const [selectedDept, setSelectedDept] = useState<string | null>(null);
   const [studentId, setStudentId] = useState<string>('');
+  const [name, setName] = useState<string>('');
+
+
 
   const putUserInfo = async () => {
     if (!selectedDept || !studentId) return;
@@ -142,8 +145,53 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
           </>
         )}
 
-         {/* STEP 2 - 학과 선택 */}
+         {/* STEP 3 - 이름 입력 */}
         {step === 3 && (
+          <>
+            <button className='flex self-start mt-[-10px] ml-[-10px]' onClick={()=>setStep(2)}>
+                <img src='/icons/back.svg'></img>
+            </button>
+            {/* 페이지 인디케이터 */}
+            <div className="flex justify-center mb-5 mt-[-10px] ">
+              <span className="w-[10px] h-[10px] bg-gray-300 rounded-full" />
+              <span className='w-[18px] h-[1px] border border-[#D9D9D9] mt-[3px]'></span>
+              <span className="w-[10px] h-[10px] bg-blue-500 rounded-full" />
+            </div>
+
+            <h2 className="text-[16px] font-bold text-[#212121] mb-5">
+              수령자 정보 입력
+            </h2>
+            <div className='flex flex-row justify-center items-start pl-2'>
+                <p className="text-[14px] text-[#212121] mb-[9px]">
+                이름을 입력해주세요 
+                </p>
+                <div className="text-blue-500 text-[25px] mt-[-20px]">•</div>
+            </div>
+              
+            <div className="mb-[85px]">
+                <textarea placeholder={`실제 학생증 정보와 일치하지 않으면\n수령이 어려울 수 있습니다.`} 
+                        className='text-center focus:outline-none flex flex-row items-center py-[9px] w-full h-[50px] border border-[#D4D4D4] rounded-[5px] placeholder:text-[10px] resize-none '
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    >
+
+                </textarea>
+               </div>
+
+            <button
+              className={`mt-2 h-10 mb-4 bg-[#0D99FF] text-white font-semibold text-[14px] rounded-lg w-full py-2 ${
+                name ? '' : 'opacity-50 cursor-not-allowed'
+              }`}
+              disabled={!name}
+              onClick={()=>setStep(4)}
+            >
+              다음
+            </button>
+          </>
+        )}
+
+         {/* STEP 4 - 학번 입력 */}
+        {step === 4 && (
           <>
             <button className='flex self-start mt-[-10px] ml-[-10px]' onClick={()=>setStep(2)}>
                 <img src='/icons/back.svg'></img>
