@@ -106,6 +106,23 @@ const TicketingPage: FC = () => {
     setShowChangeEventModal(true);
   }
 
+   const handleDelete = async (eventId) => {
+     
+    const ok = confirm('삭제하시겠습니까?');
+
+    if (!ok) return;
+    
+      try{
+        const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'DELETE'})
+        console.log('삭제 결과:', res);
+          alert("삭제 완료");
+          window.location.reload();
+      }catch(error){
+          alert(`삭제 실패 :${error.message}`);
+      }
+  
+}
+
   return (
     <BoardLayout
       board={board}
@@ -193,6 +210,11 @@ const TicketingPage: FC = () => {
                                 <button className="bg-[#A6A6AB] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[40px] py-[7px]" disabled>
                                     행사 종료
                                 </button>
+                                 <button className="w-[81px] h-[34px] border border-[#cc5656] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#e40000] ml-[5px]"
+                                  onClick={()=>handleDelete(snack.eventId)}>
+                                  삭제하기
+                                </button>
+                                
                             
                               </div>
                             )}
