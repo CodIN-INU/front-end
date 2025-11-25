@@ -7,10 +7,8 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import SignModal from '@/components/modals/ticketing/SignModal';
 import CancelModal from '@/components/modals/ticketing/CancelModal';
-import { formatDateTimeWithDay } from '@/utils/date';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { TicketInfo } from '@/interfaces/SnackEvent';
-import { convertToKoreanDate } from '@/utils/convertToKoreanDate';
 
 export default function TicketingResultInner() {
   const searchParams = useSearchParams();
@@ -35,7 +33,7 @@ export default function TicketingResultInner() {
   }, [status, eventId, router]);
 
   useEffect(() => {
-    if (!eventId) return; // 안전 가드
+    if (!eventId) return; 
     let ignore = false;
     (async () => {
       try {
@@ -44,6 +42,7 @@ export default function TicketingResultInner() {
           `/ticketing/event/participation/${eventId}`
         );
         if (!ignore) setTicket(res.data);
+        console.log(res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -61,7 +60,6 @@ export default function TicketingResultInner() {
 
   switch (status) {
     case 'success':
-      const extendedEndTime = new Date(new Date(ticket.eventEndTime).getTime() + 30 * 60 * 1000);
       return (
         <Suspense>
           <Header
@@ -80,14 +78,15 @@ export default function TicketingResultInner() {
             {ticket?.status === 'WAITING' && (
               <>
                 <div>
-                  <p className="font-bold text-[14px] text-center text-[#0D99FF]">
+                  <p className="font-bold text-[14px] text-center text-[#0D99FF] flex justify-center">
                     수령장소: {ticket.locationInfo}
                     <span className="text-[#0D99FF] ml-1 mt-[-10px] font-semibold text-[18px]">
                       •
                     </span>
                   </p>
-                  <p className="font-bold text-[12px] text-center text-black">
-                    관리자에게 이 화면을 보여준 후 서명하세요
+                  <p className="font-bold text-[12px] text-center text-black mt-2">
+                     서명 후 학생회가 제공하는 비밀번호 4자리를 <br/>
+                      직접 입력하고 화면을 보여주세요
                   </p>
                   <p className="text-[12px] text-center text-black/50 font-normal mt-[13px]">
                     교환권은 마이페이지에서도 확인 가능해요
@@ -95,10 +94,27 @@ export default function TicketingResultInner() {
                 </div>
 
                 <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex flex-col items-center">
-                  <div className="text-[11px] text-center text-[#FF2525] font-normal">
-                    {convertToKoreanDate(ticket.eventReceivedEndTime)}까지 오지 않으면
-                    티켓이 자동 취소돼요.
-                    <br /> 그 전에 꼭 방문해 주세요!
+                  
+                  <div className="text-[12px] text-center text-[#0D99FF] font-normal flex flex-row">
+                   
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="8"
+                        stroke="#0D99FF"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M12 8V12L14.5 14.5"
+                        stroke="#0D99FF"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                     <div>간식나눔 시작 30분 전까지 오지 않으면  티켓이 자동 취소돼요.</div>
+                    
+                   
                   </div>
 
                   <button
