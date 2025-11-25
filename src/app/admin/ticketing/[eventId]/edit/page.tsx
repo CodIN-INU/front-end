@@ -138,25 +138,31 @@ export default function EditEvent() {
     try{
         const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'PUT', body: formData});
         console.log('등록 결과:', res);
-        alert("생성 성공!");
+        alert("수정 성공!");
         router.back();
     }catch(error){
-        alert(`생성 실패 :${error.message}`);
+        alert(`수정 실패 :${error.message}`);
     }
     
     
   };
 
   const handleDelete = async () => {
-    try{
-      const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'DELETE'})
-      console.log('삭제 결과:', res);
-        alert("삭제 완료");
-        router.back();
-    }catch(error){
-        alert(`삭제 실패 :${error.message}`);
-    }
-  }
+     
+    const ok = confirm('삭제하시겠습니까?');
+
+    if (!ok) return;
+    
+      try{
+        const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'DELETE'})
+        console.log('삭제 결과:', res);
+          alert("삭제 완료");
+          router.back();
+      }catch(error){
+          alert(`삭제 실패 :${error.message}`);
+      }
+  
+}
     if (isLoading || !form) {
   return (
     <Suspense>

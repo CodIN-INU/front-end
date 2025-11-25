@@ -193,10 +193,7 @@ const TicketingPage: FC = () => {
                                 <button className="bg-[#A6A6AB] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[40px] py-[7px]" disabled>
                                     행사 종료
                                 </button>
-                                <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
-                                  onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
-                                  편집하기
-                                </button>
+                            
                               </div>
                             )}
                         </div>                         
