@@ -9,4 +9,5 @@ export interface CreateTicketEventRequest {
   inquiryNumber?: string;
   description?: string;
   campus?:string;
+  stock?:number;
 }
