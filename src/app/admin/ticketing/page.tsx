@@ -8,6 +8,8 @@ import { fetchClient } from "@/api/clients/fetchClient";
 import { SnackEvent, FetchSnackResponse } from "@/interfaces/SnackEvent";
 import { formatDateTimeWithDay } from '@/utils/date';
 import ChangeEventCheckModal from "@/components/modals/ticketing/ChangeEventCheckModal";
+import Link from 'next/link';
+
 
 const TicketingPage: FC = () => {
   const board = boardData['ticketingAdmin'];
@@ -138,7 +140,7 @@ const TicketingPage: FC = () => {
             >
               {/* 오버레이: 이벤트 종료 시 */}
               {snack.eventStatus === 'ENDED' && (
-                <div className="absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 " />
+                <div className=" pointer-events-none absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 " />
               )}
             <img src={snack.eventImageUrl} className="w-[93px] h-[93px] border border-[#d4d4d4] rounded-[10px] p-2 mr-[14px]"></img>
             <div className="flex flex-col items-start">
@@ -154,6 +156,7 @@ const TicketingPage: FC = () => {
                     {snack && (
                         <div className="w-full bg-white flex justify-start">
                             {snack.eventStatus === 'ACTIVE' && (
+                              <div>
                                 <button className="bg-[#0D99FF] rounded-[20px] justify-center items-center py-[7px] gap-[10px] text-[14px] text-[#ffffff] w-[135px] mt-[9px]" 
                                         onClick={(e)=> {
                                           e.stopPropagation();
@@ -161,9 +164,16 @@ const TicketingPage: FC = () => {
                                         }}>
                                     티켓팅 종료하기
                                 </button>
+                                <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
+                                  onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
+                                  편집하기
+                                </button>
+                              </div>
+                                
                             )}
 
                             {snack.eventStatus === 'UPCOMING' && (
+                              <div>
                                 <button className="bg-[#EBF0F7] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[19px] py-[7px]"
                                         onClick={(e)=> {
                                           e.stopPropagation();
@@ -171,18 +181,51 @@ const TicketingPage: FC = () => {
                                         }}>
                                     티켓팅 수동 오픈
                                 </button>
+                                <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
+                                  onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
+                                  편집하기
+                                </button>
+                              </div>
                             )}
 
                             {snack.eventStatus === 'ENDED' && (
+                              <div>
                                 <button className="bg-[#A6A6AB] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[40px] py-[7px]" disabled>
                                     행사 종료
                                 </button>
+                                <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
+                                  onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
+                                  편집하기
+                                </button>
+                              </div>
                             )}
-                        </div>
+                        </div>                         
                     )}
+                    
                 </div>
           </div>
         ))}
+
+        <div className="absolute right-[78px]">
+        <Link
+          href={`/admin/ticketing/create`}
+          className="fixed bottom-[108px] bg-main text-white rounded-full shadow-lg p-4 hover:bg-blue-600 transition duration-300 z-30"
+          aria-label="글쓰기"
+        >
+          <svg
+            width="18"
+            height="19"
+            viewBox="0 0 18 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.27281 18.6122V10.8362H0.00081259V7.81218H7.27281V0.000173807H10.4768V7.81218H17.7848V10.8362H10.4768V18.6122H7.27281Z"
+              fill="white"
+            />
+          </svg>
+        </Link>
+      </div>
 
         {showChangeEventModal && selectedEvent && (
             <ChangeEventCheckModal
