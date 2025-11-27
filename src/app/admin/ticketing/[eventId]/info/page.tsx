@@ -7,7 +7,7 @@ import {
   eventParticipationProfileResponseList,
   FetchUserResponse,
 } from '@/interfaces/SnackEvent';
-import { formatDateTimeWithDay } from '@/utils/date';
+import { formatToMonthDay } from '@/utils/date';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import SearchInput from '@/components/common/SearchInput';
@@ -65,7 +65,7 @@ const TicketingUserListPage: FC = () => {
       );
       const eventList =
         response?.data?.eventParticipationProfileResponseList ?? [];
-      setEventEndTime(formatDateTimeWithDay(response.data.eventEndTime));
+      setEventEndTime(formatToMonthDay(response.data.eventEndTime));
       setTitle(response.data.title);
       setStock(response.data.stock);
       setWaitNum(response.data.waitNum);
@@ -188,7 +188,7 @@ const TicketingUserListPage: FC = () => {
 
         <Header
           showBack
-          title={`${formatMonthDayFromKoreanDate(eventEndTime)} ${title}`}
+          title={`${eventEndTime} ${title}`}
           showDownload={{
             endpoint: `/ticketing/ticketing/excel/${eventId}`,
             filename: `${eventEndTime} ${title} 참가자 목록`,

@@ -165,7 +165,7 @@ const TicketingPage: FC = () => {
                 <p className="font-semibold text-[14px]">{snack.eventTitle}</p>
                 <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
                 </div>
-                <div className="mt-[22px] text-[12px] text-black">{formatDateTimeWithDay(snack.eventEndTime)}</div>
+                <div className="mt-[22px] text-[12px] text-black">{snack.eventEndTime}</div>
                 <div className="text-[12px] text-black">{snack.locationInfo}</div>
                 <div className="text-[12px] text-[#0D99FF]">잔여수량 {snack.currentQuantity} | 수령대기 {snack.waitQuantity} </div>
                 
