@@ -54,3 +54,16 @@ export const parseBackendDateToLocalDateTime = (str: string) => {
   return `${datePart}T${timePart}`;
 };
 
+// "2025.11.25 (화) 16:44" → 11/25 형식으로 바꿔주는 함수입니다.
+export function formatToMonthDay(raw: string): string {
+  // 1) 숫자만 추출: 2025.12.02 -> 2025 12 02
+  const match = raw.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);
+  
+
+  if (!match) return "";
+
+  const [, year, month, day] = match;
+  console.log(month,'/',day);
+  return `${month}/${day}`;
+}
+
