@@ -46,19 +46,19 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
 
 
   return (
-    <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-50 ">
+    <div className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-center z-[110] ">
         <div className="bg-white rounded-2xl w-[80%] p-6 shadow-xl text-center relative max-w-[500px]">
           {/* STEP 1 - Intro */}
         {step === 1 && (
           <>
       
-        {/* 건너뛰기 버튼 */}
+        {/* 건너뛰기 버튼 
         <button
           className="absolute top-4 right-4 text-[10px] text-[#AEAEAE]"
           onClick={onClose}
         >
           건너뛰기 &gt;
-        </button>
+        </button>*/}
 
         {/* 안내 텍스트 */}
         <p className="text-[#212121] font-medium text-[14px] leading-[17px] mt-[29px]">
