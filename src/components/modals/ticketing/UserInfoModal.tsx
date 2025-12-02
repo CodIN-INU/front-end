@@ -52,13 +52,13 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
         {step === 1 && (
           <>
       
-        {/* 건너뛰기 버튼 */}
+        {/* 건너뛰기 버튼 
         <button
           className="absolute top-4 right-4 text-[10px] text-[#AEAEAE]"
           onClick={onClose}
         >
           건너뛰기 &gt;
-        </button>
+        </button>*/}
 
         {/* 안내 텍스트 */}
         <p className="text-[#212121] font-medium text-[14px] leading-[17px] mt-[29px]">
