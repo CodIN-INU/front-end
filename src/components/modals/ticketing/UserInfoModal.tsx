@@ -34,6 +34,7 @@ const UserInfoModal: FC<UserInfoModalProps> = ({ onClose, onComplete,  initialSt
         body: JSON.stringify({
           department: selectedDept,
           studentId: studentId,
+          name: name,
         }),
       });
       
