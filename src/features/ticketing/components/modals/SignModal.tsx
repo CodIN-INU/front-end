@@ -1,15 +1,23 @@
 'use client';
 
-import { FC, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import AdminPasswordModal from './AdminPasswordModal';
 
-const SignatureCanvas = dynamic(() => import('react-signature-canvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full aspect-square rounded-xl bg-gray-100 animate-pulse" />
-  ),
-});
+const SignatureCanvas = dynamic(
+  () =>
+    import('react-signature-canvas').then((mod) => {
+      const Component = mod.default;
+      return ({ forwardedRef, ...props }: { forwardedRef?: React.Ref<any> } & Record<string, unknown>) =>
+        <Component ref={forwardedRef as any} {...props} />;
+    }),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full aspect-square rounded-xl bg-gray-100 animate-pulse" />
+    ),
+  }
+);
 
 interface SignModalProps {
   onClose: () => void;
@@ -64,7 +72,7 @@ const SignModal: FC<SignModalProps> = ({ onClose, eventId }) => {
         <div className='flex flex-col justify-center mt-[-135px]'>
             <div className="bg-white aspect-square w-full rounded-xl shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] mb-2 flex items-center justify-center">
             <SignatureCanvas
-                ref={sigCanvasRef}
+                forwardedRef={sigCanvasRef}
                 canvasProps={{ className: 'w-full aspect-square rounded-xl' }}
                 backgroundColor="white"
                 penColor="black"

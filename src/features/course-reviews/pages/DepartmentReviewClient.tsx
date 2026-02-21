@@ -143,7 +143,7 @@ const DepartmentReviewClient = ({
                 isLiked={liked}
                 semester={semester}
                 _id={_id}
-                refetch={setRefetch}
+                refetch={() => setRefetch(true)}
               />
             )
           )}

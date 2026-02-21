@@ -1,14 +1,23 @@
 // components/UserInfoModal.tsx
 'use client';
-import { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { fetchClient } from '@/api/clients/fetchClient';
 import { compressBase64Image } from '@/lib/utils/compressBase64Image';
 
-const SignatureCanvas = dynamic(() => import('react-signature-canvas'), {
-  ssr: false,
-  loading: () => <div className="w-full aspect-square rounded-xl bg-gray-100 animate-pulse" />,
-});
+// dynamic()은 ref를 전달하지 않음 → forwardedRef prop 사용
+const SignatureCanvas = dynamic(
+  () =>
+    import('react-signature-canvas').then((mod) => {
+      const Component = mod.default;
+      return ({ forwardedRef, ...props }: { forwardedRef?: React.Ref<any> } & Record<string, unknown>) =>
+        <Component ref={forwardedRef as any} {...props} />;
+    }),
+  {
+    ssr: false,
+    loading: () => <div className="w-full aspect-square rounded-xl bg-gray-100 animate-pulse" />,
+  }
+);
 
 interface ChangeStatusModalProps {
   eventId: string | string[];
@@ -148,7 +157,7 @@ const ChangeStatusModal: FC<ChangeStatusModalProps> = ({ onClose, onComplete, us
                         <div className='absolute top-[113px] left-8 text-black text-[14px] font-bold flex'>??<div className="text-blue-500 text-[22px] mt-[-15px] ml-1">?</div></div>
                         
                         <SignatureCanvas
-                            ref={sigCanvasRef}
+                            forwardedRef={sigCanvasRef}
                             canvasProps={{ className: 'w-full rounded-xl' }}
                             backgroundColor="white"
                             penColor="black"

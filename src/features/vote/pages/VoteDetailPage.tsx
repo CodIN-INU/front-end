@@ -31,7 +31,7 @@ export default function VoteDetailPage({
   const voteId = voteIdProp ?? (Array.isArray(paramsVoteId) ? paramsVoteId[0] : paramsVoteId);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [vote, setVote] = useState<vote | null>(
-    initialVote ? (initialVote as vote) : null
+    initialVote ? (initialVote as unknown as vote) : null
   );
   const [isPostLiked, setIsPostLiked] = useState<{ [key: string]: boolean }>(
     {}
@@ -49,7 +49,7 @@ export default function VoteDetailPage({
       scrapCount: number;
       commentCount: number;
       hits: number;
-      createdAt: Date;
+      createdAt: string;
       userInfo: {
         scrap: boolean;
         like: boolean;
