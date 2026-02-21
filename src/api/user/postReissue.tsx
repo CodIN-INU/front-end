@@ -1,22 +1,30 @@
 import axios, { AxiosResponse } from 'axios';
-import { redirect } from 'next/dist/server/api-utils';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+function setTokenStorage(token: string) {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('x-access-token');
+  localStorage.setItem('accessToken', token);
+  localStorage.setItem('x-access-token', token);
+  document.cookie = `x-access-token=${token}; path=/; max-age=3600; SameSite=Lax`;
+}
 
 export const PostReissue = async (): Promise<any> => {
   axios.defaults.withCredentials = true;
   try {
-    let response: AxiosResponse<any>;
+    const response: AxiosResponse<any> = await axios.post(
+      `${apiUrl}/auth/reissue`,
+      {},
+      { withCredentials: true }
+    );
 
-    if (process.env.NEXT_PUBLIC_ENV === 'dev') {
-      return response;
-    } else {
-      response = await axios.post(`${apiUrl}/auth/reissue`, {
-        headers: {
-          //Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
-        },
-      });
-    }
+    const token =
+      response.headers['authorization']?.split(' ')[1] ??
+      response.data?.accessToken ??
+      response.data?.token;
+    if (token) setTokenStorage(token);
 
     return response;
   } catch (error: any) {

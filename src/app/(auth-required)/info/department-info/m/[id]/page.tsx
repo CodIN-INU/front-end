@@ -1,14 +1,14 @@
 'use client';
 
-import BottomSheet from '@/components/info/partner/bottomSheet';
-import MapContainer from '@/components/info/partner/mapContainer';
+import BottomSheet from '@/features/department-info/components/bottomSheet';
+import MapContainer from '@/features/department-info/components/mapContainer';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { use, useEffect, useState } from 'react';
-import { IPartner } from '@/interfaces/partners';
-import apiClient from '@/api/clients/apiClient';
+import { IPartner } from '@/types/partners';
 import Script from 'next/script';
-import axios from 'axios';
 import { fetchClient } from '@/api/clients/fetchClient';
+
+const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID ?? '';
 
 export default function MapPage({
   params,
@@ -52,6 +52,19 @@ export default function MapPage({
 
   return (
     <>
+      {/* 지도 페이지에서만 네이버맵 로드 (lazyOnload로 렌더 차단 없음) */}
+      {NAVER_MAP_CLIENT_ID && (
+        <>
+          <Script
+            strategy="lazyOnload"
+            src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}&submodules=geocoder`}
+          />
+          <Script
+            strategy="lazyOnload"
+            src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${NAVER_MAP_CLIENT_ID}`}
+          />
+        </>
+      )}
       {partner && (
         <>
           <MapContainer

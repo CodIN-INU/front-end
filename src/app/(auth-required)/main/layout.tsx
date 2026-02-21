@@ -1,4 +1,4 @@
-import MainHeader from '@/components/Layout/header/MainHeader';
+import MainHeader from '@/features/main/components/MainHeader';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 
 export default function Layout({ children }: { children: React.ReactNode }) {

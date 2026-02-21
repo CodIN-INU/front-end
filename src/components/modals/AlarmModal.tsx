@@ -7,11 +7,11 @@ import {
   Notification,
 } from '@/api/notification/getNotificationList';
 import { useRouter } from 'next/navigation';
-import { createPostUrl } from '@/utils/router/createPostUrl';
+import { createPostUrl } from '@/lib/utils/router/createPostUrl';
 
-// 읽음 처리 더미 (추후 실제 API 연결)
+// ?�음 처리 ?��? (추후 ?�제 API ?�결)
 const markNotificationAsRead = async (notificationId: string) => {
-  console.log(`알림 ${notificationId} 읽음 처리`);
+  console.log(`?�림 ${notificationId} ?�음 처리`);
   await new Promise(resolve => setTimeout(resolve, 100)); // simulate network delay
 };
 
@@ -30,13 +30,13 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
       try {
         const res = await GetNotificationList();
         if (res.success) {
-          // --- 추가된 코드: 성공 시 데이터를 콘솔에 출력합니다 ---
-          console.log('알림 목록을 성공적으로 불러왔습니다:', res.dataList);
+          // --- 추�???코드: ?�공 ???�이?��? 콘솔??출력?�니??---
+          console.log('?�림 목록???�공?�으�?불러?�습?�다:', res.dataList);
           // ---------------------------------------------------
           setNotifications(res.dataList);
         }
       } catch (error) {
-        console.error('알림 목록 불러오기 실패:', error);
+        console.error('?�림 목록 불러?�기 ?�패:', error);
       } finally {
         setIsLoading(false);
       }
@@ -63,13 +63,13 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
     }
 
     try {
-      // 알림의 title과 id를 사용하여 URL을 생성합니다.
-      // notification.title이 '모집해요'나 '소통해요'와 같이 boardData에 정의된 이름과 일치해야 합니다.
+      // ?�림??title�?id�??�용?�여 URL???�성?�니??
+      // notification.title??'모집?�요'??'?�통?�요'?� 같이 boardData???�의???�름�??�치?�야 ?�니??
       const postUrl = createPostUrl(notification.title, notification.id);
       router.push(postUrl);
     } catch (error) {
-      console.error('게시글 URL 생성 실패:', error);
-      // URL 생성 실패 시, 기본 경로로 리다이렉트하거나 오류 처리를 할 수 있습니다.
+      console.error('게시글 URL ?�성 ?�패:', error);
+      // URL ?�성 ?�패 ?? 기본 경로�?리다?�렉?�하거나 ?�류 처리�??????�습?�다.
       // router.push('/main/boards');
     }
   };
@@ -77,7 +77,7 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-white flex flex-col h-screen">
       <Header
-        title="알림"
+        title="?�림"
         showBack
         backOnClick={onClose}
       />
@@ -85,9 +85,9 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
       {/* 카테고리 버튼 */}
       <div className="flex mt-20 justify-start gap-2 px-4 py-3">
         {[
-          { key: 'all', label: '전체' },
-          { key: 'read', label: '읽음' },
-          { key: 'unread', label: '읽지 않음' },
+          { key: 'all', label: '?�체' },
+          { key: 'read', label: '?�음' },
+          { key: 'unread', label: '?��? ?�음' },
         ].map(({ key, label }) => (
           <button
             key={key}
@@ -106,11 +106,11 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
       <main className="flex-1 overflow-y-auto px-4 pb-4">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">로딩 중...</p>
+            <p className="text-gray-400">로딩 �?..</p>
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">알람이 없습니다.</p>
+            <p className="text-gray-400">?�람???�습?�다.</p>
           </div>
         ) : (
           <ul className="space-y-2 mt-2">

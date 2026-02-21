@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import '@/app/globals.css';
+import '@/styles/globals.css';
 import { PostReissue } from '@/api/user/postReissue';
 interface DefaultBodyProps {
   hasHeader?: number; // 0:헤더 없음, 1: 80px 헤더, 2: 130px 헤더

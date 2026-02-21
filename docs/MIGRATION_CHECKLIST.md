@@ -424,21 +424,29 @@
 ### Phase 1: 기반 구조 정리
 - [ ] 타입 통합 완료
 - [ ] 스타일 정리 완료
-- [ ] lib 구조 생성 완료
+- [x] lib 구조 생성 완료 — `src/lib/utils/` 생성, 공용 유틸(`date`, `convertToKoreanDate`, `compressBase64Image`, `dataUrlToFile`, `router/createPostUrl`) 이동 완료
 
 ### Phase 2: Feature 분리
-- [ ] roomstatus
-- [ ] search
-- [ ] chat
-- [ ] dept-boards
-- [ ] mypage
-- [ ] board
-- [ ] ticketing
-- [ ] course-reviews
+- [x] roomstatus — `features/roomstatus/pages/`, app re-export
+- [x] search — `features/search/pages/`, app re-export
+- [x] chat — `features/chat/pages/` (ChatPage, ChatRoomPage), app re-export
+- [x] dept-boards — `features/dept-boards/pages/` (faq, notice, opinion, q/[id]), app re-export
+- [x] mypage — `features/mypage/pages/` (7개 페이지), app re-export
+- [x] board — `features/board/pages/` (목록, 게시판, 작성, 상세), app re-export
+- [x] ticketing — `features/ticketing/pages/` + `features/ticketing/admin/pages/`, app re-export
+- [x] course-reviews — `features/course-reviews/` (컴포넌트·타입·utils·페이지), app re-export
+- [x] main — `features/main/pages/` (MainPage, DeptPage), app re-export
+- [x] auth (login·profile) — `features/auth/pages/` (LoginPage, LoginAdminPage, SignupProfilePage), app re-export
+- [x] vote — `features/vote/pages/` (목록, 상세, 작성), app re-export
+- [x] admin — `features/admin/pages/` + `features/ticketing/admin/pages/`, app re-export
+- [x] courses — `features/courses/pages/`, app re-export
+- [x] department-info — `features/department-info/`, app re-export
+
+**요약**: 라우트별 페이지 로직은 `features/*/pages/`로 이동 완료, app의 각 `page.tsx`는 해당 feature 페이지를 import 후 re-export만 유지.
 
 ### Phase 3: 공용 코드 정리
 - [ ] components 재분류
-- [ ] lib/utils 정리
+- [x] lib/utils 정리 — `src/utils/` → `src/lib/utils/` 이동 완료, import 경로 `@/utils/*` → `@/lib/utils/*` 일괄 수정 완료. feature 전용 유틸(`features/*/utils/`)은 기존 위치 유지.
 
 ### Phase 4: 검증 및 최적화
 - [ ] 순환 참조 확인
