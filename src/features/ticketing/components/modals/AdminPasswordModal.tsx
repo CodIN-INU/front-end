@@ -35,22 +35,15 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
   };
 
   useEffect(() => {
-    // 초기 마운?????�커??
     focusInput();
-
-    /** ???�환 ??복�? ???�커??*/ 
     const onVisible = () => {
       if (!document.hidden) {
-        // ?�이?�웃 ?�정 ???�커??
         setTimeout(focusInput, 0);
       }
     };
     document.addEventListener('visibilitychange', onVisible);
-
-    /**?�도???�른 ??갔다가 ?�아???�도 ?�포커스*/ 
     const onWindowFocus = () => setTimeout(focusInput, 0);
     window.addEventListener('focus', onWindowFocus);
-
     return () => {
       document.removeEventListener('visibilitychange', onVisible);
       window.removeEventListener('focus', onWindowFocus);
@@ -58,7 +51,6 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
   }, []);
 
   useEffect(() => {
-    /** 비번 길이 변�??�에???�커???��? */ 
     focusInput();
   }, [password.length]);
 
@@ -91,24 +83,22 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
         body: formData,
       });
 
-      console.log('???�송 ?�공:', response);
+      console.log('완료 요청 결과:', response);
       onSubmit();
       onClose();
       window.location.reload();
     } catch (error) {
-      console.error('???�송 ?�패:', error);
-      alert('비�?번호가 ?�?�거???�류가 발생?�습?�다.');
+      console.error('완료 요청 오류:', error);
+      alert('비밀번호가 올바르지 않습니다.');
 
-      /** ?�음 ?�도 카운??계산 ??처리*/ 
       const nextAttempts = attempts + 1;
       setAttempts(nextAttempts);
       setPassword('');
 
-      // ?�력 리셋 ??즉시 ?�커??
       setTimeout(focusInput, 0);
 
       if (nextAttempts >= maxAttempts) {
-        alert('최�? ?�도 ?�수�?초과?�습?�다.');
+        alert('최대 시도 횟수를 초과하였습니다.');
         onClose();
       }
     } finally {
@@ -120,25 +110,22 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
     <div
       className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[350] flex justify-center items-center"
       onClick={(e) => {
-        // 바깥 ?�릭 ?�엔 ?�기 ?�???�풋 ?�커?�만 (?�하�??�기�?바꿔????
         if (e.target === e.currentTarget) focusInput();
       }}
     >
       <div className="bg-white w-[75%] max-w-[400px] rounded-xl shadow-lg p-6 relative text-center">
-        {/* ?�기 버튼 */}
         <button className="absolute top-3 right-3 text-gray-400" onClick={onClose}>
-          ??
+          X
         </button>
 
         <p className="text-[13px] font-medium mb-[22px]">
-          관리자 비�?번호�??�력?�세?? ({attempts}/{maxAttempts})
+          관리자 비밀번호를 입력해주세요 ({attempts}/{maxAttempts})
         </p>
 
-        {/* ???�시 (?�릭 ???�커?? */}
         <div
           className="flex justify-center gap-[31px] mb-5 cursor-pointer select-none"
           onClick={focusInput}
-          onMouseDown={(e) => e.preventDefault()} // ?�커??뺏�? 방�?
+          onMouseDown={(e) => e.preventDefault()}
         >
           {[...Array(4)].map((_, i) => (
             <div
@@ -151,7 +138,6 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
           ))}
         </div>
 
-        {/* ?��? ?�풋 */}
         <input
           ref={inputRef}
           type="password"
@@ -164,7 +150,6 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
           autoFocus
         />
 
-        {/* ?�인 버튼 */}
         <button
           className={`w-full h-10 mt-2 font-bold text-[14px] rounded transition-all duration-200 ${
             password.length === 4 ? 'bg-[#0D99FF] text-white' : 'bg-[#E8EDF3] text-[#8B8B8B]'
@@ -172,7 +157,7 @@ const AdminPasswordModal: FC<AdminPasswordModalProps> = ({
           onClick={handleConfirm}
           disabled={password.length < 4 || isSubmitting}
         >
-          {isSubmitting ? '?�인 �?..' : '?�인'}
+          {isSubmitting ? '확인 중..' : '확인'}
         </button>
       </div>
     </div>

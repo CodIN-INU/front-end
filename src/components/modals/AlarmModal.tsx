@@ -9,10 +9,10 @@ import {
 import { useRouter } from 'next/navigation';
 import { createPostUrl } from '@/lib/utils/router/createPostUrl';
 
-// ?�음 처리 ?��? (추후 ?�제 API ?�결)
+// 알림 읽음 처리 (임시 더미 API 호출)
 const markNotificationAsRead = async (notificationId: string) => {
-  console.log(`?�림 ${notificationId} ?�음 처리`);
-  await new Promise(resolve => setTimeout(resolve, 100)); // simulate network delay
+  console.log(`알림 ${notificationId} 읽음 처리`);
+  await new Promise(resolve => setTimeout(resolve, 100));
 };
 
 interface ModalProps {
@@ -30,13 +30,11 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
       try {
         const res = await GetNotificationList();
         if (res.success) {
-          // --- 추�???코드: ?�공 ???�이?��? 콘솔??출력?�니??---
-          console.log('?�림 목록???�공?�으�?불러?�습?�다:', res.dataList);
-          // ---------------------------------------------------
+          console.log('알림 목록 실제데이터 출력:', res.dataList);
           setNotifications(res.dataList);
         }
       } catch (error) {
-        console.error('?�림 목록 불러?�기 ?�패:', error);
+        console.error('알림 목록 출력 오류:', error);
       } finally {
         setIsLoading(false);
       }
@@ -61,56 +59,42 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
         prev.map(n => (n.id === notification.id ? { ...n, isRead: true } : n))
       );
     }
-
     try {
-      // ?�림??title�?id�??�용?�여 URL???�성?�니??
-      // notification.title??'모집?�요'??'?�통?�요'?� 같이 boardData???�의???�름�??�치?�야 ?�니??
       const postUrl = createPostUrl(notification.title, notification.id);
       router.push(postUrl);
     } catch (error) {
-      console.error('게시글 URL ?�성 ?�패:', error);
-      // URL ?�성 ?�패 ?? 기본 경로�?리다?�렉?�하거나 ?�류 처리�??????�습?�다.
-      // router.push('/main/boards');
+      console.error('라우팅 URL 출력 오류:', error);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-white flex flex-col h-screen">
-      <Header
-        title="?�림"
-        showBack
-        backOnClick={onClose}
-      />
-
-      {/* 카테고리 버튼 */}
+      <Header title="알림" showBack backOnClick={onClose} />
       <div className="flex mt-20 justify-start gap-2 px-4 py-3">
         {[
-          { key: 'all', label: '?�체' },
-          { key: 'read', label: '?�음' },
-          { key: 'unread', label: '?��? ?�음' },
+          { key: 'all', label: '전체' },
+          { key: 'read', label: '읽음' },
+          { key: 'unread', label: '읽지 않음' },
         ].map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setFilter(key as 'all' | 'read' | 'unread')}
             className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
-              filter === key
-                ? 'bg-[#0d99ff] text-white'
-                : 'bg-gray-100 text-gray-700'
+              filter === key ? 'bg-[#0d99ff] text-white' : 'bg-gray-100 text-gray-700'
             }`}
           >
             {label}
           </button>
         ))}
       </div>
-
       <main className="flex-1 overflow-y-auto px-4 pb-4">
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">로딩 �?..</p>
+            <p className="text-gray-400">로딩 중..</p>
           </div>
         ) : filteredNotifications.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <p className="text-gray-400">?�람???�습?�다.</p>
+            <p className="text-gray-400">알림이 없습니다.</p>
           </div>
         ) : (
           <ul className="space-y-2 mt-2">
@@ -118,15 +102,13 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
               <li
                 key={notification.id}
                 onClick={() => handleNotificationClick(notification)}
-                className={`flex justify-between items-start p-3 rounded-md hover:bg-gray-50 transition cursor-pointer`}
+                className="flex justify-between items-start p-3 rounded-md hover:bg-gray-50 transition cursor-pointer"
               >
                 <div className="flex flex-col space-y-0.5">
                   <span className="text-[10px] text-gray-500 bg-gray-100 px-1 py-0.5 rounded w-fit">
                     {notification.title}
                   </span>
-                  <span className="font-semibold text-sm">
-                    {notification.title}
-                  </span>
+                  <span className="font-semibold text-sm">{notification.title}</span>
                   <span className="text-xs text-gray-500 max-w-[250px]">
                     {truncate(notification.message, 30)}
                   </span>
@@ -135,12 +117,6 @@ const AlarmModal: React.FC<ModalProps> = ({ onClose }) => {
                   {!notification.isRead && (
                     <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-red-500" />
                   )}
-                  {/*<span className="text-[10px] text-gray-400">*/}
-                  {/*    {new Date(notification.createdAt).toLocaleTimeString("ko-KR", {*/}
-                  {/*        hour: "2-digit",*/}
-                  {/*        minute: "2-digit",*/}
-                  {/*    })}*/}
-                  {/*</span>*/}
                 </div>
               </li>
             ))}
