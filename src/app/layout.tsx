@@ -1,4 +1,4 @@
-import './globals.css';
+import '@/styles/globals.css';
 import { ReactNode } from 'react';
 import { UserProvider } from '@/context/UserContext';
 import { AuthProvider } from '@/context/AuthContext';
@@ -6,8 +6,6 @@ import type { Viewport } from 'next';
 import ReviewProvider from '@/context/WriteReviewContext';
 import Script from 'next/script';
 import { notoSansKR } from '@public/fonts';
-
-const CLIENT_ID = process.env.NAVER_MAP_CLIENT_ID;
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -26,17 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <head>
         <title>인천대학교 정보대 SNS</title>
-
-        <Script
-          strategy="beforeInteractive"
-          type="text/javascript"
-          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${CLIENT_ID}&submodules=geocoder`}
-        />
-        <Script
-          strategy="beforeInteractive"
-          type="text/javascript"
-          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${CLIENT_ID}`}
-        />
+        {/* 네이버맵은 지도 페이지에서만 lazy 로드 (렌더 차단 제거) */}
       </head>
 
       {/* Google Analytics gtag.js */}

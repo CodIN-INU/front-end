@@ -1,5 +1,5 @@
 // store/useDeptStore.ts
-import { Tag } from '@/interfaces/partners';
+import { Tag } from '@/types/partners';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

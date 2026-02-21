@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const nextConfig = {
   reactStrictMode: false,
 
@@ -6,7 +10,27 @@ const nextConfig = {
     removeConsole:
       process.env.NODE_ENV === 'production' ? { exclude: ['error'] } : false,
   },
-  
+
+  // 사용하는 패키지만 번들에 포함 (미사용 JS 감소)
+  experimental: {
+    optimizePackageImports: ['lodash', 'react-icons', 'lucide-react'],
+  },
+
+  // 정적 에셋 캐시 헤더 (캐시 수명 개선)
+  async headers() {
+    return [
+      {
+        source: '/:all*(svg|jpg|jpeg|png|gif|ico|webp|woff2)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
+
   images: {
     domains: [
       'codin-s3-bucket.s3.ap-northeast-2.amazonaws.com',
@@ -52,4 +76,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import '@/app/globals.css';
+import '@/styles/globals.css';
 
 interface CommonBtnProps {
     id?: string;

@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import DeptBoardsHeader from './header';
+import DeptBoardsHeader from '@/features/dept-boards/components/DeptBoardsHeader';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

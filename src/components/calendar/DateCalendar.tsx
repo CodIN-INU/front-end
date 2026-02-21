@@ -11,7 +11,7 @@ import ShadowBox from '@/components/common/shadowBox';
 import CloseIcon from '@public/icons/button/x.svg';
 import { fetchClient } from '@/api/clients/fetchClient';
 import clsx from 'clsx';
-import { Tag } from '@/interfaces/partners';
+import { Tag } from '@/types/partners';
 
 export default function DateCalendar() {
   // 연도 변환 모달

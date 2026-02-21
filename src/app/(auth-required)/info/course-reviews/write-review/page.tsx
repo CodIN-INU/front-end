@@ -3,7 +3,7 @@
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import Header from '@/components/Layout/header/Header';
-import { RateBar } from '@/components/Review/RateBar';
+import { RateBar } from '@/features/course-reviews/components/RateBar';
 import {
   SetStateAction,
   Suspense,
@@ -11,20 +11,20 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { departMentType, selectType } from './type';
+import { departMentType, selectType } from '@/features/course-reviews/types';
 import {
   DEPARTMENT,
   GRADE,
   SEMESTER,
   ALERTMESSAGE,
   TEMPLATETEXT,
-} from './constants';
-import { CustomSelect } from '@/components/Review/CustomSelect';
+} from '@/features/course-reviews/constants';
+import { CustomSelect } from '@/features/course-reviews/components/CustomSelect';
 import { useSearchedReviewContext } from '@/api/review/useSearchedReviewContext';
 import { AlertModal } from '@/components/modals/AlertModal';
 import { submitReview } from '@/api/review/submitReview';
 import { useRouter } from 'next/navigation';
-import { calcEmotion } from './util/calcEmotion';
+import { calcEmotion } from '@/features/course-reviews/utils/calcEmotion';
 import { ReviewContext } from '@/context/WriteReviewContext';
 
 const WriteReview = () => {
