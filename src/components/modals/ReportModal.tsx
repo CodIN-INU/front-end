@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import apiClient from "@/api/clients/apiClient";  // ← 작성해주신 인터셉터 적용된 axios 인스턴스
+import apiClient from "@/shared/api/apiClient";  // ← 작성해주신 인터셉터 적용된 axios 인스턴스
 
 interface ReportModalProps {
     onClose: () => void;

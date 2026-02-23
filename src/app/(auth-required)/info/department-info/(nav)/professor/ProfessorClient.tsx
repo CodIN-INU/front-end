@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { useEffect, useState } from 'react';
 
 interface ProfessorClientProps {

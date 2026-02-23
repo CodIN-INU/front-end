@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';

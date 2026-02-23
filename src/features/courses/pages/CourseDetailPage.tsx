@@ -6,7 +6,7 @@ import Header from '@/components/Layout/header/Header';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Review from '@/features/courses/components/Review';
 import { CourseDetail, exampleCourse } from '@/types/course';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import Rating from '@/features/courses/components/Rating';
 import { useParams } from 'next/navigation';
 import PercentBoxWrapper from '@/features/courses/components/PercentBox';
@@ -140,7 +140,7 @@ export default function CourseDetailPage({
         showBack
         title={course.title}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="relative px-[35px] py-[28px] shadow-05134 rounded-[15px] mt-[13px]">
           <div className="flex flex-col text-[12px] gap-[4px]">
             <Bold>

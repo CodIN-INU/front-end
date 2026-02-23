@@ -2,7 +2,7 @@
 
 import { FC, useState, useEffect, useRef, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import {
   eventParticipationProfileResponseList,
   FetchUserResponse,
@@ -197,7 +197,7 @@ const TicketingUserListPage: FC = () => {
         />
       </div>
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {isLoading && users.length === 0 && (
           <div className="text-center my-4 text-gray-500">?? ?..</div>
         )}

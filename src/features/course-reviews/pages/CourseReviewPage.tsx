@@ -19,7 +19,7 @@ import { Subject } from '@/features/course-reviews/components/Subject';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
-import { useReviewsContext } from '@/api/review/getReviewsContext';
+import { useReviewsContext } from '@/features/course-reviews/api/getReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';
 
@@ -174,7 +174,7 @@ const CourseReviewPage = ({
         tempBackOnClick="/main"
         title="수강 후기"
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="w-full">
           <div className="px-0 pt-[18px] overflow-hidden">
             <div

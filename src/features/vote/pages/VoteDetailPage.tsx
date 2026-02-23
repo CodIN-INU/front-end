@@ -1,19 +1,19 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useEffect, useRef } from 'react';
-import apiClient from '@/api/clients/apiClient';
-import { PostChatRoom } from '@/api/chat/postChatRoom';
-import { PostVoting } from '@/api/vote/postVoting';
-import { GetVoteDetail } from '@/api/vote/getVoteDetail';
-import { PostBlockUser } from '@/api/user/postBlockUser';
+import apiClient from '@/shared/api/apiClient';
+import { PostChatRoom } from '@/features/chat/api/postChatRoom';
+import { PostVoting } from '@/features/vote/api/postVoting';
+import { GetVoteDetail } from '@/features/vote/api/getVoteDetail';
+import { PostBlockUser } from '@/features/auth/api/postBlockUser';
 import { useParams } from 'next/navigation';
-import { PostLike } from '@/api/like/postLike';
+import { PostLike } from '@/shared/api/postLike';
 import Header from '@/components/Layout/header/Header';
 import CommentSection from '@/features/comment/components/CommentSection';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import ReportModal from '@/components/modals/ReportModal';
 import { useReportModal } from '@/hooks/useReportModal';
-import { DeletePost } from '@/api/boards/deletePost';
+import { DeletePost } from '@/features/board/api/deletePost';
 import MenuItem from '@/components/common/Menu/MenuItem';
 import type { VoteDetail } from '@/api/server';
 
@@ -318,7 +318,7 @@ export default function VoteDetailPage({
           )
         }
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {/* 프로필 */}
         <div className="flex items-center space-x-[12px] mb-[20px]">
           <div className="w-[36px] h-[36px] bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">

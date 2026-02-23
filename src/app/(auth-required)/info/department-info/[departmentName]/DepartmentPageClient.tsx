@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Phone from '@public/icons/phone.svg';
@@ -67,7 +67,7 @@ export default function DepartmentPageClient({
         showBack
         title={`${departmentNamesMap[departmentName] || departmentName}`}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {loading ? (
           <p className="text-center text-gray-500 text-lg">로딩 중...</p>
         ) : error ? (

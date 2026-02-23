@@ -2,7 +2,7 @@
 'use client';
 import React, { FC, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { compressBase64Image } from '@/lib/utils/compressBase64Image';
 
 // dynamic()은 ref를 전달하지 않음 → forwardedRef prop 사용

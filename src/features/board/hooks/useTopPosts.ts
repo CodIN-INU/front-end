@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import type { Post } from '@/types/post';
 
 export function useTopPosts() {

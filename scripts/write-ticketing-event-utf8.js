@@ -119,7 +119,7 @@ import LoadingOverlay from '@/components/common/LoadingOverlay';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import UserInfoModal from '@/features/ticketing/components/UserInfoModal';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { FetchSnackDetailResponse, TicketEvent } from '@/types/snackEvent';
 import { formatDateTimeWithDay } from '@/lib/utils/date';
 import { convertToKoreanDate } from '@/lib/utils/convertToKoreanDate';

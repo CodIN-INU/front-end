@@ -1,6 +1,6 @@
 'use client';
 import { FC, useEffect, useRef, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { compressBase64Image } from '@/lib/utils/compressBase64Image';
 
 interface AdminPasswordModalProps {

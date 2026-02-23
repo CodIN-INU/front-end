@@ -1,5 +1,5 @@
 import DepartmentPageClient from './DepartmentPageClient';
-import { getOfficeByDepartment } from '@/api/server';
+import { getOfficeByDepartment } from '@/server';
 
 interface PageProps {
   params: Promise<{ departmentName: string }>;

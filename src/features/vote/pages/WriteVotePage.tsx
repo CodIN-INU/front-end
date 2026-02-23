@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import React from 'react';
-import { PostVote } from '@/api/vote/postVote';
+import { PostVote } from '@/features/vote/api/postVote';
 
 const DatePicker = dynamic(() => import('react-datepicker'), {
   ssr: false,
@@ -148,7 +148,7 @@ export default function WriteVotePage() {
         showBack
         title={`투표 작성`}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <input
           className="defaultInput mt-[10px]"
           style={{ fontSize: '16px', fontWeight: 'bold', color: '#808080' }}

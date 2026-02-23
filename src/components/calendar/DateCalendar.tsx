@@ -9,7 +9,7 @@ import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import Calendar from '@public/icons/calendar.svg';
 import ShadowBox from '@/components/common/shadowBox';
 import CloseIcon from '@public/icons/button/x.svg';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import clsx from 'clsx';
 import { Tag } from '@/types/partners';
 

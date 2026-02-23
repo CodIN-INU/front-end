@@ -1,7 +1,7 @@
 'use client';
 
 import { FC, useState, useEffect, useRef } from 'react';
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import PostList from '@/features/board/components/list/PostList';
 import type { Post } from '@/types/post';
 import { FaSearch } from 'react-icons/fa';
@@ -78,7 +78,7 @@ const SearchPage: FC = () => {
     <Suspense>
       <div className="w-full h-full">
         <Header title="검색" />
-        <DefaultBody hasHeader={1}>
+        <DefaultBody headerPadding="compact">
           <div className="relative flex items-center w-full">
             <input
               className="flex-1 w-full rounded-full bg-gray-50 py-3 px-5 pr-12 focus:outline-none focus:ring-0"

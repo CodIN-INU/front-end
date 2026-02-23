@@ -2,7 +2,7 @@
 
 import Sad from '@public/icons/sad.svg';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import Title from '@/components/common/title';
 import clsx from 'clsx';

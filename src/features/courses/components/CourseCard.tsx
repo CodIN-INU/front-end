@@ -4,7 +4,7 @@ import Heart from '@public/icons/heart.svg';
 import Rating from './Rating';
 import { Course } from '@/types/course';
 import { forwardRef, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { Tag, tagsArray } from '@/types/partners';
 
 interface Props {

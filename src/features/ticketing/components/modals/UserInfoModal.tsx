@@ -1,7 +1,7 @@
 // components/UserInfoModal.tsx
 'use client';
 import { FC, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 interface UserInfoModalProps {
   onClose: () => void;
   onComplete: () => void;

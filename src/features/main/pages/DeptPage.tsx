@@ -11,7 +11,7 @@ import DeptHeader from '@/features/dept-boards/components/DeptHeader';
 import CustomSelect from '@/features/courses/components/CourseCustomSelect';
 import { Tag } from '@/types/partners';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import type {
   Faq,
   NoticeData,

@@ -1,6 +1,6 @@
 import BoardPage from '@/features/board/pages/BoardPage';
 import { boardData } from '@/data/boardData';
-import { getPostsByCategory } from '@/api/server/getPostsByCategory';
+import { getPostsByCategory } from '@/server/getPostsByCategory';
 
 interface PageProps {
   params: Promise<{ boardName: string }>;

@@ -4,10 +4,10 @@ import Link from 'next/link';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { PostLogout } from '@/api/user/postLogout';
-import { DeleteUser } from '@/api/user/deleteUser';
+import { PostLogout } from '@/features/auth/api/postLogout';
+import { DeleteUser } from '@/features/auth/api/deleteUser';
 import WebModal, { WebModalHandles } from '@/components/modals/WebModal';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import Head from 'next/head';
 
 interface MenuItem {
@@ -129,7 +129,7 @@ export default function MyPage() {
     <Suspense>
       <Header title="마이페이지" />
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="flex items-center justify-between pt-[18px]">
           <div className="flex items-center space-x-[12px]">
             <img

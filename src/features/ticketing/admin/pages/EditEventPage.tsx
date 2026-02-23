@@ -5,7 +5,7 @@ import { useState, Suspense, ChangeEvent, FormEvent, useEffect } from 'react';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import InputBlock from '@/features/ticketing/admin/components/InputBlock';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { CreateTicketEventRequest } from '@/types/ticketEventRequest';
 import { FetchSnackDetailResponse } from '@/types/snackEvent';
 import CommonBtn from '@/components/buttons/commonBtn';
@@ -167,7 +167,7 @@ export default function EditEventPage() {
   return (
     <Suspense>
       <Header showBack title='간식 나눔 티켓팅 관리'/>
-      <DefaultBody hasHeader={1}>로딩 중..</DefaultBody>
+      <DefaultBody headerPadding="compact">로딩 중..</DefaultBody>
     </Suspense>
   );
 }
@@ -175,7 +175,7 @@ export default function EditEventPage() {
     <Suspense>
       <Header showBack title='간식 나눔 티켓팅 관리'/>
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
             <div className='w-full flex flex-col justify-start items-start font-notosans font-medium text-[16px] leading-[19px] text-black gap-y-[15px]'>
               <button className='text-[#FF2525] text-[11px] underline self-end mt-[-40px] z-50 fixed underline-offset-[3px]'
                 onClick={handleDelete}>

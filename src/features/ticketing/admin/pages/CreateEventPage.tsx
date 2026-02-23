@@ -6,7 +6,7 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import InputBlock from '@/features/ticketing/admin/components/InputBlock';
 import type { CreateTicketEventRequest } from '@/types/ticketEventRequest';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import CommonBtn from '@/components/buttons/commonBtn';
 
 export default function CreateEventPage() {
@@ -129,7 +129,7 @@ export default function CreateEventPage() {
     <Suspense>
       <Header showBack title='간식나눔 티켓팅 생성'/>
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
             <div className='w-full flex flex-col justify-start items-start font-notosans font-medium text-[16px] leading-[19px] text-black gap-y-[15px]'>
                 {/* 간식 이미지 */}
                 <div className='flex flex-col w-full'>

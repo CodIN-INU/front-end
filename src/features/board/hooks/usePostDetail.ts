@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import type { Post } from '@/types/post';
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import { fetchPostById } from '../api/fetchPostById';
 
 interface UsePostDetailOptions {

@@ -2,7 +2,7 @@
 'use client';
 import { FC, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 
 const SignatureCanvas = dynamic(() => import('react-signature-canvas'), {
   ssr: false,

@@ -7,7 +7,7 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import UserInfoModal from '@/features/ticketing/components/modals/UserInfoModal';
 import { EventDetailContent, TicketBottomBar } from '@/features/ticketing/components/event';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { FetchSnackDetailResponse, TicketEvent } from '@/types/snackEvent';
 import { parseBackendLocalMs } from '@/features/ticketing/utils/ticketingTime';
 import { useTicketingSSE } from '@/features/ticketing/hooks/useTicketingSSE';
@@ -118,7 +118,7 @@ export default function TicketingEventPage({
     <Suspense>
       <Header showBack title="간식 나눔" />
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {isLoading && <LoadingOverlay />}
 
         {showModal && (

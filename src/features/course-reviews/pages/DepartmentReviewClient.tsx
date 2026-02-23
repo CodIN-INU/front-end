@@ -7,13 +7,13 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { DepartmentReviewComponent } from '@/features/course-reviews/components/DepartmentReview';
-import { useDepartmentRatingInfoContext } from '@/api/review/useDepartmentRatingInfoContext';
+import { useDepartmentRatingInfoContext } from '@/features/course-reviews/api/useDepartmentRatingInfoContext';
 import { ReviewComment } from '@/features/course-reviews/components/ReviewComment';
-import { useLectureReviewsContext } from '@/api/review/useLectureReviewsContext';
+import { useLectureReviewsContext } from '@/features/course-reviews/api/useLectureReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';
-import type { LectureRatingInfo } from '@/api/server/getCourseReviews';
-import type { ReviewComment as ReviewCommentType } from '@/api/server/getCourseReviews';
+import type { LectureRatingInfo } from '@/server/getCourseReviews';
+import type { ReviewComment as ReviewCommentType } from '@/server/getCourseReviews';
 
 interface DepartmentReviewClientProps {
   initialLectureInfo?: LectureRatingInfo | null;
@@ -121,7 +121,7 @@ const DepartmentReviewClient = ({
   return (
     <Suspense>
       <Header title="과목 별 후기" showBack />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {lectureInfo && emotion && (
           <DepartmentReviewComponent
             subjectName={lectureInfo.lectureNm}

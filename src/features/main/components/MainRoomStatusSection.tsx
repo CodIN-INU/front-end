@@ -7,7 +7,7 @@ import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import RoomItemHourly from '@/features/roomstatus/components/RoomItemHourly';
 import type { LectureDict } from '@/features/roomstatus/types';
 import { getTimeTableData } from '@/features/roomstatus/utils/getTimeTableData';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import PageBar from '@/components/Layout/pageBar';
 
 const defaultRoomStatus: (LectureDict | null)[] = Array.from(

@@ -45,7 +45,7 @@ export default function DeptBoardsHeader({
         topBarSetCenter
         showBack
       />
-      <DefaultBody hasHeader={2}>{children}</DefaultBody>
+      <DefaultBody headerPadding="full">{children}</DefaultBody>
     </>
   );
 }

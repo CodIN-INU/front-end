@@ -2,8 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '@/context/AuthContext';
-import { GetVoteData } from '@/api/vote/getVoteData';
-import { PostVoting } from '@/api/vote/postVoting';
+import { GetVoteData } from '@/features/vote/api/getVoteData';
+import { PostVoting } from '@/features/vote/api/postVoting';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Link from 'next/link';
@@ -374,7 +374,7 @@ export default function VoteListPage({
         title={`익명 투표`}
         tempBackOnClick='/boards'
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div
           id="VoteListCont"
           className="w-full"

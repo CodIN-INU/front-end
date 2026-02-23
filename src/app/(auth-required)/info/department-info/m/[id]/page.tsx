@@ -6,7 +6,7 @@ import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { use, useEffect, useState } from 'react';
 import { IPartner } from '@/types/partners';
 import Script from 'next/script';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 
 const NAVER_MAP_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID ?? '';
 

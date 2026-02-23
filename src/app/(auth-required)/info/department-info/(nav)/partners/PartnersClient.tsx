@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { PartnerLinkCard } from '@/features/department-info/components/PartnerLinkCard';
 import { IPartners } from '@/types/partners';
 import { useEffect, useState } from 'react';
