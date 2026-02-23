@@ -52,6 +52,7 @@ const TicketingPage: FC<TicketingPageProps> = ({
       onTabChange={tab => setActiveTab(tab)}
       showSearchButton={false}
       backOnClick="/main"
+      useLayoutHeader
     >
       <TicketingEventList
         snacks={snacks}
