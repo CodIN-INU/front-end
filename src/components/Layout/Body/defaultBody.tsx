@@ -22,29 +22,6 @@ const DefaultBody: React.FC<DefaultBodyProps> = ({
 }) => {
   const pt = PADDING_CLASS[headerPadding] ?? '';
 
-  // useEffect(()=>{
-  //     const Postreissue = async (retryCount=0) =>
-
-  //     { if (retryCount < 3) {
-  //             console.log(`🔄 재시도 중... (${retryCount + 1}/2)`);
-
-  //             try {
-  //                 const res = await PostReissue(); // 토큰 재발급 요청
-  //                 console.log(res);
-
-  //             } catch (error) {
-  //                 retryCount + 1;
-
-  //             }
-  //         }
-  //         else{
-  //         console.error("❌ 토큰 재발급 실패");
-
-  //             }
-
-  //       }
-  //       Postreissue();
-  //     }, [])
 
   return (
     <div
