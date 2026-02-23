@@ -7,12 +7,18 @@ import { ko } from 'date-fns/locale';
 import React from 'react';
 import { PostVote } from '@/features/vote/api/postVote';
 
-const DatePicker = dynamic(() => import('react-datepicker'), {
-  ssr: false,
-  loading: () => (
-    <span className="inline-block w-full h-10 bg-gray-100 animate-pulse rounded" />
-  ),
-});
+const DatePicker = dynamic(
+  () =>
+    import('react-datepicker').then(
+      mod => mod.default as React.ComponentType<Record<string, unknown>>
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <span className="inline-block w-full h-10 bg-gray-100 animate-pulse rounded" />
+    ),
+  }
+);
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';

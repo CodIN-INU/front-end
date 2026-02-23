@@ -34,8 +34,10 @@ export default function TicketingResultInner() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = await fetchClient(`/ticketing/event/participation/${eventId}`);
-        if (!ignore) setTicket(res.data);
+        const res = await fetchClient<{ data: TicketInfo }>(
+          `/ticketing/event/participation/${eventId}`
+        );
+        if (!ignore) setTicket(res?.data);
       } catch (err) {
         console.error(err);
       } finally {

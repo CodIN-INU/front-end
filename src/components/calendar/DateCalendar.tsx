@@ -92,11 +92,15 @@ export default function DateCalendar() {
   useEffect(() => {
     const fetchCalendarData = async () => {
       try {
-        const response = await fetchClient(
+        const response = await fetchClient<{
+          success?: boolean;
+          data?: { days?: CalendarData[] };
+          message?: string;
+        }>(
           `/calendar/month?year=${today.year()}&month=${today.month() + 1}`
         );
-        if (response.success) {
-          const data = response.data.days as CalendarData[];
+        if (response?.success && response.data?.days) {
+          const data = response.data.days;
           setCalendarData(data);
         } else {
           console.error('Failed to fetch calendar data:', response.message);

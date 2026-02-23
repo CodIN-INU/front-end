@@ -18,8 +18,8 @@ function LoginPageContent() {
 
   useEffect(() => {
     const autoLogin = async () => {
-      const response = await fetchClient('/users');
-      if (response.success) {
+      const response = await fetchClient<{ success?: boolean }>('/users');
+      if (response?.success) {
         router.push('/main');
       }
     };

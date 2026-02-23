@@ -79,23 +79,27 @@ export default function ChatRoomPage() {
     if (!stompClient || !myId) return;
     stompClient.connect(headers, () => {
       setConnected(true);
-      const subChatRoom = stompClient.subscribe(`/queue/` + chatRoomId, message => {
-        const receivedMessage = JSON.parse(message.body);
-        if (receivedMessage?.body?.data) {
-          setMessages(prev => [
-            ...prev,
-            {
-              id: receivedMessage.body.data.id,
-              senderId: receivedMessage.body.data.senderId,
-              content: receivedMessage.body.data.content,
-              createdAt: receivedMessage.body.data.createdAt,
-              me: false,
-              contentType: receivedMessage.body.data.contentType,
-              unread: receivedMessage.body.data.unread,
-            },
-          ]);
-        }
-      }, headers);
+      const subChatRoom = stompClient.subscribe(
+        `/queue/` + chatRoomId,
+        (message: { body: string }) => {
+          const receivedMessage = JSON.parse(message.body);
+          if (receivedMessage?.body?.data) {
+            setMessages(prev => [
+              ...prev,
+              {
+                id: receivedMessage.body.data.id,
+                senderId: receivedMessage.body.data.senderId,
+                content: receivedMessage.body.data.content,
+                createdAt: receivedMessage.body.data.createdAt,
+                me: false,
+                contentType: receivedMessage.body.data.contentType,
+                unread: receivedMessage.body.data.unread,
+              },
+            ]);
+          }
+        },
+        headers
+      );
       const subUnread = stompClient.subscribe(`/queue/unread/` + chatRoomId, () => {
         setMessages(prev => prev.map(msg => ({ ...msg, unread: 0 })));
       }, headers);
@@ -141,7 +145,9 @@ export default function ChatRoomPage() {
     }
   };
 
-  const handleMessageSubmit = async (message: Message) => {
+  const handleMessageSubmit = async (
+    message: Omit<Message, 'unread'> & { unread?: number }
+  ) => {
     let localImageUrl = imageUrl;
     if (message.contentType === 'IMAGE') {
       try {

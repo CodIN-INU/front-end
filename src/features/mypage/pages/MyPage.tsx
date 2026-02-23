@@ -26,11 +26,15 @@ export default function MyPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const result = await fetchClient('/users');
+        const result = await fetchClient<{
+          success?: boolean;
+          data?: unknown;
+          message?: string;
+        }>('/users');
 
-        if (result.success) {
+        if (result?.success && result.data != null) {
           setUserData(result.data);
-        } else {
+        } else if (result?.message) {
           console.error(result.message);
         }
       } catch (error) {
@@ -159,9 +163,9 @@ export default function MyPage() {
               onClick={e => {
                 if (item.onclick) {
                   item.onclick(e);
-                } else if (item.useModal) {
+                } else if (item.useModal && item.href) {
                   modalRef.current?.openModal(item.href);
-                } else {
+                } else if (item.href) {
                   window.location.href = item.href;
                 }
               }}

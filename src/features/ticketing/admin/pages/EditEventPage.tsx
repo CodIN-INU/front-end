@@ -158,8 +158,12 @@ export default function EditEventPage() {
         console.log('삭제 결과:', res);
           alert("삭제 완료");
           router.back();
-      }catch(error){
-          alert(`삭제 실패 :${error.message}`);
+      } catch (err) {
+          alert(
+            `삭제 실패 : ${
+              err instanceof Error ? err.message : '알 수 없는 오류'
+            }`
+          );;
       }
   
 }
@@ -219,7 +223,7 @@ export default function EditEventPage() {
                   label="제목"
                   name="title"
                   placeholder="내용을 입력해주세요"
-                  value={form.title}
+                  value={form.title ?? ''}
                   onChange={handleChange}
                 />
                 
@@ -228,7 +232,7 @@ export default function EditEventPage() {
                   label="티켓팅 시작시간"
                   name="eventTime"
                   type="datetime-local"
-                  value={form.eventTime}
+                  value={form.eventTime ?? ''}
                   onChange={handleChange}
                   withIcon
                 />
@@ -238,7 +242,7 @@ export default function EditEventPage() {
                   label="종시"
                   name="eventEndTime"
                   type="datetime-local"
-                  value={form.eventEndTime}
+                  value={form.eventEndTime ?? ''}
                   onChange={handleChange}
                   withIcon
                 />
@@ -248,7 +252,7 @@ export default function EditEventPage() {
                   label="장소"
                   name="locationInfo"
                   placeholder="내용을 입력해주세요"
-                  value={form.locationInfo}
+                  value={form.locationInfo ?? ''}
                   onChange={handleChange}
                 />
 
@@ -272,7 +276,7 @@ export default function EditEventPage() {
                   label="대상"
                   name="target"
                   placeholder="내용을 입력해주세요"
-                  value={form.target}
+                  value={form.target ?? ''}
                   onChange={handleChange}
                 />
 
@@ -282,7 +286,7 @@ export default function EditEventPage() {
                   name="stock"
                   placeholder="내용을 입력해주세요"
                   type="number"
-                  value={form.stock}
+                  value={form.stock ?? ''}
                   onChange={handleChange}
                 />
 
@@ -291,7 +295,7 @@ export default function EditEventPage() {
                   label="간식 나눔 인스타그램 링크"
                   name="promotionLink"
                   placeholder="내용을 입력해주세요"
-                  value={form.promotionLink}
+                  value={form.promotionLink ?? ''}
                   onChange={handleChange}
                 />
 
@@ -300,7 +304,7 @@ export default function EditEventPage() {
                   label="문의 전화번호"
                   name="inquiryNumber"
                   placeholder="내용을 입력해주세요"
-                  value={form.inquiryNumber}
+                  value={form.inquiryNumber ?? ''}
                   onChange={handleChange}
                 />
 
@@ -309,7 +313,7 @@ export default function EditEventPage() {
                   label="이벤트 설명"
                   name="description"
                   placeholder="내용을 입력해주세요"
-                  value={form.description}
+                  value={form.description ?? ''}
                   onChange={handleChange}
                 />
                 

@@ -69,7 +69,9 @@ export default function CoursesPage({
       const { dept, order, query, fav } = filters;
       setIsLoading(true);
 
-      const res = await fetchClient(
+      const res = await fetchClient<{
+        data: { contents: Course[]; nextPage: number };
+      }>(
         `/lectures/courses?page=${page}` +
           (query ? `&keyword=${encodeURIComponent(query)}` : '') +
           (dept !== 'ALL' ? `&department=${dept}` : '') +
@@ -77,7 +79,8 @@ export default function CoursesPage({
           (fav ? `&like=${fav}` : '')
       );
 
-      const data = res.data;
+      const data = res?.data;
+      if (!data) return;
       const newCourses: Course[] = data.contents;
 
       setCourses(prev => [...prev, ...newCourses]);

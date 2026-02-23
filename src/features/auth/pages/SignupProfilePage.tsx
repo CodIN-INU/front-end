@@ -71,13 +71,27 @@ export default function SignupProfilePage() {
 
     if (nickname) {
       try {
-        const response = await PostSignup(email, nickname, profileImg);
+        const response = await PostSignup(
+          email ?? '',
+          nickname,
+          profileImg
+        );
         console.log('회원가입 결과:', response);
         alert('회원가입 완료! 다시 로그인해주세요');
         router.push('/login');
-      } catch (error: any) {
-        console.error("회원가입 실패", error);
-        const message = error?.response?.data?.message || "회원가입 실패";
+      } catch (err) {
+        console.error('회원가입 실패', err);
+        const message =
+          err &&
+          typeof err === 'object' &&
+          'response' in err &&
+          err.response &&
+          typeof err.response === 'object' &&
+          'data' in err.response &&
+          err.response.data &&
+          typeof (err.response.data as { message?: string }).message === 'string'
+            ? (err.response.data as { message: string }).message
+            : '회원가입 실패';
         alert(message);
       }
     } else {

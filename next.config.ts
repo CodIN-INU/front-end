@@ -1,3 +1,5 @@
+import type { Configuration, RuleSetRule } from 'webpack';
+
 /** @type {import('next').NextConfig} */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -44,22 +46,45 @@ const nextConfig = {
     ],
   },
   output: 'standalone',
-  webpack: config => {
+  webpack: (config: Configuration) => {
     // SVGR setting
-    const fileLoaderRule = config.module.rules.find(rule =>
-      rule.test?.test?.('.svg')
-    );
+    if (!config.module?.rules) return config;
+
+    const fileLoaderRule = config.module.rules.find((rule): rule is RuleSetRule => {
+      if (typeof rule !== 'object' || rule === null) return false;
+      const r = rule as RuleSetRule;
+      const test = r.test;
+      if (test instanceof RegExp) return test.test('.svg');
+      if (typeof test === 'function') return test('.svg');
+      return false;
+    });
+
+    if (!fileLoaderRule) return config;
+
+    const baseRule =
+      typeof fileLoaderRule === 'object' && fileLoaderRule !== null
+        ? { ...fileLoaderRule }
+        : {};
 
     config.module.rules.push(
       {
-        ...fileLoaderRule,
+        ...baseRule,
         test: /\.svg$/i,
         resourceQuery: /url/,
       },
       {
         test: /\.svg$/i,
-        issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
+        issuer: 'issuer' in fileLoaderRule ? fileLoaderRule.issuer : undefined,
+        resourceQuery: {
+          not: [
+            ...(Array.isArray(
+              (fileLoaderRule.resourceQuery as { not?: unknown[] })?.not
+            )
+              ? (fileLoaderRule.resourceQuery as { not: RegExp[] }).not
+              : []),
+            /url/,
+          ],
+        },
         use: [
           {
             loader: '@svgr/webpack',
@@ -71,7 +96,7 @@ const nextConfig = {
         ],
       }
     );
-    fileLoaderRule.exclude = /\.svg$/i;
+    Object.assign(fileLoaderRule, { exclude: /\.svg$/i });
     return config;
   },
 };

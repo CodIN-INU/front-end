@@ -19,12 +19,13 @@ export async function fetchClient<Response = unknown>(
     },
   };
 
-  let response = await fetch(url, options);
+  const { _retry, ...fetchInit } = options;
+  let response = await fetch(url, fetchInit);
 
   if (response.status === 401 || (response.status === 403 && !init?._retry)) {
     try {
       await PostReissue();
-      response = await fetch(url, { ...options, _retry: true });
+      response = await fetch(url, fetchInit);
     } catch (err) {
       throw err;
     }

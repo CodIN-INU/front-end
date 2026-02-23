@@ -4,7 +4,7 @@ import BottomSheet from '@/features/department-info/components/bottomSheet';
 import MapContainer from '@/features/department-info/components/mapContainer';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 import { use, useEffect, useState } from 'react';
-import { IPartner } from '@/types/partners';
+import { IPartner, Tag } from '@/types/partners';
 import Script from 'next/script';
 import { fetchClient } from '@/shared/api/fetchClient';
 
@@ -29,7 +29,19 @@ export default function MapPage({
 
     const fetchPartner = async () => {
       try {
-        const { data } = await fetchClient(`/info/partner/${id}`);
+        const res = await fetchClient<{
+          data: {
+            name: string;
+            tags: Tag[];
+            benefits: string[];
+            startDate: string;
+            endDate?: string;
+            location: string;
+            img: { main: string; sub?: string[] };
+          };
+        }>(`/info/partner/${id}`);
+        const data = res?.data;
+        if (!data) return;
         console.log('Fetched partner data:', data.location);
         setParter({
           name: data.name,

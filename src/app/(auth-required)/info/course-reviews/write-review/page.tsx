@@ -51,7 +51,11 @@ const WriteReview = () => {
   const [reviewContents, setReviewContents] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { data } = useContext(ReviewContext);
+  const context = useContext(ReviewContext);
+  const data = context?.data ?? {
+    departments: { label: '학과', value: '' },
+    grade: { label: '학년', value: '' },
+  };
 
   const getReviewList = async () => {
     try {

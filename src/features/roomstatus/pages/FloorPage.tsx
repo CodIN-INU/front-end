@@ -127,7 +127,7 @@ export default function FloorPage({
         />
 
         {roomStatus[floor - 1] &&
-          Object.entries(roomStatus[floor - 1]).map(([roomNum, status]) => {
+          Object.entries(roomStatus[floor - 1] ?? {}).map(([roomNum, status]) => {
             const [timeTable, boundaryTable] = getTimeTableData(status);
             return (
               <ShadowBox

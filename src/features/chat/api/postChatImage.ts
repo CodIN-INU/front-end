@@ -6,7 +6,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export const PostChatImage = async (
   chatImages: File,
   retryCount = 0
-): Promise<unknown> => {
+): Promise<{ data: string[] }> => {
   axios.defaults.withCredentials = true;
   try {
     const formData = new FormData();

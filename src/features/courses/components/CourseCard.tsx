@@ -90,7 +90,7 @@ const CourseCard = forwardRef<HTMLDivElement, Props>(({ fav, value }, ref) => {
               </div>
               <div className="mt-[29px] mb-[8px] text-[12px]">
                 <div className="text-sub text-sr">
-                  {tagMap[department as Tag] ? tagMap[department] : department}
+                  {tagMap[department as Tag] ?? department}
                 </div>
                 <div className="text-[12px] font-medium">
                   {grade}학년 {credit}학점

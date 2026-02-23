@@ -55,7 +55,12 @@ const CourseReviewPage = ({
 
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, setData } = useContext(ReviewContext);
+  const context = useContext(ReviewContext);
+  const data = context?.data ?? {
+    departments: { label: '학과', value: '' },
+    grade: { label: '학년', value: '' },
+  };
+  const setData = context?.setData ?? (() => {});
 
   const selectDepartmentHandler = (
     selectedLabel: string,
@@ -200,13 +205,13 @@ const CourseReviewPage = ({
               onChange={e => onSearchKeywordChange(e.target.value)}
             />
             <div className="flex mt-4">
-              {SEARCHTYPES.map(({ label, value }: searchTypesType) => (
+              {SEARCHTYPES.map(item => (
                 <UnderbarBtn
-                  key={`searchType_${value}`}
-                  text={label}
-                  inverted={value === searchType.value}
+                  key={`searchType_${item.value}`}
+                  text={item.label}
+                  inverted={item.value === searchType.value}
                   className="font-semibold"
-                  onClick={() => onSearchTypeChange({ label, value })}
+                  onClick={() => onSearchTypeChange(item)}
                 />
               ))}
             </div>

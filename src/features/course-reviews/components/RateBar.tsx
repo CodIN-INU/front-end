@@ -67,9 +67,10 @@ const RateBar = ({
   height = 17, //px
 }: RateBarType) => {
   const coloredBarCnt = score / 0.25;
-  const barAry = clickable
-    ? generateClickableBars(coloredBarCnt, barWidth, clickFn)
-    : generateBars(coloredBarCnt, barWidth, height);
+  const barAry =
+    clickable && clickFn
+      ? generateClickableBars(coloredBarCnt, barWidth, clickFn)
+      : generateBars(coloredBarCnt, barWidth, height);
   return (
     <div className={`flex content-center ${className}`}>
       {barAry.map((bar) => {

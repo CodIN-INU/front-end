@@ -6,11 +6,11 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 export const GetVoteDetail = async (
   postId: string | string[],
   retryCount = 0
-): Promise<unknown> => {
+): Promise<{ data: unknown }> => {
   axios.defaults.withCredentials = true;
   try {
     const response: AxiosResponse = await axios.get(`${apiUrl}/posts/${postId}`);
-    return response.data;
+    return { data: response.data };
   } catch (error: unknown) {
     const err = error as { response?: { status: number } };
     if (err.response?.status === 401 && retryCount < 2) {

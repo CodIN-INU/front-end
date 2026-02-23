@@ -37,6 +37,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "webpack": "^5.98.0",
     "@next/bundle-analyzer": "^16.1.6",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",

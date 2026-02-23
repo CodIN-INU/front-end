@@ -56,7 +56,7 @@ export const exampleCourse: CourseDetail = {
   openKeyword: false,
   likes: 0,
   starRating: 3,
-  liked: null,
+  liked: false,
 };
 
 export interface CourseReview {

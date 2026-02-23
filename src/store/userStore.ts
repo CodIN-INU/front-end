@@ -41,10 +41,10 @@ export const useAuth = create<AuthState>()(
                 set({ status: 'loading' });
 
                 try{
-                    const response = await fetchClient('/users');
-                    const data = response.data
-
-                    set({user: data, status: 'authenticated' });
+                    const response = await fetchClient<{ data?: User }>('/users');
+                    const data = response?.data;
+                    if (data) set({ user: data, status: 'authenticated' });
+                    else set({ user: null, status: 'unauthenticated' });
 
                 }catch{
                     set({ user: null, status: 'unauthenticated' });

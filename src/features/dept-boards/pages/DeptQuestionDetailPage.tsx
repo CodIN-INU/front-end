@@ -184,8 +184,9 @@ export default function DeptQuestionDetailPage({
 
     const fetchNoticeData = async () => {
       try {
-        const response = await fetchClient(`/notice/${noticeId}`);
-        const data: Post = response.data;
+        const response = await fetchClient<{ data: Post }>(`/notice/${noticeId}`);
+        const data = response?.data;
+        if (!data) return;
         setNotice(data);
       } catch (error) {
         console.error('Error fetching notice:', error);

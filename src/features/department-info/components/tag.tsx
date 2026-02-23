@@ -65,7 +65,7 @@ export function Tags(
         !other ? 'bg-[#EBF0F7] text-sub' : 'bg-[#0D99FF] text-white'
         } text-[10px] px-[9.5px] py-[3.5px] flex justify-center items-center rounded-[20px] flex-shrink-0`}
     >
-      #{tagMap[tag as Tag] ? tagMap[tag] : tag}
+      {tagMap[tag as Tag] ?? tag}
     </div>
   );
 }

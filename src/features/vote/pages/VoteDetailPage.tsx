@@ -29,7 +29,9 @@ export default function VoteDetailPage({
   const router = useRouter();
   const paramsVoteId = useParams().voteId;
   const voteId = voteIdProp ?? (Array.isArray(paramsVoteId) ? paramsVoteId[0] : paramsVoteId);
-  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, number[]>
+  >({});
   const [vote, setVote] = useState<vote | null>(
     initialVote ? (initialVote as unknown as vote) : null
   );
@@ -42,6 +44,7 @@ export default function VoteDetailPage({
   const [menuOpen, setMenuOpen] = useState(false);
 
   interface vote {
+    _id?: string;
     post: {
       title: string;
       content: string;
@@ -119,15 +122,15 @@ export default function VoteDetailPage({
     const getVoteData = async () => {
       try {
         const voteData = await GetVoteDetail(voteId);
-        const voteInfo = voteData.data;
+        const voteInfo = voteData.data as vote;
         setVote(voteInfo);
 
         const postId = voteInfo?.post?._id ?? voteInfo?._id;
         if (postId) {
           setIsPostLiked({
-            [postId]: voteInfo?.post?.userInfo?.like ?? voteInfo?.userInfo?.like ?? false,
+            [postId]: voteInfo?.post?.userInfo?.like ?? false,
           });
-          setLikeCount(voteInfo?.post?.likeCount ?? voteInfo?.likeCount ?? 0);
+          setLikeCount(voteInfo?.post?.likeCount ?? 0);
         }
       } catch (error) {
         console.log('투표 정보를 불러오지 못했습니다.', error);
@@ -208,7 +211,7 @@ export default function VoteDetailPage({
   ) => {
     e.preventDefault();
 
-    if (selectedOptions.length === 0) {
+    if ((selectedOptions[voteId]?.length ?? 0) === 0) {
       alert('투표 옵션을 선택해주세요');
     } else
       try {
@@ -218,9 +221,16 @@ export default function VoteDetailPage({
         );
         console.log('결과:', response);
         window.location.reload();
-      } catch (error: any) {
-        console.error('투표 실패', error);
-        const message = error?.response?.data?.message;
+      } catch (err) {
+        console.error('투표 실패', err);
+        const message =
+          err &&
+          typeof err === 'object' &&
+          'response' in err &&
+          err.response &&
+          typeof err.response === 'object' &&
+          'data' in err.response &&
+          (err.response.data as { message?: string })?.message;
         alert(message);
       }
   };
@@ -235,9 +245,16 @@ export default function VoteDetailPage({
         await PostBlockUser(vote!.post.userId);
         alert('유저를 차단하였습니다');
       }
-    } catch (error: any) {
-      console.log('유저 차단에 실패하였습니다.', error);
-      const message = error?.response?.data?.message;
+    } catch (err) {
+      console.log('유저 차단에 실패하였습니다.', err);
+      const message =
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        err.response &&
+        typeof err.response === 'object' &&
+        'data' in err.response &&
+        (err.response.data as { message?: string })?.message;
       alert(message);
     }
   };
@@ -283,7 +300,7 @@ export default function VoteDetailPage({
       alert('채팅하기 클릭됨');
       startChat();
     } else if (action === 'report') {
-      openReportModal('POST', vote.post._id);
+      openReportModal('POST', vote?.post?._id ?? '');
     } else if (action === 'block') {
       blockUser();
     } else if (action === 'delete') {
@@ -561,7 +578,7 @@ export default function VoteDetailPage({
             </div>
           )}
           <CommentSection
-            postId={voteId.toString()}
+            postId={voteId?.toString() ?? ''}
             postName={vote?.post.title}
           />
         </div>

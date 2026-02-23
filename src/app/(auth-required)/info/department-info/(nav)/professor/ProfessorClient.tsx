@@ -3,18 +3,31 @@
 import { fetchClient } from '@/shared/api/fetchClient';
 import { useEffect, useState } from 'react';
 
+export interface ProfessorPost {
+  id: string;
+  title: string;
+  content: string;
+  professor: string;
+}
+
+interface LabApiResponse {
+  success: boolean;
+  dataList?: ProfessorPost[];
+  message?: string;
+}
+
 interface ProfessorClientProps {
-  initialPosts?: any[];
+  initialPosts?: ProfessorPost[];
 }
 
 export default function ProfessorClient({
   initialPosts = [],
 }: ProfessorClientProps = {}) {
   const [loading, setLoading] = useState(initialPosts.length === 0);
-  const [professorPosts, setProfessorPosts] = useState<any[]>(
+  const [professorPosts, setProfessorPosts] = useState<ProfessorPost[]>(
     initialPosts.length > 0 ? initialPosts : []
   );
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialPosts.length > 0) return;
@@ -23,14 +36,20 @@ export default function ProfessorClient({
       setLoading(true);
       setError(null);
       try {
-        const response = await fetchClient('/info/lab');
+        const response = await fetchClient<LabApiResponse>('/info/lab');
         if (response.success) {
           setProfessorPosts(response.dataList ?? []);
         } else {
-          setError(response.message || '데이터를 가져오는 데 실패했습니다.');
+          setError(response.message ?? '데이터를 가져오는 데 실패했습니다.');
         }
-      } catch (err: any) {
-        setError(err.message || '알 수 없는 오류가 발생했습니다.');
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: unknown }).message)
+              : '알 수 없는 오류가 발생했습니다.'
+        );
       } finally {
         setLoading(false);
       }

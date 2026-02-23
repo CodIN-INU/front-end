@@ -8,10 +8,11 @@ interface Message {
     createdAt: string;
     contentType: string;
     me: boolean;
+    unread?: number;
 }
 
 interface MessageFormProps {
-    onMessageSubmit: (message: Message) => void;
+    onMessageSubmit: (message: Message) => void | Promise<void>;
     myId: string;
     imageFile: File | null;
     setImageFile: React.Dispatch<React.SetStateAction<File | null>>;

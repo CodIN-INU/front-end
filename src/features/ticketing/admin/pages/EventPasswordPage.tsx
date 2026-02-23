@@ -14,12 +14,22 @@ const EventPasswordPage: FC = () => {
   useEffect(() => {
     const fetchPassword = async () => {
       try {
-        const res = await fetchClient(`/ticketing/admin/event/${eventId}/password`);
-        console.log(res.data);
-        setPassword(res.data);
+        const res = await fetchClient<{ data: string }>(
+          `/ticketing/admin/event/${eventId}/password`
+        );
+        if (res?.data != null) {
+          console.log(res.data);
+          setPassword(res.data);
+        }
         setLoading(false);
-      } catch (error: any) {
-        alert(`데이터 불러오기 실패 :  ${error.message}`);
+      } catch (err) {
+        const msg =
+          err instanceof Error
+            ? err.message
+            : err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: unknown }).message)
+              : '알 수 없는 오류';
+        alert(`데이터 불러오기 실패 :  ${msg}`);
       }
     };
 

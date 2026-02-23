@@ -35,7 +35,7 @@ export default function ChatPage() {
 
     stompClient.connect({}, () => {
       setConnected(true);
-      stompClient.subscribe(`/user/queue/chatroom/unread`, message => {
+      stompClient.subscribe(`/user/queue/chatroom/unread`, (message: { body: string }) => {
         const receivedUnread = JSON.parse(message.body);
         setChatList(prevChatList => {
           const updatedChatList = prevChatList.map(chat =>

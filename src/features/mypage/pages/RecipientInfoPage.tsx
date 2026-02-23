@@ -53,7 +53,7 @@ export default function RecipientInfo() {
       });
 
       updateUser({
-        department: selectedDept,
+        department: selectedDept ?? undefined,
         studentId: studentId,
       });
       

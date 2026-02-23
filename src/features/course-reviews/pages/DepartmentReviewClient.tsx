@@ -55,7 +55,12 @@ const DepartmentReviewClient = ({
     }))
   );
   const [refetch, setRefetch] = useState<boolean>(false);
-  const { data, setData } = useContext(ReviewContext);
+  const context = useContext(ReviewContext);
+  const data = context?.data ?? {
+    departments: { label: '학과', value: '' },
+    grade: { label: '학년', value: '' },
+  };
+  const setData = context?.setData ?? (() => {});
 
   const getDepartMentRateInfo = async () => {
     try {
