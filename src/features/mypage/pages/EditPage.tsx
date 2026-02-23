@@ -8,7 +8,7 @@ import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
 import { useAuth } from '@/store/userStore';
 import LoadingOverlay from '@/components/common/LoadingOverlay';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 
 const UserInfoEditPage = () => {
   const [userInfo, setUserInfo] = useState({
@@ -105,9 +105,9 @@ const UserInfoEditPage = () => {
         })
         alert('수정이 완료되었습니다.');
         console.log('User Info Updated:', userResponse);
-      } catch (error) {
-        alert(error.message);
-        console.log(error);
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+        console.log(err);
       }
     }
 
@@ -125,9 +125,9 @@ const UserInfoEditPage = () => {
         })
         alert('수정이 완료되었습니다.');
         console.log('User Info Updated:', userResponse);
-      } catch (error) {
-        alert(error.message);
-        console.log(error);
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+        console.log(err);
       }
     }
 
@@ -146,9 +146,9 @@ const UserInfoEditPage = () => {
         console.log('Profile Image Updated:', imageResponse.data);
         alert('수정이 완료되었습니다.');
 
-      } catch (error) {
-        alert(error.message);
-        console.error(error);
+      } catch (err) {
+        alert(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.');
+        console.error(err);
       }
     }
 
@@ -163,7 +163,7 @@ const UserInfoEditPage = () => {
         title="유저 정보 수정"
         showBack
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {loading && <LoadingOverlay/>}
         {/* 프로필 사진 수정 */}
         <div className="flex flex-col items-center mt-[18px]">

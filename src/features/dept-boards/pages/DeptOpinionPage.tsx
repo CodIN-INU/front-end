@@ -2,7 +2,7 @@
 
 import Sad from '@public/icons/sad.svg';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import Title from '@/components/common/title';
 import clsx from 'clsx';
@@ -70,11 +70,11 @@ export default function DeptOpinionPage({
       // Optionally, refresh the list of voices
       setPage(0); // Reset to first page
       // Fetch updated opinions
-      const response = await fetchClient(
-        `/voice-box?department=${dept}&page=0`
-      );
-      const data: Opinion = response.data;
-      setVoices(data.contents);
+      const response = await fetchClient<{
+        data?: { contents?: unknown[] };
+      }>(`/voice-box?department=${dept}&page=0`);
+      const data = response?.data;
+      setVoices(Array.isArray(data?.contents) ? data.contents : []);
     } catch (error) {
       console.error('Error uploading voice:', error);
       alert('의견 전송에 실패했습니다. 다시 시도해주세요.');
@@ -86,11 +86,11 @@ export default function DeptOpinionPage({
 
     const fetchOpinions = async () => {
       try {
-        const response = await fetchClient(
-          `/voice-box?department=${dept}&page=${page}`
-        );
-        const data = response.data;
-        setVoices(data?.contents ?? []);
+        const response = await fetchClient<{
+          data?: { contents?: unknown[] };
+        }>(`/voice-box?department=${dept}&page=${page}`);
+        const data = response?.data;
+        setVoices(Array.isArray(data?.contents) ? data.contents : []);
       } catch (error) {
         console.error('Error fetching opinions:', error);
       }

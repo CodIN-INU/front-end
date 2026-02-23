@@ -19,7 +19,7 @@ export default function MapContainer({
       zoom: 15,
     });
 
-    if (!isInvalidPlacename(placename)) {
+    if (!isInvalidPlacename(placename ?? '')) {
       alert(
         'invalid placename. Please use only alphanumeric characters and spaces.'
       );

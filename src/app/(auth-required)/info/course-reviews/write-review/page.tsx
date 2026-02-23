@@ -20,9 +20,9 @@ import {
   TEMPLATETEXT,
 } from '@/features/course-reviews/constants';
 import { CustomSelect } from '@/features/course-reviews/components/CustomSelect';
-import { useSearchedReviewContext } from '@/api/review/useSearchedReviewContext';
+import { useSearchedReviewContext } from '@/features/course-reviews/api/useSearchedReviewContext';
 import { AlertModal } from '@/components/modals/AlertModal';
-import { submitReview } from '@/api/review/submitReview';
+import { submitReview } from '@/features/course-reviews/api/submitReview';
 import { useRouter } from 'next/navigation';
 import { calcEmotion } from '@/features/course-reviews/utils/calcEmotion';
 import { ReviewContext } from '@/context/WriteReviewContext';
@@ -51,7 +51,11 @@ const WriteReview = () => {
   const [reviewContents, setReviewContents] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { data } = useContext(ReviewContext);
+  const context = useContext(ReviewContext);
+  const data = context?.data ?? {
+    departments: { label: '학과', value: '' },
+    grade: { label: '학년', value: '' },
+  };
 
   const getReviewList = async () => {
     try {
@@ -119,7 +123,7 @@ const WriteReview = () => {
         showBack
         title="후기 작성하기"
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="flex flex-col justify-between">
           <div>
             <div className="w-full flex pt-[18px]">

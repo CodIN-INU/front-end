@@ -10,8 +10,8 @@ import {
 } from "react-icons/fa";
 
 // chat API 불러오기
-import { startChat } from "@/api/chat/postChatRoom";
-import { PostLike } from "@/api/like/postLike";
+import { startChat } from '@/features/chat/api/postChatRoom';
+import { PostLike } from "@/shared/api/postLike";
 
 interface Comment {
   _id: string;
@@ -241,11 +241,11 @@ export default function CommentSection({
           ...comment,
           content: comment.content || "내용이 없습니다.",
           postId: postId,
-          postName: postName
+          postName: postName ?? '',
         }));
         console.log("응답", data);
         setComments(validComments);
-        const initialCommentLikes = data.dataList.reduce(
+        const initialCommentLikes = (data.dataList ?? []).reduce(
             (acc: { [key: string]: boolean }, comment: Comment) => {
               acc[comment._id] = comment.userInfo.like;
               
@@ -260,7 +260,7 @@ export default function CommentSection({
         setIsCommentLiked(initialCommentLikes);
         console.log(initialCommentLikes);
 
-        const initialLikesCount = data.dataList.reduce(
+        const initialLikesCount = (data.dataList ?? []).reduce(
             (acc: { [key: string]: number }, comment: Comment) => {
               acc[comment._id] = comment.likeCount;
 
@@ -631,7 +631,11 @@ export default function CommentSection({
                                       onClick={async () => {
                                         try {
                                           // 필요한 제목(title)은 원하는 대로 지정 가능
-                                          await startChat(postName, comment.userId, postId);
+                                          await startChat(
+                                            postName ?? '',
+                                            comment.userId,
+                                            postId
+                                          );
                                           setMenuOpenId(null);
                                           console.log("채팅전달값:",postName, comment.userId, postId);
                                         } catch (error) {
@@ -669,7 +673,14 @@ export default function CommentSection({
                           setAnonymous={setAnonymous}
                           value={newReply}
                           onChange={(e) => setNewReply(e.target.value)}
-                          onSubmit={() => replyTargetNickname ? submitReply("@"+replyTargetNickname+" "+newReply, idFromParent) : submitReply(newReply, comment._id)}
+                          onSubmit={() =>
+                            replyTargetNickname
+                              ? submitReply(
+                                  '@' + replyTargetNickname + ' ' + (newReply ?? ''),
+                                  idFromParent ?? ''
+                                )
+                              : submitReply(newReply ?? '', comment._id)
+                          }
                           submitLoading={submitLoading}
                           replyTargetNickname={replyTargetNickname}
                           placeholder={replyTargetNickname !== null ? "에게 답글 .. " : "답글을 입력하세요"}

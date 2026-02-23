@@ -11,7 +11,7 @@ import DeptHeader from '@/features/dept-boards/components/DeptHeader';
 import CustomSelect from '@/features/courses/components/CourseCustomSelect';
 import { Tag } from '@/types/partners';
 import { useEffect, useMemo, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import type {
   Faq,
   NoticeData,
@@ -60,10 +60,10 @@ export default function DeptPage() {
 
   const fetchNoticeData = async () => {
     try {
-      const response = await fetchClient(
-        `/notice/category?department=${dept}&page=${page}`
-      );
-      const data: NoticeData[] = response.data.contents;
+      const response = await fetchClient<{
+        data: { contents: NoticeData[] };
+      }>(`/notice/category?department=${dept}&page=${page}`);
+      const data = response?.data?.contents ?? [];
       console.log(data);
       setNotices(data);
     } catch (error) {
@@ -76,20 +76,21 @@ export default function DeptPage() {
     const fetchOpinions = async () => {
       try {
         // Fetch opinions from the server (dummy endpoint used here)
-        const response = await fetchClient(
-          `/voice-box?department=${dept}&page=${page}`
-        );
-        const data: OpinionType = response.data;
-        console.log('익명의소리함', data);
-        setVoices(data.contents);
+        const response = await fetchClient<{
+          data: { contents?: OpinionType['contents'] };
+        }>(`/voice-box?department=${dept}&page=${page}`);
+        const data = response?.data;
+        setVoices(Array.isArray(data?.contents) ? data.contents : []);
       } catch (error) {
         console.error('Error fetching opinions:', error);
       }
     };
     const fetchFaqs = async () => {
       try {
-        const response = await fetchClient(`/question?department=${dept}`);
-        const data: Faq[] = response.dataList;
+        const response = await fetchClient<{ dataList?: Faq[] }>(
+          `/question?department=${dept}`
+        );
+        const data = response?.dataList ?? [];
         setQuestions(data);
       } catch (error) {
         console.error('Error fetching FAQs:', error);

@@ -1,8 +1,8 @@
 'use client';
 
-import { PostChatRoom } from '@/api/chat/postChatRoom';
-import { PostBlockUser } from '@/api/user/postBlockUser';
-import { DeletePost } from '@/api/boards/deletePost';
+import { PostChatRoom } from '@/features/chat/api/postChatRoom';
+import { PostBlockUser } from '@/features/auth/api/postBlockUser';
+import { DeletePost } from '@/features/board/api/deletePost';
 import { useReportModal } from '@/hooks/useReportModal';
 import Header from '@/components/Layout/header/Header';
 import MenuItem from '@/components/common/Menu/MenuItem';

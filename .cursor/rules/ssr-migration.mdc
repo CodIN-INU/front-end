@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+---
+
+---
+description: App Router CSR -> RSC/SSR refactor playbook (shrink 'use client' boundary, server data fetch)
+globs:
+  - "src/app/**/*"
+  - "src/features/**/*"
+  - "src/server/**/*"
+alwaysApply: false
+---
+
+# CSR -> RSC/SSR Refactor Playbook (App Router)
+
+## 목표
+- 페이지/레이아웃은 Server Component 유지
+- 데이터 패칭은 가능한 서버로 이동
+- Client Component는 인터랙션 leaf만 남김
+
+## Step 1) 현황 파악 (먼저)
+- 해당 라우트에서 'use client'가 붙은 파일 목록화
+- 클라이언트에서 fetch/useEffect로 데이터 로딩하는 지점 목록화
+- 브라우저 API 의존(window/localStorage/MediaQuery 등) 지점 분리 계획
+- hydration mismatch 위험 요소 확인:
+  - Date.now / Math.random / locale/timezone formatting / viewport 기반 렌더
+
+## Step 2) "서버 래퍼 + 클라 leaf"로 구조 바꾸기
+- page.tsx (Server Component):
+  - 서버에서 데이터 준비(가능하면 fetch)
+  - UI는 대부분 서버에서 렌더
+  - 인터랙션 필요한 컴포넌트만 Client leaf로 분리해 props 전달
+
+- Client leaf 컴포넌트:
+  - 상태/이벤트/브라우저 API만 담당
+  - 데이터는 props로 받거나, 정말 필요한 경우에만 클라에서 후속 요청
+
+## Step 3) 클라 데이터 패칭 제거/축소
+- 기존: useEffect(() => fetch(...), [])
+- 전환:
+  - 서버에서 fetch 후 결과를 내려준다
+  - 클라이언트는 “정말 상호작용 때문에 필요한” 추가 fetch만 수행
+
+## Step 4) 서버 전용 로직 분리
+- 서버에서만 써야 하는 코드는 src/server/** 로 이동
+- features에서는 서버 코드 직접 접근이 필요하면 server를 통해 접근(의존 방향 유지)
+
+## Step 5) 로딩/스트리밍 UX
+- 라우트 세그먼트에 loading.tsx를 두어 기본 로딩 UI 제공
+- 느린 영역은 Suspense boundary로 더 잘게 쪼개 스트리밍
+
+## Step 6) 완료 조건
+- 상단(page/layout)에서 'use client' 제거/최소화
+- hydration warning 0
+- 네트워크: 초기 화면에 필요한 데이터는 서버에서 준비(가능한 범위)
+- 번들 영향 큰 클라 라이브러리(차트, 지도 등)는 leaf로 격리

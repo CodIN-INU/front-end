@@ -1,0 +1,51 @@
+---
+alwaysApply: true
+---
+
+---
+description: Architecture & folder structure (feature-first), module boundaries, route groups/private folders
+globs:
+  - "src/**/*"
+  - "app/**/*"
+alwaysApply: false
+---
+
+# Architecture / Folder Structure / Boundaries (App Router)
+
+## 핵심 원칙
+- app/는 “라우팅/조립 레이어”로 얇게 유지
+- 기능/도메인 코드는 features/에 고응집으로 모음
+- 공용은 shared/, 서버 전용은 server/로 분리
+
+## 추천 구조
+- src/
+  - app/                          # 라우팅/레이아웃/route handler/route-level composition
+  - features/                     # 도메인 기능 단위 (auth, user, billing, ...)
+  - shared/                       # 범용 UI/훅/유틸/타입
+  - server/                       # 서버 전용 서비스/액션/리포지토리/API clients
+
+## App Router 구조화 규칙 (URL 유지 + 정리)
+- Route Groups: (group)로 조직화 (URL에 포함되지 않음)
+- Private folder: _components, _lib, _actions 등은 라우팅에서 제외되는 “구현 디테일” 폴더로 사용
+
+예시:
+- src/app/(marketing)/page.tsx
+- src/app/(dashboard)/settings/page.tsx
+- src/app/blog/_components/PostCard.tsx
+- src/app/blog/_lib/query.ts
+
+## 결합도 낮추는 Import 규칙
+- app -> features/shared/server import 가능
+- features -> shared/server import 가능
+- shared -> shared 내부만 (feature 의존 금지)
+- server -> server + shared 일부(types/utils)만
+
+## Feature Public API 강제 (deep import 금지)
+- 각 feature는 index.ts를 “공개 진입점”으로 사용
+  - ✅ import { LoginForm } from "@/features/auth"
+  - ❌ import { LoginForm } from "@/features/auth/components/LoginForm"
+
+## 라우트 레이어(app) 규칙
+- page/layout는 “조립”만 하고, 비즈니스 로직은 features로 내린다.
+- 라우트 전용 UI는 해당 segment의 private folder(_components)에 colocate 가능하되,
+  다른 route/feature에서 재사용 필요하면 shared/ui 또는 features로 승격한다.

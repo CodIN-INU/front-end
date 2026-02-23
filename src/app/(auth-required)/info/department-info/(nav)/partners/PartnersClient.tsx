@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { PartnerLinkCard } from '@/features/department-info/components/PartnerLinkCard';
 import { IPartners } from '@/types/partners';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ export default function PartnersClient({
   initialPartners = [],
 }: PartnersClientProps = {}) {
   const [loading, setLoading] = useState(initialPartners.length === 0);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [partners, setPartners] = useState<IPartners[]>(
     initialPartners.length > 0 ? initialPartners : []
   );
@@ -23,10 +23,16 @@ export default function PartnersClient({
 
     const fetchData = async () => {
       try {
-        const res = await fetchClient('/info/partner');
+        const res = await fetchClient<{ dataList?: IPartners[] }>('/info/partner');
         setPartners(res.dataList ?? []);
-      } catch (err: any) {
-        setError(err.message || '알 수 없는 오류가 발생했습니다.');
+      } catch (err) {
+        setError(
+          err instanceof Error
+            ? err.message
+            : err && typeof err === 'object' && 'message' in err
+              ? String((err as { message: unknown }).message)
+              : '알 수 없는 오류가 발생했습니다.'
+        );
       } finally {
         setLoading(false);
       }

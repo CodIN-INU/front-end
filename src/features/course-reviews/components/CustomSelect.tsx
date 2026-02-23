@@ -91,7 +91,7 @@ const CustomSelect = ({
       },
       fontSize: '14px',
     }),
-    indicatorSeparator: base => ({
+    indicatorSeparator: (base: object) => ({
       ...base,
       display: 'none',
     }),
@@ -101,7 +101,7 @@ const CustomSelect = ({
     <Select
       styles={SelectBarCustomStyle}
       options={options}
-      onChange={selected => onChange(selected)}
+      onChange={selected => onChange?.(selected)}
       value={value}
       isSearchable={isSearchable}
     />

@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { PostSubscribe } from '@/api/fcm/postSubscribe';
-import { PostUnsubscribe } from '@/api/fcm/postUnsubscribe';
+import { PostSubscribe } from '@/features/mypage/api/postSubscribe';
+import { PostUnsubscribe } from '@/features/mypage/api/postUnsubscribe';
 
 export default function NotificationSettingPage() {
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -48,7 +48,7 @@ export default function NotificationSettingPage() {
         title="푸시 알람 동의"
         showBack
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="flex justify-between items-center px-4 py-3 border-b">
           <span className="text-main text-Mm">푸시 알람 동의</span>
           <label className="inline-flex relative items-center cursor-pointer">

@@ -37,7 +37,7 @@ export default function MyBoardPage() {
         showBack
         tempBackOnClick="/mypage"
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <PostList
           posts={posts}
           boardName={board}

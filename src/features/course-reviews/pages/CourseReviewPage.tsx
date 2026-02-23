@@ -19,7 +19,7 @@ import { Subject } from '@/features/course-reviews/components/Subject';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import BottomNav from '@/components/Layout/BottomNav/BottomNav';
-import { useReviewsContext } from '@/api/review/getReviewsContext';
+import { useReviewsContext } from '@/features/course-reviews/api/getReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';
 
@@ -55,7 +55,12 @@ const CourseReviewPage = ({
 
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, setData } = useContext(ReviewContext);
+  const context = useContext(ReviewContext);
+  const data = context?.data ?? {
+    departments: { label: '학과', value: '' },
+    grade: { label: '학년', value: '' },
+  };
+  const setData = context?.setData ?? (() => {});
 
   const selectDepartmentHandler = (
     selectedLabel: string,
@@ -174,7 +179,7 @@ const CourseReviewPage = ({
         tempBackOnClick="/main"
         title="수강 후기"
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="w-full">
           <div className="px-0 pt-[18px] overflow-hidden">
             <div
@@ -200,13 +205,13 @@ const CourseReviewPage = ({
               onChange={e => onSearchKeywordChange(e.target.value)}
             />
             <div className="flex mt-4">
-              {SEARCHTYPES.map(({ label, value }: searchTypesType) => (
+              {SEARCHTYPES.map(item => (
                 <UnderbarBtn
-                  key={`searchType_${value}`}
-                  text={label}
-                  inverted={value === searchType.value}
+                  key={`searchType_${item.value}`}
+                  text={item.label}
+                  inverted={item.value === searchType.value}
                   className="font-semibold"
-                  onClick={() => onSearchTypeChange({ label, value })}
+                  onClick={() => onSearchTypeChange(item)}
                 />
               ))}
             </div>

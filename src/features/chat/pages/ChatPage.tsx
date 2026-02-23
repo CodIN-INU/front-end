@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
-import { GetChatRoomData } from '@/api/chat/getChatRoomData';
+import { GetChatRoomData } from '@/features/chat/api/getChatRoomData';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Image from 'next/image';
@@ -35,7 +35,7 @@ export default function ChatPage() {
 
     stompClient.connect({}, () => {
       setConnected(true);
-      stompClient.subscribe(`/user/queue/chatroom/unread`, message => {
+      stompClient.subscribe(`/user/queue/chatroom/unread`, (message: { body: string }) => {
         const receivedUnread = JSON.parse(message.body);
         setChatList(prevChatList => {
           const updatedChatList = prevChatList.map(chat =>
@@ -121,7 +121,7 @@ export default function ChatPage() {
   return (
     <Suspense>
       <Header title="쪽지" />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {chatList.length === 0 ? (
           <div className="text-center text-lg text-gray-500 mt-[60%]">채팅을 시작해보세요!</div>
         ) : (

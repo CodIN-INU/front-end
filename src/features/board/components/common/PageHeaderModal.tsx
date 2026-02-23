@@ -22,7 +22,7 @@ export default function PageHeaderModal({
       className="fixed inset-0 bg-white z-50 overflow-y-scroll"
     >
       <PostDetailModalHeader post={post} onClose={onClose} />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="pt-[18px] overflow-y-auto">{children}</div>
       </DefaultBody>
     </div>

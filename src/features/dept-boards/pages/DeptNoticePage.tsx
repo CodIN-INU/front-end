@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -71,16 +71,14 @@ export default function DeptNoticePage({
       if (loading) return;
       setLoading(true);
       try {
-        const res = await fetchClient(
-          `/notice/category?department=${dept}&page=${page}`,
-          { signal: controller.signal as any }
-        );
+        const res = await fetchClient<{
+          data?: { contents?: NoticeData[]; lastPage?: number; nextPage?: number };
+        }>(`/notice/category?department=${dept}&page=${page}`, {
+          signal: controller.signal,
+        });
 
-        const {
-          contents,
-          nextPage,
-        }: { contents: NoticeData[]; lastPage: number; nextPage: number } =
-          res.data ?? { contents: [], lastPage: 0, nextPage: -1 };
+        const { contents = [], nextPage = -1 } =
+          res?.data ?? {};
 
         setNotices(prev => {
           const seen = new Set(prev.map(it => it._id));
@@ -89,8 +87,8 @@ export default function DeptNoticePage({
         });
 
         setNext(typeof nextPage === 'number' ? nextPage : -1);
-      } catch (e: any) {
-        if (e?.name !== 'AbortError') {
+      } catch (e) {
+        if (!(e instanceof Error && e.name === 'AbortError')) {
           console.error('Error fetching notices:', e);
         }
       } finally {

@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         tempBackOnClick="/main"
         topNav={topNav}
       />
-      <DefaultBody hasHeader={2}>{children}</DefaultBody>
+      <DefaultBody headerPadding="full">{children}</DefaultBody>
     </>
   );
 }

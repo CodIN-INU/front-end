@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Header from '@/components/Layout/header/Header';
@@ -184,8 +184,9 @@ export default function DeptQuestionDetailPage({
 
     const fetchNoticeData = async () => {
       try {
-        const response = await fetchClient(`/notice/${noticeId}`);
-        const data: Post = response.data;
+        const response = await fetchClient<{ data: Post }>(`/notice/${noticeId}`);
+        const data = response?.data;
+        if (!data) return;
         setNotice(data);
       } catch (error) {
         console.error('Error fetching notice:', error);
@@ -212,7 +213,7 @@ export default function DeptQuestionDetailPage({
         showBack
         title={parsingTitle(dept) + ' 게시판'}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <ShadowBox className="overflow-hidden">
           <div className="py-[15px] px-[12px]">
             <div className="flex items-center min-w-[106px] gap-[17px] overflow-hidden">

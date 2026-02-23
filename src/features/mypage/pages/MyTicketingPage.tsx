@@ -4,7 +4,7 @@ import { FC, useState, useEffect, useRef } from "react";
 import { boardData } from "@/data/boardData";
 import BoardLayout from "@/components/Layout/BoardLayout";
 import { useRouter } from "next/navigation";
-import { fetchClient } from "@/api/clients/fetchClient";
+import { fetchClient } from "@/shared/api/fetchClient";
 import { MySnackEvent, FetchMySnackResponse } from "@/types/snackEvent";
 import CancelModal from '@/features/ticketing/components/modals/CancelModal';
 import { convertToKoreanDate } from "@/lib/utils/convertToKoreanDate";

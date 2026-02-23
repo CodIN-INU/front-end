@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useElementSizeHeight, useElementSizeWidth } from '@/hooks/useElementSize';
 import type { LectureDict } from '../types';
@@ -127,7 +127,7 @@ export default function FloorPage({
         />
 
         {roomStatus[floor - 1] &&
-          Object.entries(roomStatus[floor - 1]).map(([roomNum, status]) => {
+          Object.entries(roomStatus[floor - 1] ?? {}).map(([roomNum, status]) => {
             const [timeTable, boundaryTable] = getTimeTableData(status);
             return (
               <ShadowBox

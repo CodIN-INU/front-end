@@ -5,7 +5,7 @@ import Header from '@/components/Layout/header/Header';
 import {
   GetNotificationList,
   Notification,
-} from '@/api/notification/getNotificationList';
+} from '@/features/mypage/api/getNotificationList';
 import { useRouter } from 'next/navigation';
 import { createPostUrl } from '@/lib/utils/router/createPostUrl';
 

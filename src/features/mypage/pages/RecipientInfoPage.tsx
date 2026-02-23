@@ -4,7 +4,7 @@
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import { useState, Suspense, useEffect } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/userStore';
 import LoadingOverlay from '@/components/common/LoadingOverlay';
@@ -53,7 +53,7 @@ export default function RecipientInfo() {
       });
 
       updateUser({
-        department: selectedDept,
+        department: selectedDept ?? undefined,
         studentId: studentId,
       });
       
@@ -76,7 +76,7 @@ export default function RecipientInfo() {
         showBack
       />
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {isInitializing && <LoadingOverlay />}
         <div className='flex flex-row justify-start items-start pl-2 mb-2'>
                 <p className="text-[16px] text-[#212121] mb-[9px] font-semibold">

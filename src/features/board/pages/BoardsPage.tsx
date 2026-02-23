@@ -24,7 +24,7 @@ export default function BoardsPage() {
   return (
     <>
       <Header showBack title="커뮤니티" tempBackOnClick="/main" />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <form
           onSubmit={handleSearch}
           className="bg-white fixed top-[80px] left-1/2 -translate-x-1/2 right-0 z-50 w-full max-w-[410px]"

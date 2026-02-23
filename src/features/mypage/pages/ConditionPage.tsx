@@ -14,7 +14,7 @@ const Page = () => {
         showBack
       />
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="whitespace-pre-wrap">
           {`코딘 개인정보 처리방침
 

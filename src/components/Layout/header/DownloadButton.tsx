@@ -1,7 +1,7 @@
 // components/DownloadButton.tsx
 'use client';
 import React, { useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 
 interface DownloadButtonProps {
   endpoint: string; // 백엔드 API 경로 (예: "/files/report")

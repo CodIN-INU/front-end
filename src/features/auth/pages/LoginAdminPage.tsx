@@ -6,7 +6,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import CommonBtn from '@/components/buttons/commonBtn';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { PostLogin } from '@/api/user/postLogin';
+import { PostLogin } from '@/features/auth/api/postLogin';
 import { UserContext } from '@/context/UserContext';
 
 export default function LoginAdminPage() {
@@ -72,7 +72,7 @@ export default function LoginAdminPage() {
   };
 
   return (
-    <DefaultBody hasHeader={0}>
+    <DefaultBody headerPadding="none">
       <div className="absolute bottom-[62px] w-full px-[20px] left-0 flex flex-col items-center justify-center">
         <img
           className="w-[171.41px] h-[45px] mb-[72px]"

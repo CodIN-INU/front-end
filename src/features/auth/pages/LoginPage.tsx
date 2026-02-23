@@ -6,7 +6,7 @@ import React, { Suspense, useState, useContext, useEffect } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import { UserContext } from '@/context/UserContext';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 
 function LoginPageContent() {
   const router = useRouter();
@@ -18,8 +18,8 @@ function LoginPageContent() {
 
   useEffect(() => {
     const autoLogin = async () => {
-      const response = await fetchClient('/users');
-      if (response.success) {
+      const response = await fetchClient<{ success?: boolean }>('/users');
+      if (response?.success) {
         router.push('/main');
       }
     };

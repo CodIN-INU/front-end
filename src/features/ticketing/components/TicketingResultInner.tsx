@@ -6,7 +6,7 @@ import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import SignModal from './modals/SignModal';
 import CancelModal from './modals/CancelModal';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import type { TicketInfo } from '@/types/snackEvent';
 
 export default function TicketingResultInner() {
@@ -34,8 +34,10 @@ export default function TicketingResultInner() {
     (async () => {
       try {
         setIsLoading(true);
-        const res = await fetchClient(`/ticketing/event/participation/${eventId}`);
-        if (!ignore) setTicket(res.data);
+        const res = await fetchClient<{ data: TicketInfo }>(
+          `/ticketing/event/participation/${eventId}`
+        );
+        if (!ignore) setTicket(res?.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -55,7 +57,7 @@ export default function TicketingResultInner() {
       return (
         <Suspense>
           <Header title="간식나눔 교환권" showBack />
-          <DefaultBody hasHeader={1}>
+          <DefaultBody headerPadding="compact">
             <div className="w-full flex justify-center items-center mt-[15%] px-[40px]">
               <img src="/icons/ticketing/ticket.svg" alt="ticket" />
               <p className="absolute text-[40px] text-[#0D99FF] mt-[-30px] font-extrabold">

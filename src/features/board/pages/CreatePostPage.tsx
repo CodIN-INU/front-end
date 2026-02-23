@@ -43,7 +43,7 @@ export default function CreatePostPage() {
   return (
     <div className="w-full h-full">
       <Header showBack title="글 작성하기" />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-[18px] pt-[18px]"

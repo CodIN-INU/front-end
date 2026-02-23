@@ -4,7 +4,7 @@ import { FC, useState, useEffect, useRef } from "react";
 import { boardData } from "@/data/boardData";
 import BoardLayout from "@/components/Layout/BoardLayout";
 import { useRouter } from "next/navigation";
-import { fetchClient } from "@/api/clients/fetchClient";
+import { fetchClient } from "@/shared/api/fetchClient";
 import { SnackEvent, FetchSnackResponse } from "@/types/snackEvent";
 import { formatDateTimeWithDay } from '@/lib/utils/date';
 import ChangeEventCheckModal from '@/features/ticketing/components/modals/ChangeEventCheckModal';

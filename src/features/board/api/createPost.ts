@@ -1,4 +1,4 @@
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 
 export interface CreatePostFormData {
   title: string;

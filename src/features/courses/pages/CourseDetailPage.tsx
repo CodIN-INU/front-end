@@ -6,7 +6,7 @@ import Header from '@/components/Layout/header/Header';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Review from '@/features/courses/components/Review';
 import { CourseDetail, exampleCourse } from '@/types/course';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import Rating from '@/features/courses/components/Rating';
 import { useParams } from 'next/navigation';
 import PercentBoxWrapper from '@/features/courses/components/PercentBox';
@@ -66,8 +66,11 @@ export default function CourseDetailPage({
 
       inFlight.current = true;
       try {
-        const res = await fetchClient(`/lectures/reviews/${id}?page=${p}`);
-        const data = res.data;
+        const res = await fetchClient<{
+          data: { contents: CourseReview[]; nextPage: number };
+        }>(`/lectures/reviews/${id}?page=${p}`);
+        const data = res?.data;
+        if (!data) return;
         const review: CourseReview[] = data.contents;
 
         setReviews(prev => {
@@ -93,8 +96,9 @@ export default function CourseDetailPage({
 
     const fetchCourse = async () => {
       try {
-        const res = await fetchClient(`/lectures/${id}`);
-        const data: CourseDetail = res.data;
+        const res = await fetchClient<{ data: CourseDetail }>(`/lectures/${id}`);
+        const data = res?.data;
+        if (!data) return;
         setCourse(data);
       } catch (error) {
         console.error('Error fetching course data:', error);
@@ -140,7 +144,7 @@ export default function CourseDetailPage({
         showBack
         title={course.title}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div className="relative px-[35px] py-[28px] shadow-05134 rounded-[15px] mt-[13px]">
           <div className="flex flex-col text-[12px] gap-[4px]">
             <Bold>
@@ -168,7 +172,7 @@ export default function CourseDetailPage({
             )}
           </div>
         </div>
-        {course.preCourse !== null && course.preCourse.length > 0 && (
+        {course.preCourse != null && course.preCourse.length > 0 && (
           <div className="mt-[33px]">
             <Title>이 과목은 선수과목이 있어요</Title>
             <div className="flex justify-center mt-[18px] items-center gap-[4px]">
@@ -257,7 +261,11 @@ export default function CourseDetailPage({
               </div>
               <div className="border-l border-[#D4D4D4] self-stretch" />
               <div className="flex gap-[16px] py-[5px]">
-                <PercentBoxWrapper emotion={course.emotion} />
+                <PercentBoxWrapper
+                  emotion={
+                    course.emotion ?? { hard: 0, ok: 0, best: 0 }
+                  }
+                />
               </div>
             </div>
             <div>

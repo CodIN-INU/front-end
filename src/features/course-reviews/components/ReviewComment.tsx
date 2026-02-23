@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import Heart from '@public/icons/heart.svg';
 
 interface ReviewCommentProps {

@@ -5,14 +5,20 @@ import dynamic from 'next/dynamic';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
 import React from 'react';
-import { PostVote } from '@/api/vote/postVote';
+import { PostVote } from '@/features/vote/api/postVote';
 
-const DatePicker = dynamic(() => import('react-datepicker'), {
-  ssr: false,
-  loading: () => (
-    <span className="inline-block w-full h-10 bg-gray-100 animate-pulse rounded" />
-  ),
-});
+const DatePicker = dynamic(
+  () =>
+    import('react-datepicker').then(
+      mod => mod.default as React.ComponentType<Record<string, unknown>>
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <span className="inline-block w-full h-10 bg-gray-100 animate-pulse rounded" />
+    ),
+  }
+);
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import CommonBtn from '@/components/buttons/commonBtn';
@@ -148,7 +154,7 @@ export default function WriteVotePage() {
         showBack
         title={`투표 작성`}
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <input
           className="defaultInput mt-[10px]"
           style={{ fontSize: '16px', fontWeight: 'bold', color: '#808080' }}

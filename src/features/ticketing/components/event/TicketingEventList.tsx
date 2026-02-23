@@ -60,7 +60,7 @@ export function TicketingEventList({
   }
 
   return (
-    <div className="flex flex-col gap-[22px] py-[29px] w-full">
+    <div className="flex flex-col gap-[22px] pb-[29px] w-full">
       {snacks.map(snack => (
         <TicketingEventCard
           key={snack.eventId}

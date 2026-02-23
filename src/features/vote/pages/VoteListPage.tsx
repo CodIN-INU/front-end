@@ -2,8 +2,8 @@
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '@/context/AuthContext';
-import { GetVoteData } from '@/api/vote/getVoteData';
-import { PostVoting } from '@/api/vote/postVoting';
+import { GetVoteData } from '@/features/vote/api/getVoteData';
+import { PostVoting } from '@/features/vote/api/postVoting';
 import Header from '@/components/Layout/header/Header';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import Link from 'next/link';
@@ -17,14 +17,39 @@ interface VoteListPageProps {
   initialNextPage?: number;
 }
 
+interface VoteData {
+  post: {
+    title: string;
+    content: string;
+    likeCount: number;
+    scrapCount: number;
+    commentCount: number;
+    hits: number;
+    createdAt: Date | string;
+    userInfo: { scrap: boolean; like: boolean };
+    anonymous: boolean;
+    _id: string;
+  };
+  poll: {
+    pollOptions: string[];
+    multipleChoice: boolean;
+    pollEndTime: string;
+    pollVotesCounts: number[];
+    userVoteOptions: string[] | string;
+    totalParticipants: number;
+    hasUserVoted: boolean;
+    pollFinished: boolean;
+  };
+}
+
 export default function VoteListPage({
   initialVotes = [],
   initialNextPage = -1,
 }: VoteListPageProps = {}) {
   const authContext = useContext(AuthContext);
   const chatBoxRef = useRef<HTMLDivElement | null>(null);
-  const [voteList, setVoteList] = useState<any>(
-    initialVotes.length > 0 ? initialVotes : []
+  const [voteList, setVoteList] = useState<VoteData[]>(
+    initialVotes.length > 0 ? (initialVotes as unknown as VoteData[]) : []
   );
   const [page, setPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(
@@ -33,36 +58,9 @@ export default function VoteListPage({
   const [hasMore, setHasMore] = useState<boolean>(
     initialNextPage >= 0
   );
-  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
-
-  interface VoteData {
-    post: {
-      title: string;
-      content: string;
-      likeCount: number;
-      scrapCount: number;
-      commentCount: number;
-      hits: number;
-      createdAt: Date;
-      userInfo: {
-        scrap: boolean;
-        like: boolean;
-      };
-      anonymous: boolean;
-      _id: string;
-    }
-    poll: {
-      pollOptions: string[];
-      multipleChoice: boolean;
-      pollEndTime: string;
-      pollVotesCounts: number[];
-      userVoteOptions: string[] | string;
-      totalParticipants: number;
-      hasUserVoted: boolean;
-      pollFinished: boolean;
-    };
-    
-  }
+  const [selectedOptions, setSelectedOptions] = useState<
+    Record<string, number[]>
+  >({});
 
   interface VoteListProps {
     voteList: VoteData[]; // VoteData 타입의 배열
@@ -103,16 +101,18 @@ export default function VoteListPage({
 
       setIsLoading(true);
       try {
-        const voteData = await GetVoteData(pageNum);
-        const newVoteData = voteData.data?.contents || [];
+        const voteData = await GetVoteData(pageNum) as {
+          data?: { contents?: VoteData[] };
+        };
+        const newVoteData = voteData.data?.contents ?? [];
         if (newVoteData.length === 0) {
           setHasMore(false);
         } else {
           setVoteList(prev => [...newVoteData, ...prev]);
         }
         setIsLoading(false);
-      } catch (error: any) {
-        console.log('투표 정보를 불러오지 못했습니다.', error);
+      } catch (err) {
+        console.log('투표 정보를 불러오지 못했습니다.', err);
         setVoteList([]);
         setIsLoading(false);
       }
@@ -145,15 +145,24 @@ export default function VoteListPage({
     voteId: string
   ) => {
     e.preventDefault();
-    if(selectedOptions.length==0) {alert('투표 옵션을 선택해주세요');}
-
-    else try {
+    if ((selectedOptions[voteId]?.length ?? 0) === 0) {
+      alert('투표 옵션을 선택해주세요');
+      return;
+    }
+    try {
       const response = await PostVoting(voteId, selectedOptions[voteId] || []);
       console.log('결과:', response);
       window.location.reload();
-    } catch (error: any) {
-      console.error('투표 실패', error);
-      const message = error?.response?.data?.message;
+    } catch (err) {
+      console.error('투표 실패', err);
+      const message =
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        err.response &&
+        typeof err.response === 'object' &&
+        'data' in err.response &&
+        (err.response.data as { message?: string })?.message;
       alert(message);
     }
   };
@@ -374,7 +383,7 @@ export default function VoteListPage({
         title={`익명 투표`}
         tempBackOnClick='/boards'
       />
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <div
           id="VoteListCont"
           className="w-full"

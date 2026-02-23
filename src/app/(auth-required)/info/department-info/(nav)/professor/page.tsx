@@ -1,5 +1,5 @@
 import ProfessorClient from './ProfessorClient';
-import { getProfessorLabList } from '@/api/server';
+import { getProfessorLabList } from '@/server';
 
 export default async function ProfessorRoutePage() {
   const initialPosts = await getProfessorLabList();

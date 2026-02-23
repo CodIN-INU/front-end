@@ -1,4 +1,4 @@
-import apiClient from '@/api/clients/apiClient';
+import apiClient from '@/shared/api/apiClient';
 import type { Post } from '@/types/post';
 
 interface PostApiResponse {

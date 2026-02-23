@@ -7,7 +7,7 @@ import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import RoomItemHourly from '@/features/roomstatus/components/RoomItemHourly';
 import type { LectureDict } from '@/features/roomstatus/types';
 import { getTimeTableData } from '@/features/roomstatus/utils/getTimeTableData';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import PageBar from '@/components/Layout/pageBar';
 
 const defaultRoomStatus: (LectureDict | null)[] = Array.from(
@@ -31,8 +31,12 @@ const MainRoomStatusSection = ({
     if (initial && Array.isArray(initial) && initial.length > 0) return;
     const fetchMiniRoomStatus = async () => {
       try {
-        const response = await fetchClient('/rooms/empty');
-        if (response.success) {
+        const response = await fetchClient<{
+          success: boolean;
+          data?: (LectureDict | null)[];
+          message?: string;
+        }>('/rooms/empty');
+        if (response.success && response.data) {
           setRoomStatus(response.data);
         } else {
           console.error('Failed to fetch room status:', response.message);
@@ -63,7 +67,7 @@ const MainRoomStatusSection = ({
       </div>
       <div className="px-[14px]">
         {roomStatus[floor - 1] &&
-          Object.entries(roomStatus[floor - 1])
+          Object.entries(roomStatus[floor - 1] ?? {})
             .slice(0, 2)
             .map(([roomNum, status]) => {
               const [timeTable, boundaryTable] = getTimeTableData(status);

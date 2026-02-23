@@ -1,6 +1,6 @@
 'use client';
 import { FC, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 interface ChangeEventCheckModalProps {
   onClose: () => void;
   onComplete: ()=> void;

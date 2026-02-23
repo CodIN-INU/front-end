@@ -11,7 +11,7 @@ const EventDetailPage: FC = () => {
 
   return (
     <Suspense>
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         <Header showBack title={`간식나눔`} />
         <div className='flex flex-col w-full h-[100vh] text-[18px] font-bold text-black justify-center'>
           <div className='flex flex-col w-full h-full'>

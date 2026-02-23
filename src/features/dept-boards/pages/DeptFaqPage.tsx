@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -27,8 +27,10 @@ export default function DeptFaqPage({
 
     const fetchFaqs = async () => {
       try {
-        const response = await fetchClient(`/question?department=${dept}`);
-        const data: Faq[] = response.dataList ?? [];
+        const response = await fetchClient<{ dataList?: Faq[] }>(
+          `/question?department=${dept}`
+        );
+        const data = response?.dataList ?? [];
         setQuestions(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error fetching FAQs:', error);

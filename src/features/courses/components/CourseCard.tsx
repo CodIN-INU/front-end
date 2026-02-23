@@ -4,7 +4,7 @@ import Heart from '@public/icons/heart.svg';
 import Rating from './Rating';
 import { Course } from '@/types/course';
 import { forwardRef, useState } from 'react';
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { Tag, tagsArray } from '@/types/partners';
 
 interface Props {
@@ -90,7 +90,7 @@ const CourseCard = forwardRef<HTMLDivElement, Props>(({ fav, value }, ref) => {
               </div>
               <div className="mt-[29px] mb-[8px] text-[12px]">
                 <div className="text-sub text-sr">
-                  {tagMap[department as Tag] ? tagMap[department] : department}
+                  {tagMap[department as Tag] ?? department}
                 </div>
                 <div className="text-[12px] font-medium">
                   {grade}학년 {credit}학점

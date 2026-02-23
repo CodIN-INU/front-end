@@ -1,4 +1,4 @@
-import { fetchClient } from '@/api/clients/fetchClient';
+import { fetchClient } from '@/shared/api/fetchClient';
 import { CourseReview } from '@/types/course';
 import Heart from '@public/icons/heart.svg';
 import { forwardRef, useState } from 'react';

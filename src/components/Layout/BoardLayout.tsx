@@ -18,6 +18,8 @@ interface BoardLayoutProps extends PropsWithChildren {
   showSearchButton?: boolean; // SearchButton 표시 여부 props 추가
   showReloadButton?: boolean;
   backOnClick?: string;
+  /** true면 외부 레이아웃의 헤더 사용 (Header/DefaultBody/BottomNav 미렌더) */
+  useLayoutHeader?: boolean;
 }
 
 const BoardLayout: FC<BoardLayoutProps> = ({
@@ -27,7 +29,8 @@ const BoardLayout: FC<BoardLayoutProps> = ({
   children,
   showSearchButton = true, // 기본값 true
   showReloadButton = false,
-  backOnClick = '/boards'
+  backOnClick = '/boards',
+  useLayoutHeader = false,
 }) => {
   const router = useRouter();
   const { name, icon, tabs, backLink } = board;
@@ -37,7 +40,28 @@ const BoardLayout: FC<BoardLayoutProps> = ({
     console.log('BoardLayout: board', board);
   }, [activeTab]);
 
-
+  if (useLayoutHeader) {
+    return (
+      <>
+        {hasTabs && (
+          <div
+            id="scrollbar-hidden"
+            className="w-full bg-white z-50 overflow-x-scroll fixed pb-[8px] pr-[40px] mt-[-3px]"
+          >
+            <Tabs
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={onTabChange}
+            />
+          </div>
+        )}
+        <div className="pb-[12px] opacity-0">
+          <SmRoundedBtn status={1} text="" />
+        </div>
+        {children}
+      </>
+    );
+  }
 
   return (
     <>
@@ -51,7 +75,7 @@ const BoardLayout: FC<BoardLayoutProps> = ({
         searchOnClick={()=>router.push('/search')}
       />
 
-      <DefaultBody hasHeader={1}>
+      <DefaultBody headerPadding="compact">
         {/* Tabs Section */}
         {hasTabs && (
           <div

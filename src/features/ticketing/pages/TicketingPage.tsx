@@ -46,13 +46,14 @@ const TicketingPage: FC<TicketingPageProps> = ({
   );
 
   return (
-    <BoardLayout
-      board={board}
-      activeTab={activeTab}
-      onTabChange={tab => setActiveTab(tab)}
-      showSearchButton={false}
-      backOnClick="/main"
-    >
+    // <BoardLayout
+    //   board={board}
+    //   activeTab={activeTab}
+    //   onTabChange={tab => setActiveTab(tab)}
+    //   showSearchButton={false}
+    //   backOnClick="/main"
+    //   useLayoutHeader
+    // >
       <TicketingEventList
         snacks={snacks}
         isLoading={isLoading}
@@ -60,7 +61,7 @@ const TicketingPage: FC<TicketingPageProps> = ({
         onLoadMore={fetchNextPage}
         onCardClick={handleCardClick}
       />
-    </BoardLayout>
+    // </BoardLayout>
   );
 };
 
