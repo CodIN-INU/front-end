@@ -1,7 +1,10 @@
 import { PostReissue } from '@/features/auth/api/postReissue';
 
 export interface FetchOptions extends RequestInit {
+  /** 재시도 시 reissue 제외 플래그 (내부용) */
   _retry?: boolean;
+  /** true면 401/403 시 reissue 시도 안 함. 로그인 페이지 세션 확인 등에 사용 */
+  skipReissue?: boolean;
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
