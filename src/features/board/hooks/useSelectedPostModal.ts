@@ -4,10 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Post } from '@/types/post';
 
-/**
- * 게시물 클릭 시 모달 + URL postId 동기화
- */
-export function usePostModal(posts: Post[]) {
+/** 목록에서 선택한 글을 전체화면 모달 + URL postId와 동기화 */
+export function useSelectedPostModal(posts: Post[]) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);

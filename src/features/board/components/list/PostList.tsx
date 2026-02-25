@@ -1,9 +1,9 @@
 'use client';
 
-import { usePostModal } from '@/features/board/hooks/usePostModal';
-import { PostListItems } from './PostListItems';
-import PageHeaderModal from '../common/PageHeaderModal';
-import PostDetailClient from '../post/PostDetailClient';
+import { useSelectedPostModal } from '@/features/board/hooks/useSelectedPostModal';
+import { PostListBody } from './PostListBody';
+import FullScreenPostModal from '../common/FullScreenPostModal';
+import PostDetailView from '../post/PostDetailView';
 import type { Post } from '@/types/post';
 
 interface PostListProps {
@@ -17,20 +17,20 @@ export default function PostList({
   boardName,
   boardType,
 }: PostListProps) {
-  const { selectedPost, openModal, closeModal } = usePostModal(posts);
+  const { selectedPost, openModal, closeModal } = useSelectedPostModal(posts);
 
   return (
     <div>
-      <PostListItems
+      <PostListBody
         posts={posts}
         boardName={boardName}
         boardType={boardType}
         onPostClick={openModal}
       />
       {selectedPost && (
-        <PageHeaderModal onClose={closeModal} post={selectedPost}>
-          <PostDetailClient postId={selectedPost._id} />
-        </PageHeaderModal>
+        <FullScreenPostModal onClose={closeModal} post={selectedPost}>
+          <PostDetailView postId={selectedPost._id} />
+        </FullScreenPostModal>
       )}
     </div>
   );

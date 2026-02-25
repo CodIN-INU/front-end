@@ -1,5 +1,5 @@
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import PostDetailClient from '../components/post/PostDetailClient';
+import PostDetailView from '../components/post/PostDetailView';
 import { getPostById } from '@/server/getPost';
 
 export interface PostDetailPageProps {
@@ -12,7 +12,7 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
 
   return (
     <DefaultBody headerPadding="compact">
-      <PostDetailClient postId={resolved.postId} initialPost={initialPost} />
+      <PostDetailView postId={resolved.postId} initialPost={initialPost} />
     </DefaultBody>
   );
 }

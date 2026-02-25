@@ -9,7 +9,7 @@ import { BoardLinkSection } from '@/features/board/components/list/BoardLinkSect
 import { useSearchPosts } from '@/features/board/hooks/useSearchPosts';
 import { useTopPosts } from '@/features/board/hooks/useTopPosts';
 
-export default function BoardsPage() {
+export default function CommunityPage() {
   const { posts, loading, error } = useTopPosts();
   const {
     searchQuery,

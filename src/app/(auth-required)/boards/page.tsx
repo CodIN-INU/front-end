@@ -1,4 +1,4 @@
-import BoardsPage from '@/features/board/pages/BoardsPage';
+import CommunityPage from '@/features/board/pages/CommunityPage';
 
-export default BoardsPage;
+export default CommunityPage;
 

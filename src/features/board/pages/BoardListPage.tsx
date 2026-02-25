@@ -9,13 +9,13 @@ import BoardLayout from '@/components/Layout/BoardLayout';
 import { useBoardPosts } from '@/features/board/hooks/useBoardPosts';
 import { useInfiniteScroll } from '@/features/board/hooks/useInfiniteScroll';
 
-interface BoardPageProps {
+interface BoardListPageProps {
   boardName?: string;
   initialPosts?: import('@/types/post').Post[];
   initialNextPage?: number;
 }
 
-const BoardPage: FC<BoardPageProps> = ({
+const BoardListPage: FC<BoardListPageProps> = ({
   boardName: boardNameProp,
   initialPosts = [],
   initialNextPage,
@@ -76,4 +76,4 @@ const BoardPage: FC<BoardPageProps> = ({
   );
 };
 
-export default BoardPage;
+export default BoardListPage;

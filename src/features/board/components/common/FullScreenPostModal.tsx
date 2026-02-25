@@ -2,26 +2,27 @@
 
 import { ReactNode } from 'react';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { PostDetailModalHeader } from '../modal/PostDetailModalHeader';
+import { PostDetailModalBar } from '../modal/PostDetailModalBar';
 import type { Post } from '@/types/post';
 
-interface PageHeaderModalProps {
+interface FullScreenPostModalProps {
   children: ReactNode;
   onClose: () => void;
   post: Post;
 }
 
-export default function PageHeaderModal({
+/** 글 상세 전체화면 모달 (상단 바 + 본문) */
+export default function FullScreenPostModal({
   children,
   onClose,
   post,
-}: PageHeaderModalProps) {
+}: FullScreenPostModalProps) {
   return (
     <div
       id="scrollbar-hidden"
       className="fixed inset-0 bg-white z-50 overflow-y-scroll"
     >
-      <PostDetailModalHeader post={post} onClose={onClose} />
+      <PostDetailModalBar post={post} onClose={onClose} />
       <DefaultBody headerPadding="compact">
         <div className="pt-[18px] overflow-y-auto">{children}</div>
       </DefaultBody>
