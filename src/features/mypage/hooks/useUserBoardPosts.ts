@@ -34,7 +34,7 @@ export function useUserBoardPosts(boardType: UserBoardType | null) {
         );
         setHasMore(nextPage !== -1);
       } catch (error) {
-        console.error('마이보드 데이터 로드 실패:', error);
+        console.error('마이페이지 데이터 로드 실패:', error);
       } finally {
         setIsLoading(false);
       }

@@ -11,7 +11,8 @@ interface Props {
   onOpenModal: (post: Post) => void;
 }
 
-const ListWithCategoryPostItem: React.FC<Props> = ({ post, onOpenModal }) => {
+/** 카테고리 라벨이 있는 목록형 게시글 아이템 */
+const CategoryPostItem: React.FC<Props> = ({ post, onOpenModal }) => {
   const router = useRouter();
   const imageUrl = post.postImageUrl?.[0];
 
@@ -59,4 +60,4 @@ const ListWithCategoryPostItem: React.FC<Props> = ({ post, onOpenModal }) => {
   );
 };
 
-export default ListWithCategoryPostItem;
+export default CategoryPostItem;

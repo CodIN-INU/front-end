@@ -1,5 +1,5 @@
 import apiClient from '@/shared/api/apiClient';
-import type { Post } from '@/types/post';
+import type { Post, PostApiItem } from '@/types/post';
 
 export type UserBoardType = 'posts' | 'likes' | 'comments' | 'scraps';
 
@@ -13,6 +13,14 @@ const ENDPOINT_MAP: Record<UserBoardType, string> = {
 export interface FetchUserBoardPostsResult {
   contents: Post[];
   nextPage: number;
+}
+
+/** API 응답 한 건 { post, poll } → 평탄화된 Post */
+function normalizePostItem(item: PostApiItem): Post {
+  return {
+    ...item.post,
+    poll: item.poll ?? null,
+  };
 }
 
 export async function fetchUserBoardPosts(
@@ -29,7 +37,10 @@ export async function fetchUserBoardPosts(
   }
 
   const data = response.data.data;
-  const contents = Array.isArray(data?.contents) ? data.contents : [];
+  const rawContents = Array.isArray(data?.contents) ? data.contents : [];
+  const contents = rawContents.map((item: PostApiItem) =>
+    normalizePostItem(item)
+  );
   const nextPage = data?.nextPage ?? -1;
 
   return { contents, nextPage };

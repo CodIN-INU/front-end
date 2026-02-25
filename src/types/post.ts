@@ -1,27 +1,50 @@
-// src/types/post.ts
-export interface Post {
-    _id: string; // API 응답의 postId
-    title: string;
-    content: string;
-    postCategory: string;
-    createdAt: string;
-    anonymous: boolean;
-    commentCount: number;
-    likeCount: number;
-    scrapCount: number;
-    postImageUrl: string[]; // 이미지 URL 배열
-    userId: string;
-    nickname?: string;
-    userImageUrl?: string;
-    // 추가된 필드
-    authorName?: string; // 작성자 이름 (익명일 경우 옵션)
-    viewCount?: number; // 조회수
-    hits?: number; // 조회수
-    // 변경된 필드
-    userInfo: {
-        like: boolean; // 사용자가 좋아요를 눌렀는지 여부
-        scrap: boolean; // 사용자가 북마크했는지 여부
-        mine: boolean;
-    };
+// API 응답의 content 한 건: { post, poll }
+// 리스트/상세에서 쓰는 평탄화 타입: Post (post 필드 + poll)
+
+export interface PostContent {
+  _id: string;
+  title: string;
+  content: string;
+  postCategory: string;
+  createdAt: string;
+  anonymous: boolean;
+  commentCount: number;
+  likeCount: number;
+  scrapCount: number;
+  postImageUrl: string[];
+  userId: string;
+  nickname?: string;
+  userImageUrl?: string;
+  authorName?: string;
+  viewCount?: number;
+  hits?: number;
+  userInfo: {
+    like: boolean;
+    scrap: boolean;
+    mine: boolean;
+  };
 }
 
+export interface Poll {
+  pollOptions: string[];
+  pollEndTime: string;
+  multipleChoice: boolean;
+  pollVotesCounts: number[];
+  userVotesOptions: number[];
+  totalParticipants: number;
+  hasUserVoted: boolean;
+  pollFinished: boolean;
+}
+
+/** API가 반환하는 목록/상세 한 건 (nested) */
+export interface PostApiItem {
+  post: PostContent;
+  poll: Poll | null;
+}
+
+/**
+ * 리스트·상세에서 사용하는 평탄화 타입.
+ * post 필드를 최상위로 펼치고 poll만 붙인 형태.
+ * 컴포넌트에서는 post.title, post.poll 등으로 사용.
+ */
+export type Post = PostContent & { poll: Poll | null };

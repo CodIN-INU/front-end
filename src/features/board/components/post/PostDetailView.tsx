@@ -9,7 +9,7 @@ import {
 } from './PostDetail';
 import { usePostDetail } from '../../hooks/usePostDetail';
 
-interface PostDetailClientProps {
+interface PostDetailViewProps {
   postId: string;
   initialPost?: Post | null;
 }
@@ -26,10 +26,11 @@ const ErrorState = ({ message }: { message: string }) => (
   </div>
 );
 
-export default function PostDetailClient({
+/** 글 상세 뷰 (헤더·본문·액션·댓글) */
+export default function PostDetailView({
   postId,
   initialPost,
-}: PostDetailClientProps) {
+}: PostDetailViewProps) {
   const {
     post,
     loading,

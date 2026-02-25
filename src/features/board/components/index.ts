@@ -6,5 +6,5 @@
  */
 
 export { default as PostList } from './list/PostList';
-export { default as PostDetailClient } from './post/PostDetailClient';
-export { default as PageHeaderModal } from './common/PageHeaderModal';
+export { default as PostDetailView } from './post/PostDetailView';
+export { default as FullScreenPostModal } from './common/FullScreenPostModal';

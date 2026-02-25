@@ -3,19 +3,20 @@
 import PostItem from '../post/PostItem/PostItem';
 import type { Post } from '@/types/post';
 
-interface PostListItemsProps {
+interface PostListBodyProps {
   posts: Post[];
   boardName: string;
   boardType: string;
   onPostClick: (post: Post) => void;
 }
 
-export function PostListItems({
+/** 게시글 목록 본문 (ul + PostItem들) */
+export function PostListBody({
   posts,
   boardName,
   boardType,
   onPostClick,
-}: PostListItemsProps) {
+}: PostListBodyProps) {
   return (
     <ul
       className={

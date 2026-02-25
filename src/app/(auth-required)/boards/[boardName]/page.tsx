@@ -1,4 +1,4 @@
-import BoardPage from '@/features/board/pages/BoardPage';
+import BoardListPage from '@/features/board/pages/BoardListPage';
 import { boardData } from '@/data/boardData';
 import { getPostsByCategory } from '@/server/getPostsByCategory';
 
@@ -24,7 +24,7 @@ export default async function BoardRoutePage({ params }: PageProps) {
   const { posts, nextPage } = await getPostsByCategory(defaultPostCategory, 0);
 
   return (
-    <BoardPage
+    <BoardListPage
       boardName={boardName}
       initialPosts={posts}
       initialNextPage={nextPage}

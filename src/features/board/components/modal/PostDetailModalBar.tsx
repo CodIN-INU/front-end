@@ -9,15 +9,16 @@ import MenuItem from '@/components/common/Menu/MenuItem';
 import { getBoardNameByCategory } from '@/features/board/utils';
 import type { Post } from '@/types/post';
 
-interface PostDetailModalHeaderProps {
+interface PostDetailModalBarProps {
   post: Post;
   onClose: () => void;
 }
 
-export function PostDetailModalHeader({
+/** 글 상세 전체화면 모달의 상단 바 (뒤로가기, 제목, 메뉴) */
+export function PostDetailModalBar({
   post,
   onClose,
-}: PostDetailModalHeaderProps) {
+}: PostDetailModalBarProps) {
   const {
     openModal: openReportModal,
     getModalComponent: getReportModalComponent,

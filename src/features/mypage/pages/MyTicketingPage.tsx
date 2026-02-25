@@ -104,11 +104,11 @@ const TicketingPage: FC = () => {
       backOnClick='/mypage'
     >
       {isLoading && snacks.length === 0 && (
-        <div className="text-center my-4 text-gray-500">?? ?..</div>
+        <div className="text-center my-4 text-gray-500">로딩중...</div>
       )}
 
       {!hasMore && !isLoading && snacks.length === 0 && (
-        <div className="text-center my-4 text-gray-500">???? ????.</div>
+        <div className="text-center my-4 text-gray-500">등록된 이벤트가 없습니다.</div>
       )}
 
       <div className="flex flex-col gap-[22px] py-[29px] w-full">
