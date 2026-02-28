@@ -43,7 +43,6 @@ const MainRoomStatusSection = ({
         }
       } catch (error) {
         console.error('Error fetching room status:', error);
-        window.location.reload();
       }
     };
     fetchMiniRoomStatus();
