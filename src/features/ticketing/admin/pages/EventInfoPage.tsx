@@ -35,11 +35,11 @@ const TicketingUserListPage: FC = () => {
   const [selectedUser, setSelectedUser] =
     useState<eventParticipationProfileResponseList | null>(null);
 
-  // ???? ??
+  // 상태/정렬 필터
   const [statusFilter, setStatusFilter] = useState<
-    '??' | '????' | '????'
-  >('??');
-  const [sortType, setSortType] = useState<'??' | '????'>('??');
+    '전체' | '수령완료' | '미수령'
+  >('전체');
+  const [sortType, setSortType] = useState<'학과순' | '이름순'>('학과순');
   const [openMenu, setOpenMenu] = useState<null | 'status' | 'sort'>(null);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const TicketingUserListPage: FC = () => {
       setWaitNum(response.data.waitNum);
 
       if (!Array.isArray(eventList)) {
-        console.error('?? ??? ??? ??');
+        console.error('참여 목록 형식 오류');
         setHasMore(false);
         return;
       }
@@ -81,7 +81,7 @@ const TicketingUserListPage: FC = () => {
         setUsers(prev => [...prev, ...eventList]);
       }
     } catch (e) {
-      console.error('??? ???? ??', e);
+      console.error('데이터 불러오기 실패', e);
       setHasMore(false);
     } finally {
       setIsLoading(false);
@@ -109,7 +109,7 @@ const TicketingUserListPage: FC = () => {
     if (page > 1) fetchPosts(page);
   }, [page]);
 
-  // 1) ?? ??
+  // 1) 검색 필터
   const filteredUsers =
     searchQuery.trim() === ''
       ? users
@@ -120,16 +120,16 @@ const TicketingUserListPage: FC = () => {
           return target.includes(keyword);
         });
 
-  // 2) ?? ?? (??/????/????)
+  // 2) 상태 필터 (전체/수령완료/미수령)
   const statusFiltered = filteredUsers.filter(u => {
-    if (statusFilter === '??') return true;
-    const isDone = Boolean(u.imageURL); // ?? ??? ????
-    return statusFilter === '????' ? isDone : !isDone;
+    if (statusFilter === '전체') return true;
+    const isDone = Boolean(u.imageURL); // 수령 여부 판단
+    return statusFilter === '수령완료' ? isDone : !isDone;
   });
 
-  // 3) ?? (??/????)
+  // 3) 정렬 (학과순/이름순)
   const finalUsers = [...statusFiltered].sort((a, b) => {
-    if (sortType === '??') {
+    if (sortType === '학과순') {
       const dep =
         a.department?.localeCompare(b.department ?? '', 'ko', {
           sensitivity: 'base',
@@ -145,7 +145,7 @@ const TicketingUserListPage: FC = () => {
     }
   });
 
-  // ?? ????? ??
+  // 사용자 상태 변경
   const changeUserStatus = (user: eventParticipationProfileResponseList) => {
     setSelectedUser(user);
     setShowChangeModal(true);
@@ -161,7 +161,7 @@ const TicketingUserListPage: FC = () => {
     return `${parts[1]}/${parts[2]}`;
   };
 
-  // ???? ?? ???
+  // 필터 버튼 스타일
   const pillBtn =
     'relative flex items-center gap-2 px-[21px] py-[6.5px] rounded-full bg-[#F9F9F9] text-[#808080] ' +
     'shadow-[0_6px_7.2px_rgba(182,182,182,0.3)] text-[12px] font-medium';
@@ -175,7 +175,7 @@ const TicketingUserListPage: FC = () => {
   return (
     <Suspense>
       <div className="relative mb-6">
-        {/* ???? / ???? ?? */}
+        {/* 참여 인원 / 대기 인원 */}
         <div
           className="
           absolute top-14 left-1/2 -translate-x-1/2
@@ -183,7 +183,7 @@ const TicketingUserListPage: FC = () => {
           items-center z-[54]
         "
         >
-          ???? {stock} | ???? {waitNum}
+          참여 인원 {stock} | 대기 인원 {waitNum}
         </div>
 
         <Header
@@ -191,7 +191,7 @@ const TicketingUserListPage: FC = () => {
           title={`${eventEndTime} ${title}`}
           showDownload={{
             endpoint: `/ticketing/ticketing/excel/${eventId}`,
-            filename: `${eventEndTime} ${title} ??? ??`,
+            filename: `${eventEndTime} ${title} 참여자 목록`,
             method: 'GET',
           }}
         />
@@ -199,22 +199,22 @@ const TicketingUserListPage: FC = () => {
 
       <DefaultBody headerPadding="compact">
         {isLoading && users.length === 0 && (
-          <div className="text-center my-4 text-gray-500">?? ?..</div>
+          <div className="text-center my-4 text-gray-500">로딩 중..</div>
         )}
         {!hasMore && !isLoading && users.length === 0 && (
           <div className="text-center my-4 text-gray-500">
-            ???? ????.
+            참여자가 없습니다.
           </div>
         )}
 
         <SearchInput
-          placeholder="???? ?????."
+          placeholder="이름 또는 학번 검색"
           onChange={query => setSearchQuery(query)}
         />
 
-        {/* ? ???? ??: ??? ??? ?? */}
+        {/* 필터/정렬 영역 */}
         <div className="mt-[33px] mb-[30px] flex gap-2 self-end">
-          {/* ?? ?? */}
+          {/* 상태 필터 */}
           <div className="relative">
             <button
               type="button"
@@ -223,12 +223,12 @@ const TicketingUserListPage: FC = () => {
                 setOpenMenu(openMenu === 'status' ? null : 'status')
               }
             >
-              <span className="text-[10px]">?</span>
+              <span className="text-[10px]">▼</span>
               <span>{statusFilter}</span>
             </button>
             {openMenu === 'status' && (
               <div className={menuBase}>
-                {(['??', '????', '????'] as const).map(opt => (
+                {(['전체', '수령완료', '미수령'] as const).map(opt => (
                   <button
                     key={opt}
                     className={itemCls}
@@ -244,19 +244,19 @@ const TicketingUserListPage: FC = () => {
             )}
           </div>
 
-          {/* ?? ???? */}
+          {/* 정렬 방식 */}
           <div className="relative">
             <button
               type="button"
               className={pillBtn}
               onClick={() => setOpenMenu(openMenu === 'sort' ? null : 'sort')}
             >
-              <span className="text-[10px]">?</span>
-              <span>{sortType === '??' ? '??' : '????'}</span>
+              <span className="text-[10px]">▼</span>
+              <span>{sortType === '학과순' ? '학과순' : '이름순'}</span>
             </button>
             {openMenu === 'sort' && (
               <div className={menuBase}>
-                {(['??', '????'] as const).map(opt => (
+                {(['학과순', '이름순'] as const).map(opt => (
                   <button
                     key={opt}
                     className={itemCls}
@@ -301,14 +301,14 @@ const TicketingUserListPage: FC = () => {
                     className="bg-[#0D99FF] text-white text-[14px] rounded-full px-3 py-[7px]"
                     onClick={() => showUserSign(user)}
                   >
-                    ?? ??
+                    수령 완료
                   </button>
                 ) : (
                   <span
                     className="bg-[#EBF0F7] text-[#808080] text-[14px] rounded-full px-3 py-[7px]"
                     onClick={() => changeUserStatus(user)}
                   >
-                    ?? ??
+                    수령 대기
                   </span>
                 )}
               </div>
