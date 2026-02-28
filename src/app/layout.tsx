@@ -6,6 +6,7 @@ import type { Viewport } from 'next';
 import ReviewProvider from '@/context/WriteReviewContext';
 import Script from 'next/script';
 import { notoSansKR } from '@public/fonts';
+import { RefreshOnForeground } from '@/app/_components/RefreshOnForeground';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -51,7 +52,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               id="scrollbar-hidden"
               className="bg-white max-w-full min-h-full relative flex justify-center"
             >
-              {' '}
+              <RefreshOnForeground />
               {/* 바텀 네비게이션 높이만큼 패딩 추가 */}
               <div className="bg-white w-full min-h-full max-w-[500px] relative">
                 {children}
