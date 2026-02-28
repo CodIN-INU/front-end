@@ -43,7 +43,7 @@ const AdminTicketingListPage: FC = () => {
       console.log(response)
       const eventList = response?.data?.eventList;
       if (!Array.isArray(eventList)) {
-        console.error('eventList? ??????????:', eventList);
+        console.error('eventList 형식이 올바르지 않습니다:', eventList);
         setHasMore(false);
         return;
       }
@@ -55,7 +55,7 @@ const AdminTicketingListPage: FC = () => {
       }
 
     } catch (e) {
-      console.error("??????? ???.", e);
+      console.error("데이터를 불러오지 못했습니다.", e);
       setHasMore(false);
     } finally {
       setIsLoading(false);
@@ -63,7 +63,7 @@ const AdminTicketingListPage: FC = () => {
     }
   };
 
-  // ???
+  // 초기 로드
   useEffect(() => {
     const initialize = async () => {
       setSnacks([]);
@@ -75,7 +75,7 @@ const AdminTicketingListPage: FC = () => {
     initialize();
   }, [activeTab]);
 
-  // ??? ??
+  // 스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -93,7 +93,7 @@ const AdminTicketingListPage: FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 
-  // ??? ?? ?
+  // 페이지 변경 시 fetch
   useEffect(() => {
     if (page > 1) {
       fetchPosts(page);
@@ -108,17 +108,17 @@ const AdminTicketingListPage: FC = () => {
 
   const handleDelete = async (eventId: number) => {
      
-    const ok = confirm('?????????');
+    const ok = confirm('삭제하시겠습니까?');
 
     if (!ok) return;
     
       try{
         const res = await fetchClient(`/ticketing/admin/event/${eventId}`, {method: 'DELETE'})
-        console.log('?? ??:', res);
-          alert("?? ??");
+        console.log('삭제 결과:', res);
+          alert("삭제 완료");
           window.location.reload();
       } catch (error: any) {
-          alert(`?? ?? :${error.message}`);
+          alert(`삭제 실패 :${error.message}`);
       }
   
 }
@@ -133,11 +133,11 @@ const AdminTicketingListPage: FC = () => {
       backOnClick='/main'
     >
       {isLoading && snacks.length === 0 && (
-        <div className="text-center my-4 text-gray-500">?? ?..</div>
+        <div className="text-center my-4 text-gray-500">로딩 중..</div>
       )}
 
       {!hasMore && !isLoading && snacks.length === 0 && (
-        <div className="text-center my-4 text-gray-500">???? ????.</div>
+        <div className="text-center my-4 text-gray-500">등록된 이벤트가 없습니다.</div>
       )}
 
       <div className="flex flex-col gap-[22px] py-[29px] w-full">
@@ -155,7 +155,7 @@ const AdminTicketingListPage: FC = () => {
                 
               }}
             >
-              {/* ????: ??? ?? ? */}
+              {/* 종료된 이벤트: 반투명 오버레이 */}
               {snack.eventStatus === 'ENDED' && (
                 <div className=" pointer-events-none absolute inset-0 bg-[rgba(0,0,0,0.18)] rounded-[15px] z-20 " />
               )}
@@ -163,13 +163,13 @@ const AdminTicketingListPage: FC = () => {
             <div className="flex flex-col items-start">
                 <div className="flex items-start">
                 <p className="font-semibold text-[14px]">{snack.eventTitle}</p>
-                <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> ?</p>
+                <p className="text-[25px] text-[#0D99FF] mt-[-17px]">•</p>
                 </div>
                 <div className="mt-[22px] text-[12px] text-black">{snack.eventEndTime}</div>
                 <div className="text-[12px] text-black">{snack.locationInfo}</div>
-                <div className="text-[12px] text-[#0D99FF]">???? {snack.currentQuantity} | ???? {snack.waitQuantity} </div>
+                <div className="text-[12px] text-[#0D99FF]">참여 인원 {snack.currentQuantity} | 대기 인원 {snack.waitQuantity} </div>
                 
-                {/* ?? ?? */}
+                {/* 액션 버튼 */}
                     {snack && (
                         <div className="w-full bg-white flex justify-start">
                             {snack.eventStatus === 'ACTIVE' && (
@@ -179,11 +179,11 @@ const AdminTicketingListPage: FC = () => {
                                           e.stopPropagation();
                                           changeEvent(snack.eventId, 'close');                                          
                                         }}>
-                                    ??? ????
+                                    이벤트 종료
                                 </button>
                                 <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
                                   onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
-                                  ????
+                                  수정
                                 </button>
                               </div>
                                 
@@ -196,11 +196,11 @@ const AdminTicketingListPage: FC = () => {
                                           e.stopPropagation();
                                           changeEvent(snack.eventId, 'open');
                                         }}>
-                                    ??? ?? ??
+                                    이벤트 시작하기
                                 </button>
                                 <button className="w-[81px] h-[34px] border border-[#D4D4D4] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#AEAEAE] ml-[5px]"
                                   onClick={(e)=>{e.stopPropagation(); router.push(`/admin/ticketing/${snack.eventId}/edit`)}}>
-                                  ????
+                                  수정
                                 </button>
                               </div>
                             )}
@@ -208,11 +208,11 @@ const AdminTicketingListPage: FC = () => {
                             {snack.eventStatus === 'ENDED' && (
                               <div>
                                 <button className="bg-[#A6A6AB] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[40px] py-[7px]" disabled>
-                                    ?? ??
+                                    종료됨
                                 </button>
                                  <button className="w-[81px] h-[34px] border border-[#cc5656] rounded-[20px] font-notosans font-medium text-[14px] leading-[17px] text-center text-[#e40000] ml-[5px]"
                                   onClick={()=>handleDelete(snack.eventId)}>
-                                  ????
+                                  삭제
                                 </button>
                                 
                             
@@ -229,7 +229,7 @@ const AdminTicketingListPage: FC = () => {
         <Link
           href={`/admin/ticketing/create`}
           className="fixed bottom-[108px] bg-main text-white rounded-full shadow-lg p-4 hover:bg-blue-600 transition duration-300 z-30"
-          aria-label="????"
+          aria-label="새 이벤트 추가"
         >
           <svg
             width="18"
