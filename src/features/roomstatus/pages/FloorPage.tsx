@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import apiClient from '@/shared/api/apiClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useElementSizeHeight, useElementSizeWidth } from '@/hooks/useElementSize';
@@ -17,63 +17,48 @@ import {
   DEFAULT_BUILDING,
 } from '../constants/buildings';
 
-const defaultRoomStatus: (LectureDict | null)[] = Array.from(
-  { length: 5 },
-  () => null
-);
+const defaultRoomStatus: (LectureDict | null)[] = Array.from({ length: 5 }, () => null);
 
 interface FloorPageProps {
-  floorParam?: string;
+  initialFloor?: number;
   building?: string;
   initialRoomStatus?: (LectureDict | null)[] | null;
 }
 
 export default function FloorPage({
-  floorParam: floorParamProp,
+  initialFloor,
   building = DEFAULT_BUILDING,
   initialRoomStatus,
 }: FloorPageProps = {}) {
   const router = useRouter();
-  const params = useParams();
-  const floorParam = floorParamProp ?? params.floor;
-  const floorStr = Array.isArray(floorParam) ? floorParam[0] : floorParam;
 
   const { ref_w, width } = useElementSizeWidth<HTMLDivElement>();
 
   const handleBuildingChange = (value: string) => {
-    const floorSegment = floorStr ?? '1';
-    router.push(`/roomstatus/${floorSegment}?building=${encodeURIComponent(value)}`);
+    // 건물 변경 시에는 URL 쿼리만 업데이트 (층은 state 기반)
+    router.push(`/roomstatus/${floor}?building=${encodeURIComponent(value)}`);
   };
   const handleFloorChange = (value: string) => {
-    const floorSegment = value === '0' ? '1' : value;
-    router.push(`/roomstatus/${floorSegment}?building=${encodeURIComponent(building)}`);
+    const floorNum = value === '0' ? 1 : Number(value) || 1;
+    setFloor(floorNum);
   };
   const { ref_h, height } = useElementSizeHeight<HTMLDivElement>();
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(
+  const [isInitialLoading, setIsInitialLoading] = useState<boolean>(
     !(initialRoomStatus && initialRoomStatus.length > 0)
   );
+  const [isRefetching, setIsRefetching] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [floor, setFloor] = useState<number>(
-    floorStr ? Number(floorStr) || 1 : 1
-  );
+  const [floor, setFloor] = useState<number>(initialFloor ?? 1);
   const [roomStatus, setRoomStatus] = useState<(LectureDict | null)[]>(
     initialRoomStatus && initialRoomStatus.length > 0 ? initialRoomStatus : defaultRoomStatus
   );
   const [showNav, setShowNav] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!floorStr) {
-      setFloor(1);
-    } else {
-      setFloor(Number(floorStr) || 1);
-    }
-  }, [floorStr]);
 
-  useEffect(() => {
-
-    const floorNum = floorStr ? Number(floorStr) || 1 : 1;
+    const floorNum = floor;
     const date = new Date();
     const day = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
     const storageKey = `roomStatus_${building}_${floorNum}_${day}`;
@@ -85,7 +70,8 @@ export default function FloorPage({
           const rs = JSON.parse(cached);
           if (Array.isArray(rs) && rs.length > 0) {
             setRoomStatus(rs);
-            setIsLoading(false);
+            setIsInitialLoading(false);
+            setIsRefetching(false);
             return;
           }
         } catch {
@@ -95,7 +81,19 @@ export default function FloorPage({
     }
 
     const fetchRoomStatus = async () => {
-      setIsLoading(true);
+      const hasAnyRooms = roomStatus.some((floorData) => {
+        return (
+          floorData &&
+          typeof floorData === 'object' &&
+          Object.keys(floorData ?? {}).length > 0
+        );
+      });
+
+      if (!hasAnyRooms) {
+        setIsInitialLoading(true); // 앱 전체에서 처음 로딩할 때만 전체 로딩 화면
+      } else {
+        setIsRefetching(true); // 이후에는 기존 화면 유지 + 백그라운드 refetch
+      }
       try {
         const response = await apiClient.get(
           `/lectures/rooms/empty/detail?building=${encodeURIComponent(building)}&floor=${encodeURIComponent(floorNum)}`
@@ -131,14 +129,15 @@ export default function FloorPage({
       } catch (err: unknown) {
         setError(err instanceof Error ? err.message : String(err));
       } finally {
-        setIsLoading(false);
+        setIsInitialLoading(false);
+        setIsRefetching(false);
       }
     };
 
     fetchRoomStatus();
-  }, [initialRoomStatus, building, floorStr]);
+  }, [building, floor, roomStatus]);
 
-  if (isLoading) {
+  if (isInitialLoading) {
     return (
       <div className="w-full h-full">
         <div className="mt-[150px] px-0 flex justify-center">
@@ -158,7 +157,7 @@ export default function FloorPage({
     );
   }
 
-  const floorSelectValue = floorStr ?? '1';
+  const floorSelectValue = String(floor);
   const buildingOption =
     ROOM_BUILDING_OPTIONS.find((o) => o.value === building) ?? ROOM_BUILDING_OPTIONS[0];
   const floorOption =
