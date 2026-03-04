@@ -172,7 +172,7 @@ export default function FloorPage({
         <p className="mt-1 text-lg font-bold text-[#111827]">
           건물명과 층을 선택해 주세요
         </p>
-        <div className="mt-5 flex flex-row gap-3 sm:flex-row sm:gap-4 border-b border-[#000000]">
+        <div className="mt-3 flex flex-row gap-3 sm:flex-row sm:gap-4 border-b border-[#000000] mb-3">
           <div className="flex min-w-0 flex-[2] flex-col gap-1">
             <RoomSelectDropDown
               inputId="room-building"
