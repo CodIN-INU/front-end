@@ -332,7 +332,7 @@ export default function VoteDetailPage({
                 삭제하기
               </MenuItem>
               <MenuItem onClick={() => handleMenuAction('share-kakao')}>
-                카카오톡으로 공유하기
+                카카오톡 공유하기
               </MenuItem>
               <MenuItem onClick={() => handleMenuAction('copy-link')}>
                 링크 복사하기
@@ -350,7 +350,7 @@ export default function VoteDetailPage({
                 차단하기
               </MenuItem>
               <MenuItem onClick={() => handleMenuAction('share-kakao')}>
-                카카오톡으로 공유하기
+                카카오톡 공유하기
               </MenuItem>
               <MenuItem onClick={() => handleMenuAction('copy-link')}>
                 링크 복사하기
