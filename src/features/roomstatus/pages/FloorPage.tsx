@@ -72,7 +72,6 @@ export default function FloorPage({
   }, [floorStr]);
 
   useEffect(() => {
-    if (initialRoomStatus && initialRoomStatus.length > 0) return;
 
     const floorNum = floorStr ? Number(floorStr) || 1 : 1;
     const date = new Date();
