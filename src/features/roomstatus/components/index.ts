@@ -6,3 +6,4 @@ export { default as RoomItem } from './RoomItem';
 export { default as RoomItemHourly } from './RoomItemHourly';
 export { default as RoomItemDetail } from './RoomItemDetail';
 export { default as CurrentTimePointer } from './CurrentTimePointer';
+export { RoomSelect, type RoomSelectOption } from './RoomSelect';

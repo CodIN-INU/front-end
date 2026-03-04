@@ -8,6 +8,7 @@ import { useElementSizeHeight, useElementSizeWidth } from '@/hooks/useElementSiz
 import type { LectureDict } from '../types';
 import CurrentTimePointer from '../components/CurrentTimePointer';
 import RoomItemHourly from '../components/RoomItemHourly';
+import { RoomSelectDropDown } from '../components/RoomSelectDropDown';
 import { getTimeTableData } from '../utils/getTimeTableData';
 import { MAXHOUR, MINHOUR } from '../constants/timeTableData';
 import {
@@ -73,29 +74,50 @@ export default function FloorPage({
   useEffect(() => {
     if (initialRoomStatus && initialRoomStatus.length > 0) return;
 
+    const floorNum = floorStr ? Number(floorStr) || 1 : 1;
     const date = new Date();
     const day = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+    const storageKey = `roomStatus_${building}_${floorNum}_${day}`;
 
-    if (typeof window !== 'undefined' && localStorage.getItem('roomStatusUpdatedAt') === day) {
-      const rs = JSON.parse(localStorage.getItem('roomStatus') || '[]');
-      if (Array.isArray(rs) && rs.length > 0) {
-        setRoomStatus(rs);
-        setIsLoading(false);
+    if (typeof window !== 'undefined') {
+      const cached = localStorage.getItem(storageKey);
+      if (cached) {
+        try {
+          const rs = JSON.parse(cached);
+          if (Array.isArray(rs) && rs.length > 0) {
+            setRoomStatus(rs);
+            setIsLoading(false);
+            return;
+          }
+        } catch {
+          // ignore broken cache
+        }
       }
-      return;
     }
 
     const fetchRoomStatus = async () => {
       setIsLoading(true);
       try {
-        const floorNum = floorStr ? Number(floorStr) || 1 : 1;
         const response = await apiClient.get(
           `/lectures/rooms/empty/detail?building=${encodeURIComponent(building)}&floor=${encodeURIComponent(floorNum)}`
         );
         const raw = response.data?.data ?? response.data;
         let la: (LectureDict | null)[];
         if (Array.isArray(raw)) {
-          la = raw;
+          // 백엔드가 [{...해당 층 데이터...}] 형태로 줄 수도 있고,
+          // 층별 전체 배열을 줄 수도 있으므로 분기 처리
+          if (
+            raw.length === 1 &&
+            raw[0] &&
+            typeof raw[0] === 'object' &&
+            !Array.isArray(raw[0])
+          ) {
+            const arr: (LectureDict | null)[] = [null, null, null, null, null];
+            arr[floorNum - 1] = raw[0] as LectureDict;
+            la = arr;
+          } else {
+            la = raw as (LectureDict | null)[];
+          }
         } else if (raw && typeof raw === 'object') {
           const arr: (LectureDict | null)[] = [null, null, null, null, null];
           arr[floorNum - 1] = raw as LectureDict;
@@ -104,8 +126,7 @@ export default function FloorPage({
           la = defaultRoomStatus;
         }
         if (typeof window !== 'undefined' && la.length > 0) {
-          localStorage.setItem('roomStatus', JSON.stringify(la));
-          localStorage.setItem('roomStatusUpdatedAt', day);
+          localStorage.setItem(storageKey, JSON.stringify(la));
         }
         setRoomStatus(la);
       } catch (err: unknown) {
@@ -139,6 +160,10 @@ export default function FloorPage({
   }
 
   const floorSelectValue = floorStr ?? '1';
+  const buildingOption =
+    ROOM_BUILDING_OPTIONS.find((o) => o.value === building) ?? ROOM_BUILDING_OPTIONS[0];
+  const floorOption =
+    ROOM_FLOOR_OPTIONS.find((o) => o.value === floorSelectValue) ?? ROOM_FLOOR_OPTIONS[0];
 
   return (
     <div className="flex flex-col">
@@ -148,32 +173,21 @@ export default function FloorPage({
           건물명과 층을 선택해 주세요
         </p>
         <div className="mt-5 flex flex-row gap-3 sm:flex-row sm:gap-4 border-b border-[#000000]">
-          <div className="flex flex-1 flex-col gap-1">
-            <select
-              id="room-building"
-              value={building}
-              onChange={(e) => handleBuildingChange(e.target.value)}
-              className="h-11 w-full rounded-lg  bg-white px-3 text-sm font-medium text-[#111827] outline-none">
-              {ROOM_BUILDING_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+          <div className="flex min-w-0 flex-[2] flex-col gap-1">
+            <RoomSelectDropDown
+              inputId="room-building"
+              value={buildingOption}
+              options={ROOM_BUILDING_OPTIONS}
+              onChange={handleBuildingChange}
+            />
           </div>
-          <div className="flex flex-1 flex-col gap-1">
-            <select
-              id="room-floor"
-              value={floorSelectValue}
-              onChange={(e) => handleFloorChange(e.target.value)}
-              className="h-11 w-full rounded-lg  bg-white px-3 text-sm font-medium text-[#111827] outline-none"
-            >
-              {ROOM_FLOOR_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+          <div className="flex min-w-0 flex-1 flex-col gap-1">
+            <RoomSelectDropDown
+              inputId="room-floor"
+              value={floorOption}
+              options={ROOM_FLOOR_OPTIONS}
+              onChange={handleFloorChange}
+            />
           </div>
         </div>
       </div>
@@ -185,32 +199,50 @@ export default function FloorPage({
         id="scrollbar-hidden"
         className="relative flex flex-col gap-[21px]"
       >
-        <CurrentTimePointer
-          minHour={MINHOUR}
-          maxHour={MAXHOUR}
-          width={width}
-          height={height}
-          refOfParent={scrollRef}
-          setShowNav={setShowNav}
-        />
+        {(() => {
+          const floorData = roomStatus[floor - 1];
+          const hasRooms =
+            floorData &&
+            typeof floorData === 'object' &&
+            Object.keys(floorData).length > 0;
 
-        {roomStatus[floor - 1] &&
-          Object.entries(roomStatus[floor - 1] ?? {}).map(([roomNum, status]) => {
-            const [timeTable, boundaryTable] = getTimeTableData(status);
+          if (!hasRooms) {
             return (
-              <ShadowBox
-                key={roomNum}
-                className="flex flex-col w-full px-[14px] pt-[17px] pb-[20px]"
-              >
-                <RoomItemHourly
-                  RoomName={roomNum + '호'}
-                  LectureList={status}
-                  RoomStatusList={timeTable}
-                  BoundaryList={boundaryTable}
-                />
-              </ShadowBox>
+              <p className="py-8 text-center text-[#6B7280]">
+                해당 데이터가 존재하지 않습니다
+              </p>
             );
-          })}
+          }
+
+          return (
+            <>
+              <CurrentTimePointer
+                minHour={MINHOUR}
+                maxHour={MAXHOUR}
+                width={width}
+                height={height}
+                refOfParent={scrollRef}
+                setShowNav={setShowNav}
+              />
+              {Object.entries(floorData ?? {}).map(([roomNum, status]) => {
+                const [timeTable, boundaryTable] = getTimeTableData(status);
+                return (
+                  <ShadowBox
+                    key={roomNum}
+                    className="flex flex-col w-full px-[14px] pt-[17px] pb-[20px]"
+                  >
+                    <RoomItemHourly
+                      RoomName={roomNum + '호'}
+                      LectureList={status}
+                      RoomStatusList={timeTable}
+                      BoundaryList={boundaryTable}
+                    />
+                  </ShadowBox>
+                );
+              })}
+            </>
+          );
+        })()}
       </div>
     </div>
   );

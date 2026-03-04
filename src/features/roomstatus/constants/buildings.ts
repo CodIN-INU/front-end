@@ -26,7 +26,6 @@ export const ROOM_BUILDING_OPTIONS = [
 ] as const;
 
 export const ROOM_FLOOR_OPTIONS = [
-  { value: '0', label: '전체' },
   { value: '1', label: '1층' },
   { value: '2', label: '2층' },
   { value: '3', label: '3층' },

@@ -90,7 +90,7 @@ const RoomItemHourly: React.FC<RoomItemProps> = ({
       <h3
         className={clsx(
           !summaryView ? 'left-[14px] top-[17px]' : 'top-[9px]',
-          'absolute text-[#212121] text-[14px] w-max bg-white z-30 font-medium'
+          'absolute text-[#212121] text-[14px] w-max bg-white  font-medium'
         )}
       >
         {RoomName}
