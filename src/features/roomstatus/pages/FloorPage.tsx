@@ -71,7 +71,7 @@ export default function FloorPage({
     const fetchRoomStatus = async () => {
       setIsLoading(true);
       try {
-        const response = await apiClient.get('/rooms/empty');
+        const response = await apiClient.get('/lectures/rooms/empty');
         const la: LectureDict[] = response.data?.data ?? response.data ?? [];
         if (typeof window !== 'undefined' && la.length > 0) {
           localStorage.setItem('roomStatus', JSON.stringify(la));

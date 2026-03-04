@@ -28,6 +28,7 @@ export async function getCourses(
   }
 ): Promise<GetCoursesResult> {
   try {
+    console.log('[getCourses] called, page:', page);
     const params = new URLSearchParams({ page: String(page) });
     if (options?.keyword) params.set('keyword', options.keyword);
     if (options?.department && options.department !== 'ALL')
@@ -40,11 +41,13 @@ export async function getCourses(
     );
     const contents = res.data?.contents ?? [];
     const nextPage = res.data?.nextPage ?? -1;
+    console.log(contents, nextPage);
     return {
       courses: Array.isArray(contents) ? contents : [],
       nextPage,
     };
-  } catch {
+  } catch (e) {
+    console.error('[getCourses] serverFetch failed', e); 
     return { courses: [], nextPage: -1 };
   }
 }

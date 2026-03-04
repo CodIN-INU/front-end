@@ -5,8 +5,8 @@ export type labelType = {
 };
 
 export type searchTypesType = {
-  label: '과목명' | '교수명';
-  value: 'LEC' | 'PROF';
+  label: '평점순' | '좋아요순' | '인기순';
+  value: 'RATING' | 'LIKE' | 'HIT';
 };
 
 export type reviewContentType = {

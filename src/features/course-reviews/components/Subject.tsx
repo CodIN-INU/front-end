@@ -5,7 +5,7 @@ import { RateBar } from './RateBar';
 import Link from 'next/link';
 
 type SubjectType = {
-  subjectName: string;
+  title: string;
   subjectCode: string | number;
   professor: string;
   score: number;
@@ -14,14 +14,14 @@ type SubjectType = {
   semesters: string[];
 } & ComponentProps<'div'>;
 
-const Subject = ({ subjectName, subjectCode, professor, score, rateCnt, grade, semesters, ...rest }: SubjectType) => {
+const Subject = ({ title, subjectCode, professor, score, rateCnt, grade, semesters, ...rest }: SubjectType) => {
   return (
     <div className="group w-full py-[18px] px-[10px] hover:bg-[#EBF0F7]" {...rest}>
       {/* <p className="text-[#D4D4D4]">{`<li>`}</p> */}
       <div id="scrollbar-hidden" className="w-full flex flex-row justify-between">
         <div id="scrollbar-hidden" className="w-1/2 text-XLm">
           <Link href={`./course-reviews/${encodeURIComponent(subjectCode)}`}>
-            <p className="mb-2">{subjectName}</p>
+            <p className="mb-2">{title}</p>
           </Link>
           <div className="w-full text-sm flex font-semibold">
             <div className="mr-[8px] text-start text-[#808080] font-normal whitespace-nowrap">
@@ -32,7 +32,7 @@ const Subject = ({ subjectName, subjectCode, professor, score, rateCnt, grade, s
             </span>
           </div>
           <div id="scrollbar-hidden" className="w-full text-sm flex font-semibold overflow-x-scroll">
-            <p className="text-wrap pr-3 mt-[6px] text-xs text-[#808080] opacity-80 ">{semesters.join(", ")}</p>
+            <p className="text-wrap pr-3 mt-[6px] text-xs text-[#808080] opacity-80 ">{semesters?.join(", ")}</p>
           </div>
         </div>
         <div className="w-1/2 text-end text-[#EBF0F7] group-hover:text-white">

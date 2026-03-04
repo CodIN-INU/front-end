@@ -80,6 +80,7 @@ export default function CoursesPage({
       );
 
       const data = res?.data;
+      console.log(data);
       if (!data) return;
       const newCourses: Course[] = data.contents;
 

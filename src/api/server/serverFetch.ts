@@ -26,13 +26,12 @@ export async function serverFetch<T = unknown>(
 ): Promise<T> {
   const url = `${apiUrl}${path}`;
   const cookieStore = await cookies();
-  const token = cookieStore.get('x-access-token')?.value;
   const cookieHeader = cookieStore.toString();
+  console.log(cookieHeader);
 
   const headers: HeadersInit = {
     ...init?.headers,
     ...(cookieHeader && { Cookie: cookieHeader }),
-    ...(token && { Authorization: `Bearer ${token}` }),
   };
 
   const useTimeout = !init?.signal;

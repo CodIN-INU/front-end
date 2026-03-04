@@ -24,7 +24,7 @@ export const useReviewsContext = async ({
     });
 
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/lectures/list?${parameters}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/lectures/courses?${parameters}`,
       { headers: { 'Content-Type': 'application/json' } }
     );
 

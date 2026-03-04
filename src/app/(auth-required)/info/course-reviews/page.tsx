@@ -5,7 +5,7 @@ export default async function CourseReviewsRoutePage() {
   const { contents, nextPage } = await getCourseReviews(
     'COMPUTER_SCI',
     0,
-    { option: 'LEC' }
+    { sort: 'RATING' }
   );
 
   return (
