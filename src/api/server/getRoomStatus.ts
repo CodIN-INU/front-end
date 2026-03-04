@@ -1,5 +1,7 @@
 /**
- * 서버에서 빈 강의실 현황 조회 (메인/강의실 페이지 SSR용)
+ * 서버에서 빈 강의실 현황 조회
+ * - getRoomStatus: 메인 등 공통용 (기존) GET /lectures/rooms/empty
+ * - getRoomStatusDetail: /roomstatus 페이지용 (건물·층별) GET /lectures/rooms/empty/detail?building=&floor=
  */
 
 import { serverFetch } from './serverFetch';
@@ -10,17 +12,54 @@ interface RoomStatusApiResponse {
   data?: LectureDict[];
 }
 
+/** 메인 페이지 등: 기존 API (파라미터 없음) */
 export async function getRoomStatus(): Promise<LectureDict[] | null> {
   try {
     const res = await serverFetch<RoomStatusApiResponse>('/lectures/rooms/empty');
     const data = res.data;
-    console.log(data);
     if (Array.isArray(data)) {
       return data;
     }
     return null;
-  } catch (e){
+  } catch (e) {
     console.error('[getRoomStatus] serverFetch failed', e);
+    return null;
+  }
+}
+
+interface RoomStatusDetailApiResponse {
+  success?: boolean;
+  data?: LectureDict[] | LectureDict;
+}
+
+export interface GetRoomStatusDetailParams {
+  building: string;
+  floor: string | number;
+}
+
+/** /roomstatus 페이지용: 건물·층별 상세 API */
+export async function getRoomStatusDetail(
+  params: GetRoomStatusDetailParams
+): Promise<(LectureDict | null)[] | null> {
+  const { building, floor } = params;
+  try {
+    const res = await serverFetch<RoomStatusDetailApiResponse>(
+      `/lectures/rooms/empty/detail?building=${encodeURIComponent(building)}&floor=${encodeURIComponent(String(floor))}`
+    );
+    const data = res.data;
+    if (Array.isArray(data)) {
+      return data as (LectureDict | null)[];
+    }
+    if (data && typeof data === 'object' && !Array.isArray(data)) {
+      const floorNum = Number(floor);
+      const idx = floorNum >= 1 && floorNum <= 5 ? floorNum - 1 : 0;
+      const arr: (LectureDict | null)[] = [null, null, null, null, null];
+      arr[idx] = data as LectureDict;
+      return arr;
+    }
+    return null;
+  } catch (e) {
+    console.error('[getRoomStatusDetail] serverFetch failed', e);
     return null;
   }
 }

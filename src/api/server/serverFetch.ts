@@ -27,7 +27,6 @@ export async function serverFetch<T = unknown>(
   const url = `${apiUrl}${path}`;
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
-  console.log(cookieHeader);
 
   const headers: HeadersInit = {
     ...init?.headers,

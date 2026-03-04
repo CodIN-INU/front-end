@@ -19,7 +19,8 @@ export type { VoteDetail } from './getVoteById';
 // 메인
 export { getTopPosts } from './getTopPosts';
 export type { RankingPost } from './getTopPosts';
-export { getRoomStatus } from './getRoomStatus';
+export { getRoomStatus, getRoomStatusDetail } from './getRoomStatus';
+export type { GetRoomStatusDetailParams } from './getRoomStatus';
 
 // 강의
 export { getCourses } from './getCourses';
