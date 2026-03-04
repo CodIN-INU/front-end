@@ -7,6 +7,7 @@ import { useReportModal } from '@/hooks/useReportModal';
 import Header from '@/components/Layout/header/Header';
 import MenuItem from '@/components/common/Menu/MenuItem';
 import { getBoardNameByCategory } from '@/features/board/utils';
+import { useShareActions } from '@/shared/hooks/useShareActions';
 import type { Post } from '@/types/post';
 
 interface PostDetailModalBarProps {
@@ -23,6 +24,11 @@ export function PostDetailModalBar({
     openModal: openReportModal,
     getModalComponent: getReportModalComponent,
   } = useReportModal();
+
+  const { copyLink, shareKakao } = useShareActions({
+    title: post.title,
+    description: getBoardNameByCategory(post.postCategory) || '',
+  });
 
   const startChat = async () => {
     try {
@@ -75,6 +81,10 @@ export function PostDetailModalBar({
       blockUser();
     } else if (action === 'delete') {
       deletePost();
+    } else if (action === 'share-kakao') {
+      shareKakao();
+    } else if (action === 'copy-link') {
+      copyLink();
     }
   };
 
@@ -87,9 +97,17 @@ export function PostDetailModalBar({
         MenuItems={() => (
           <>
             {post.userInfo.mine ? (
-              <MenuItem onClick={() => handleMenuAction('delete')}>
-                삭제하기
-              </MenuItem>
+              <>
+                <MenuItem onClick={() => handleMenuAction('delete')}>
+                  삭제하기
+                </MenuItem>
+                <MenuItem onClick={() => handleMenuAction('share-kakao')}>
+                  카카오톡으로 공유하기
+                </MenuItem>
+                <MenuItem onClick={() => handleMenuAction('copy-link')}>
+                  링크 복사하기
+                </MenuItem>
+              </>
             ) : (
               <>
                 <MenuItem onClick={() => handleMenuAction('chat')}>
@@ -100,6 +118,12 @@ export function PostDetailModalBar({
                 </MenuItem>
                 <MenuItem onClick={() => handleMenuAction('block')}>
                   차단하기
+                </MenuItem>
+                <MenuItem onClick={() => handleMenuAction('share-kakao')}>
+                  카카오톡으로 공유하기
+                </MenuItem>
+                <MenuItem onClick={() => handleMenuAction('copy-link')}>
+                  링크 복사하기
                 </MenuItem>
               </>
             )}
