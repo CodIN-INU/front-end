@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import apiClient from '@/shared/api/apiClient';
 import ShadowBox from '@/components/common/shadowBox';
 import { useElementSizeHeight, useElementSizeWidth } from '@/hooks/useElementSize';
@@ -10,6 +10,11 @@ import CurrentTimePointer from '../components/CurrentTimePointer';
 import RoomItemHourly from '../components/RoomItemHourly';
 import { getTimeTableData } from '../utils/getTimeTableData';
 import { MAXHOUR, MINHOUR } from '../constants/timeTableData';
+import {
+  ROOM_BUILDING_OPTIONS,
+  ROOM_FLOOR_OPTIONS,
+  DEFAULT_BUILDING,
+} from '../constants/buildings';
 
 const defaultRoomStatus: (LectureDict | null)[] = Array.from(
   { length: 5 },
@@ -18,18 +23,30 @@ const defaultRoomStatus: (LectureDict | null)[] = Array.from(
 
 interface FloorPageProps {
   floorParam?: string;
+  building?: string;
   initialRoomStatus?: LectureDict[] | null;
 }
 
 export default function FloorPage({
   floorParam: floorParamProp,
+  building = DEFAULT_BUILDING,
   initialRoomStatus,
 }: FloorPageProps = {}) {
+  const router = useRouter();
   const params = useParams();
   const floorParam = floorParamProp ?? params.floor;
   const floorStr = Array.isArray(floorParam) ? floorParam[0] : floorParam;
 
   const { ref_w, width } = useElementSizeWidth<HTMLDivElement>();
+
+  const handleBuildingChange = (value: string) => {
+    const floorSegment = floorStr ?? '1';
+    router.push(`/roomstatus/${floorSegment}?building=${encodeURIComponent(value)}`);
+  };
+  const handleFloorChange = (value: string) => {
+    const floorSegment = value === '0' ? '1' : value;
+    router.push(`/roomstatus/${floorSegment}?building=${encodeURIComponent(building)}`);
+  };
   const { ref_h, height } = useElementSizeHeight<HTMLDivElement>();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -71,22 +88,35 @@ export default function FloorPage({
     const fetchRoomStatus = async () => {
       setIsLoading(true);
       try {
-        const response = await apiClient.get('/lectures/rooms/empty');
-        const la: LectureDict[] = response.data?.data ?? response.data ?? [];
+        const floorNum = floorStr ? Number(floorStr) || 1 : 1;
+        const response = await apiClient.get(
+          `/lectures/rooms/empty/detail?building=${encodeURIComponent(building)}&floor=${encodeURIComponent(floorNum)}`
+        );
+        const raw = response.data?.data ?? response.data;
+        let la: (LectureDict | null)[];
+        if (Array.isArray(raw)) {
+          la = raw;
+        } else if (raw && typeof raw === 'object') {
+          const arr: (LectureDict | null)[] = [null, null, null, null, null];
+          arr[floorNum - 1] = raw as LectureDict;
+          la = arr;
+        } else {
+          la = defaultRoomStatus;
+        }
         if (typeof window !== 'undefined' && la.length > 0) {
           localStorage.setItem('roomStatus', JSON.stringify(la));
           localStorage.setItem('roomStatusUpdatedAt', day);
         }
         setRoomStatus(la);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : String(err));
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchRoomStatus();
-  }, [initialRoomStatus]);
+  }, [initialRoomStatus, building, floorStr]);
 
   if (isLoading) {
     return (
@@ -108,8 +138,46 @@ export default function FloorPage({
     );
   }
 
+  const floorSelectValue = floorStr ?? '1';
+
   return (
     <div className="flex flex-col">
+      <div className="flex w-full flex-col px-4 pb-4">
+        <p className="text-lg font-bold text-[#212121]">빈 강의실을 찾을</p>
+        <p className="mt-1 text-lg font-bold text-[#111827]">
+          건물명과 층을 선택해 주세요
+        </p>
+        <div className="mt-5 flex flex-row gap-3 sm:flex-row sm:gap-4 border-b border-[#000000]">
+          <div className="flex flex-1 flex-col gap-1">
+            <select
+              id="room-building"
+              value={building}
+              onChange={(e) => handleBuildingChange(e.target.value)}
+              className="h-11 w-full rounded-lg  bg-white px-3 text-sm font-medium text-[#111827] outline-none">
+              {ROOM_BUILDING_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-1 flex-col gap-1">
+            <select
+              id="room-floor"
+              value={floorSelectValue}
+              onChange={(e) => handleFloorChange(e.target.value)}
+              className="h-11 w-full rounded-lg  bg-white px-3 text-sm font-medium text-[#111827] outline-none"
+            >
+              {ROOM_FLOOR_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div ref={ref_w} className="mx-[7px]" />
 
       <div
