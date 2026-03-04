@@ -12,13 +12,15 @@ interface RoomStatusApiResponse {
 
 export async function getRoomStatus(): Promise<LectureDict[] | null> {
   try {
-    const res = await serverFetch<RoomStatusApiResponse>('/rooms/empty');
+    const res = await serverFetch<RoomStatusApiResponse>('/lectures/rooms/empty');
     const data = res.data;
+    console.log(data);
     if (Array.isArray(data)) {
       return data;
     }
     return null;
-  } catch {
+  } catch (e){
+    console.error('[getRoomStatus] serverFetch failed', e);
     return null;
   }
 }

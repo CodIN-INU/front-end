@@ -37,8 +37,8 @@ const CourseReviewPage = ({
     value: 'COMPUTER_SCI',
   });
   const [searchType, setSearchType] = useState<searchTypesType>({
-    label: '과목명',
-    value: 'LEC',
+    label: '평점순',
+    value: 'RATING',
   });
 
   const [query, setQuery] = useState<string>('');
@@ -112,6 +112,7 @@ const CourseReviewPage = ({
       });
 
       const contents = result.data?.contents ?? [];
+      console.log(contents);
       setReviewContents(prev => [...prev, ...contents]);
       setHasMore(contents.length > 0);
     } catch (err) {
@@ -150,7 +151,7 @@ const CourseReviewPage = ({
   useEffect(() => {
     const isDefault =
       selectedDepartment.value === 'COMPUTER_SCI' &&
-      searchType.value === 'LEC' &&
+      searchType.value === 'RATING' &&
       searchKeyword === '' &&
       page === 0;
     if (isDefault && initialContents.length > 0) return;
@@ -233,7 +234,7 @@ const CourseReviewPage = ({
               ) => (
                 <Subject
                   key={`subject_${_id}_${lectureNm}_${idx}`}
-                  subjectName={lectureNm}
+                  title={lectureNm}
                   subjectCode={_id}
                   score={starRating}
                   professor={professor}

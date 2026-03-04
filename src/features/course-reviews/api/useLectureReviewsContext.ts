@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 type UseLectureReviewsContextType = {
-  lectureId: string;
+  lectureId: number | string;
 };
 
 export const useLectureReviewsContext = async ({
@@ -12,7 +12,7 @@ export const useLectureReviewsContext = async ({
   try {
     const params = new URLSearchParams({ page: '0' });
     const result = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/reviews/${lectureId}?${params}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/lectures/reviews/${lectureId}?${params}`,
       { headers: { 'Content-Type': 'application/json' } }
     );
 

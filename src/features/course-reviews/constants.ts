@@ -9,8 +9,9 @@ export const DEPARTMENTS = [
 ];
 
 export const SEARCHTYPES: searchTypesType[] = [
-  { label: '과목명', value: 'LEC' },
-  { label: '교수명', value: 'PROF' },
+  { label: '평점순', value: 'RATING' },
+  { label: '좋아요순', value: 'LIKE' },
+  { label: '인기순', value: 'HIT' },
 ];
 
 // write-review

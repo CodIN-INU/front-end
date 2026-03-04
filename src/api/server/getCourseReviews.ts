@@ -30,25 +30,30 @@ export interface GetCourseReviewsResult {
 export async function getCourseReviews(
   department: string,
   page: number = 0,
-  options?: { keyword?: string; option?: string }
+  options?: { keyword?: string; sort?: string }
 ): Promise<GetCourseReviewsResult> {
   try {
     const params = new URLSearchParams({
       department,
       page: String(page),
-      keyword: options?.keyword ?? '',
-      option: options?.option ?? 'LEC',
+      sort: options?.sort ?? 'RATING',
     });
+    const keyword = options?.keyword?.trim();
+    if (keyword) {
+      params.set('keyword', keyword);
+    }
     const res = await serverFetch<CourseReviewListApiResponse>(
-      `/lectures/list?${params.toString()}`
+      `/lectures/courses?${params.toString()}`
     );
     const contents = res.data?.contents ?? [];
     const nextPage = res.data?.nextPage ?? -1;
+    console.log(contents, nextPage);
     return {
       contents: Array.isArray(contents) ? contents : [],
       nextPage,
     };
-  } catch {
+  } catch (e){
+    console.error('[getCourseReviews] serverFetch failed', e);
     return { contents: [], nextPage: -1 };
   }
 }
@@ -109,10 +114,11 @@ export async function getLectureReviews(
   if (!id) return { contents: [], nextPage: -1 };
   try {
     const res = await serverFetch<ReviewCommentsApiResponse>(
-      `/reviews/${id}?page=${page}`
+      `/lectures/reviews/${id}?page=${page}`
     );
     const contents = res.data?.contents ?? [];
     const nextPage = res.data?.nextPage ?? -1;
+    console.log(contents, nextPage);
     return {
       contents: Array.isArray(contents) ? contents : [],
       nextPage,

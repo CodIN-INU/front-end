@@ -35,7 +35,7 @@ const MainRoomStatusSection = ({
           success: boolean;
           data?: (LectureDict | null)[];
           message?: string;
-        }>('/rooms/empty');
+        }>('/lectures/rooms/empty');
         if (response.success && response.data) {
           setRoomStatus(response.data);
         } else {
