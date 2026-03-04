@@ -25,7 +25,7 @@ const defaultRoomStatus: (LectureDict | null)[] = Array.from(
 interface FloorPageProps {
   floorParam?: string;
   building?: string;
-  initialRoomStatus?: LectureDict[] | null;
+  initialRoomStatus?: (LectureDict | null)[] | null;
 }
 
 export default function FloorPage({

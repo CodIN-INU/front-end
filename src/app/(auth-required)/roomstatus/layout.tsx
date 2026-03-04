@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
-import RoomStatusHeader from './RoomStatusHeader';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
