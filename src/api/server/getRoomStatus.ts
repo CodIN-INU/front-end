@@ -48,6 +48,20 @@ export async function getRoomStatusDetail(
     );
     const data = res.data;
     if (Array.isArray(data)) {
+      // 백엔드가 [{...해당 층 데이터...}] 형태로 줄 수도 있고,
+      // 층별 전체 배열을 줄 수도 있으므로 클라이언트와 동일하게 분기 처리
+      if (
+        data.length === 1 &&
+        data[0] &&
+        typeof data[0] === 'object' &&
+        !Array.isArray(data[0])
+      ) {
+        const floorNum = Number(floor);
+        const idx = floorNum >= 1 && floorNum <= 5 ? floorNum - 1 : 0;
+        const arr: (LectureDict | null)[] = [null, null, null, null, null];
+        arr[idx] = data[0] as LectureDict;
+        return arr;
+      }
       return data as (LectureDict | null)[];
     }
     if (data && typeof data === 'object' && !Array.isArray(data)) {
