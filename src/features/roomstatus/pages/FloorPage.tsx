@@ -36,7 +36,10 @@ export default function FloorPage({
 
   const handleBuildingChange = (value: string) => {
     // 건물 변경 시에는 URL 쿼리만 업데이트 (층은 state 기반)
-    router.push(`/roomstatus/${floor}?building=${encodeURIComponent(value)}`);
+    const params = new URLSearchParams();
+    params.set('building', value);
+    params.set('floor', String(floor));
+    router.push(`/roomstatus?${params.toString()}`);
   };
   const handleFloorChange = (value: string) => {
     const floorNum = value === '0' ? 1 : Number(value) || 1;
@@ -57,7 +60,6 @@ export default function FloorPage({
   const [showNav, setShowNav] = useState<string | null>(null);
 
   useEffect(() => {
-
     const floorNum = floor;
     const date = new Date();
     const day = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
@@ -135,7 +137,7 @@ export default function FloorPage({
     };
 
     fetchRoomStatus();
-  }, [building, floor, roomStatus]);
+  }, [building, floor]);
 
   if (isInitialLoading) {
     return (

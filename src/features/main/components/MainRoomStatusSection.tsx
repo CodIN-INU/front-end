@@ -57,7 +57,7 @@ const MainRoomStatusSection = ({
       <div className="flex justify-between pl-[14px] pr-[5px] pt-[23px] pb-[18px] font-bold">
         <div className="text-[16px]">빈 강의실을 찾고 있나요?</div>
         <Link
-          href="/roomstatus/1"
+          href="/roomstatus"
           className="flex items-center gap-[1px]"
         >
           <span className="text-active text-[12px]">자세히보기</span>
