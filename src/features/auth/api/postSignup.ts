@@ -3,8 +3,11 @@ import axios, { AxiosResponse } from 'axios';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const PostSignup = async (
-  email: string | string[] | null,
+  email: string | string[],
   nickname: string,
+  name: string,
+  college: string,
+  department: string,
   profileImage: File | null
 ): Promise<unknown> => {
   axios.defaults.withCredentials = true;
@@ -12,7 +15,7 @@ export const PostSignup = async (
   const formData = new FormData();
   formData.append(
     'userProfileRequestDto ',
-    JSON.stringify({ email: email ?? '', nickname })
+    JSON.stringify({ email: email ?? '', nickname, name, college, department })
   );
   if (profileImage) formData.append('userImage', profileImage);
 
