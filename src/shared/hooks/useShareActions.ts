@@ -49,6 +49,28 @@ export function useShareActions({
     const shareUrl = getShareUrl();
     if (!shareUrl) return;
 
+    // React Native WebView 환경이면 네이티브 측에서 카카오 공유 처리
+    if (typeof window !== 'undefined' && (window as any).ReactNativeWebView) {
+      try {
+        (window as any).ReactNativeWebView.postMessage(
+          JSON.stringify({
+            type: 'SHARE_KAKAO',
+            payload: {
+              title,
+              description: description ?? '',
+              imageUrl:
+                imageUrl ?? 'https://codin.inu.ac.kr/images/logo.png',
+              url: shareUrl,
+            },
+          }),
+        );
+      } catch (error) {
+        console.error('웹뷰로 카카오 공유 메시지 전송 실패:', error);
+        alert('앱에서 카카오톡 공유를 처리하지 못했어요.');
+      }
+      return;
+    }
+
     const kakaoKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 
     try {
@@ -64,8 +86,7 @@ export function useShareActions({
           title,
           description: description ?? '',
           imageUrl:
-            imageUrl ??
-            'https://codin.inu.ac.kr/images/logo.png',
+            imageUrl ?? 'https://codin.inu.ac.kr/images/logo.png',
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,

@@ -6,5 +6,6 @@ export type User = {
     profileImageUrl: string,
     nickname: string,
     department: string,
+    college: string,
     userRole: string
 }
