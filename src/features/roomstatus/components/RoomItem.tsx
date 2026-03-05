@@ -7,6 +7,7 @@ import {
   TIMETABLE_GAP,
   TIMETABLE_LENGTH,
   TIMETABLE_WIDTH,
+  ROOM_ITEM_DETAIL_LONG_PRESS_MS,
 } from '../constants/timeTableData';
 
 const RoomItem: React.FC<RoomItemProps> = ({
@@ -22,6 +23,9 @@ const RoomItem: React.FC<RoomItemProps> = ({
   const [touchedLecture, setTouchedLecture] = React.useState<Lecture | null>(
     null
   );
+  const [detailVisibleIndex, setDetailVisibleIndex] = React.useState<number | null>(null);
+  const longPressTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchIndexRef = React.useRef<number>(-1);
 
   const createEmptyLecture = (st: string, et: string): Lecture => {
     return {
@@ -112,14 +116,40 @@ const RoomItem: React.FC<RoomItemProps> = ({
     selectToucedLecture(idx);
   };
 
-  const getIsActive = (idx: number) => {
-    if (idx == 5 && clicked <= 5 && clicked != -1) {
-      return true;
-    } else if (idx == 28 && clicked >= 28) {
-      return true;
-    } else {
-      return 5 < idx && idx < 28 && clicked === idx ? true : false;
+  const clearLongPress = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
     }
+    setDetailVisibleIndex(null);
+    onClickTimeLine(-1);
+  };
+
+  const handleMouseEnter = (idx: number) => {
+    setDetailVisibleIndex(idx);
+    selectToucedLecture(idx);
+  };
+
+  const handleMouseLeave = () => {
+    setDetailVisibleIndex(null);
+    setTouchedLecture(null);
+  };
+
+  const handleTouchStart = (idx: number) => {
+    touchIndexRef.current = idx;
+    longPressTimerRef.current = setTimeout(() => {
+      longPressTimerRef.current = null;
+      onClickTimeLine(idx);
+      setDetailVisibleIndex(idx);
+    }, ROOM_ITEM_DETAIL_LONG_PRESS_MS);
+  };
+
+  const handleTouchEnd = () => {
+    clearLongPress();
+  };
+
+  const handleTouchMove = () => {
+    clearLongPress();
   };
 
   return (
@@ -150,8 +180,12 @@ const RoomItem: React.FC<RoomItemProps> = ({
             <button
               key={index}
               id={`room-${RoomName}-time-${index}`}
-              onTouchStart={() => onClickTimeLine(index)}
-              onTouchEnd={() => onClickTimeLine(-1)}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={() => handleTouchStart(index)}
+              onTouchEnd={handleTouchEnd}
+              onTouchMove={handleTouchMove}
+              onTouchCancel={handleTouchEnd}
               style={{
                 width: `${TIMETABLE_WIDTH}px`,
                 height: `${TIMETABLE_WIDTH * 1.6}px`,
@@ -167,7 +201,7 @@ const RoomItem: React.FC<RoomItemProps> = ({
               }`}
             >
               <RoomItemDetail
-                isActive={getIsActive(index)}
+                isActive={detailVisibleIndex === index}
                 lecture={touchedLecture}
               />
             </button>

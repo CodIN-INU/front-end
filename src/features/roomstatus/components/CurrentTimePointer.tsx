@@ -68,7 +68,7 @@ const CurrentTimePointer: React.FC<CurrentTimePointerProps> = ({
   if (!width || !height) return null;
 
   return (
-    <div ref={wrapRef} className="absolute top-0 z-50" style={{ left: x }}>
+    <div ref={wrapRef} className="absolute top-0 z-30" style={{ left: x }}>
       <div
         className="block absolute left-0"
         style={{ width: 1, height, background: LINE_COLOR }}

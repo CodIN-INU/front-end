@@ -1,5 +1,6 @@
 'use client';
 import { FC, ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import AlarmModal from '@/components/modals/AlarmModal';
 import { useAuth } from '@/store/userStore';
 import { MainCalendarSection, MainSectionSkeleton } from '../components';
@@ -9,15 +10,36 @@ interface MainPageProps {
   belowFoldContent?: ReactNode;
 }
 
+const EDIT_PAGE_PATH = '/mypage/edit';
+
 const MainPage: FC<MainPageProps> = ({ belowFoldContent }) => {
+  const router = useRouter();
   const fetchMe = useAuth(s => s.fetchMe);
   const hasHydrated = useAuth(s => s.hasHydrated);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deferBelowFold, setDeferBelowFold] = useState(!!belowFoldContent); // SSR 콘텐츠 있으면 즉시 표시
 
   useEffect(() => {
-    if (hasHydrated) fetchMe();
-  }, [hasHydrated, fetchMe]);
+    if (!hasHydrated) return;
+    let cancelled = false;
+    fetchMe().then(() => {
+      if (cancelled) return;
+      const user = useAuth.getState().user;
+      if (!user) return;
+      const departmentEmpty = !user.department?.trim();
+      const collegeEmpty =
+        user.college !== undefined &&
+        (user.college == null || String(user.college).trim() === '');
+      const nameTooShort = (user.name?.length ?? 0) <= 1;
+      if (departmentEmpty || collegeEmpty || nameTooShort) {
+        alert('단과대 및 학과 등록 또는 올바른 정보인지 확인해주세요.');
+        router.push(EDIT_PAGE_PATH);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [hasHydrated, fetchMe, router]);
 
 
   // const [hasNewAlarm, setHasNewAlarm] = useState(false); // 알람 여부

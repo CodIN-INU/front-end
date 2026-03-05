@@ -27,6 +27,7 @@ const roomSelectStyles: StylesConfig<RoomSelectOption, false> = {
     padding: 0,
     paddingLeft: 8,
     color: '#EBF0F7',
+    zIndex:50
   }),
   indicatorSeparator: () => ({ display: 'none' }),
   menu: (provided) => ({
@@ -34,6 +35,7 @@ const roomSelectStyles: StylesConfig<RoomSelectOption, false> = {
     borderRadius: 8,
     overflow: 'hidden',
     boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+    zIndex: 39,
   }),
   menuList: (provided) => ({ ...provided, padding: 0 }),
   option: (provided, state) => ({
@@ -43,6 +45,7 @@ const roomSelectStyles: StylesConfig<RoomSelectOption, false> = {
     color: '#212121',
     backgroundColor: state.isFocused ? '#EBF0F7' : 'white',
     padding: '10px 12px',
+    zIndex:50
   }),
   singleValue: (provided) => ({
     ...provided,
