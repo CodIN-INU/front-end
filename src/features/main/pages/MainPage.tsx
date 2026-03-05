@@ -32,7 +32,7 @@ const MainPage: FC<MainPageProps> = ({ belowFoldContent }) => {
         (user.college == null || String(user.college).trim() === '');
       const nameTooShort = (user.name?.length ?? 0) <= 1;
       if (departmentEmpty || collegeEmpty || nameTooShort) {
-        alert('추가 정보 등록이 필요합니다');
+        alert('단과대 및 학과 등록 또는 올바른 정보인지 확인해주세요.');
         router.push(EDIT_PAGE_PATH);
       }
     });
