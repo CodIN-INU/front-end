@@ -111,7 +111,7 @@ export default function SignupProfilePage() {
         profileImg
       );
       console.log('회원가입 결과:', response);
-      alert('회원가입 완료! 다시 로그인해주세요');
+      alert('회원가입 완료!');
       router.push('/login');
     } catch (err) {
       console.error('회원가입 실패', err);
