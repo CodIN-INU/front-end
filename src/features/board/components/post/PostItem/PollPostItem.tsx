@@ -31,7 +31,9 @@ export default function PollPostItem({ post }: PollPostItemProps) {
         <h3 className="text-sm sm:text-Lm font-medium text-gray-800 line-clamp-1">
           {post.title}
         </h3>
-        <p className="text-xs sm:text-Mm text-sub line-clamp-2">{post.content}</p>
+        <p className="text-xs sm:text-Mm text-sub line-clamp-2 break-words">
+          {post.content}
+        </p>
 
         <div className="flex items-center gap-1 text-Mr text-[#404040]">
           <span>{poll.totalParticipants}명 참여</span>

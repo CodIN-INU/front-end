@@ -21,13 +21,13 @@ const StandardPostItem: React.FC<Props> = ({ post, onOpenModal }) => {
 
   return (
     <li className="flex items-start justify-between">
-      <a href="#" onClick={handleClick} className="flex-1">
+      <a href="#" onClick={handleClick} className="flex-1 min-w-0">
         <div className="flex justify-between">
-          <div>
+          <div className="min-w-0">
             <h3 className="text-sm sm:text-Lm font-medium text-gray-800 mt-[8px]">
               {post.title}
             </h3>
-            <p className="text-xs sm:text-Mm text-sub line-clamp-2 mt-[4px] mb-[8px]">
+            <p className="text-xs sm:text-Mm text-sub line-clamp-2 break-words mt-[4px] mb-[8px]">
               {post.content}
             </p>
           </div>

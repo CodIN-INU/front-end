@@ -1,5 +1,5 @@
 import apiClient from '@/shared/api/apiClient';
-import type { Post } from '@/types/post';
+import type { Post, PostApiItem } from '@/types/post';
 
 interface FetchSearchPostsParams {
   keyword: string;
@@ -24,7 +24,17 @@ export async function fetchSearchPosts({
   }
 
   const data = response.data.data;
-  const contents = Array.isArray(data?.contents) ? data.contents : [];
+  const rawContents: unknown = data?.contents;
+  const apiItems: PostApiItem[] = Array.isArray(rawContents)
+    ? (rawContents as PostApiItem[])
+    : [];
+
+  const contents: Post[] = apiItems
+    .filter((item) => !!item && typeof item === 'object' && 'post' in item)
+    .map((item) => ({
+      ...(item.post as Post),
+      poll: item.poll ?? null,
+    }));
   const nextPage = data?.nextPage ?? -1;
 
   return { contents, nextPage };
