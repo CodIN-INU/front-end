@@ -32,3 +32,4 @@ export function useRefreshOnForeground(): void {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [router]);
 }
+

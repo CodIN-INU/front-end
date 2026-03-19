@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git mv:*)",
+      "Bash(git -C /d/front-end status --short)",
+      "Bash(git -C /d/front-end mv src/components/Layout src/shared/ui/Layout)",
+      "Bash(xargs sed:*)",
+      "Bash(grep -rn \"from ''''@/hooks/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/store/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/context/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/types/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/constants/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/data/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/config/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"from ''''@/lib/\" /d/front-end/src --include=\"*.ts\" --include=\"*.tsx\")"
+    ]
+  }
+}

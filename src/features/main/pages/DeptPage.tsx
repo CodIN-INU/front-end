@@ -17,7 +17,7 @@ import type {
   NoticeData,
   Opinion as OpinionType,
 } from '@/features/dept-boards/types';
-import { useDeptStore } from '@/hooks/useDeptStore';
+import { useDeptStore } from '@/shared/hooks/useDeptStore';
 
 function timeAgo(createdAt: string | number | Date) {
   const now = new Date();

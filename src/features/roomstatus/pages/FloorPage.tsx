@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '@/shared/api/apiClient';
 import ShadowBox from '@/components/common/shadowBox';
-import { useElementSizeHeight, useElementSizeWidth } from '@/hooks/useElementSize';
+import { useElementSizeHeight, useElementSizeWidth } from '@/shared/hooks/useElementSize';
 import type { LectureDict } from '../types';
 import CurrentTimePointer from '../components/CurrentTimePointer';
 import RoomItemHourly from '../components/RoomItemHourly';

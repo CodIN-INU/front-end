@@ -1,6 +1,6 @@
 'use client';
 
-import { useRefreshOnForeground } from '@/hooks/useRefreshOnForeground';
+import { useRefreshOnForeground } from '@/shared/hooks/useRefreshOnForeground';
 
 /**
  * 포그라운드 복귀 시 router.refresh()를 수행하는 클라이언트 래퍼.

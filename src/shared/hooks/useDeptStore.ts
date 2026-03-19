@@ -17,3 +17,4 @@ export const useDeptStore = create<DeptState>()(
     { name: 'dept-storage' } // localStorage key
   )
 );
+

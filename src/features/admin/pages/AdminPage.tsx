@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useReportModal } from "@/hooks/useReportModal";
+import { useReportModal } from "@/shared/hooks/useReportModal";
 
 export default function AdminPage() {
   const { openModal, getModalComponent } = useReportModal();

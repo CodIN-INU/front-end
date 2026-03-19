@@ -12,7 +12,7 @@ import Header from '@/components/Layout/header/Header';
 import CommentSection from '@/features/comment/components/CommentSection';
 import DefaultBody from '@/components/Layout/Body/defaultBody';
 import ReportModal from '@/components/modals/ReportModal';
-import { useReportModal } from '@/hooks/useReportModal';
+import { useReportModal } from '@/shared/hooks/useReportModal';
 import { DeletePost } from '@/features/board/api/deletePost';
 import MenuItem from '@/components/common/Menu/MenuItem';
 import { useShareActions } from '@/shared/hooks/useShareActions';
