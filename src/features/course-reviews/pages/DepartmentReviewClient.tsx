@@ -3,9 +3,9 @@
 import { useParams } from 'next/navigation';
 import { Suspense, useContext, useEffect, useState } from 'react';
 import type { lectureInfoType, emotionType, reviewType } from '@/features/course-reviews/types';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
 import { DepartmentReviewComponent } from '@/features/course-reviews/components/DepartmentReview';
 import { useDepartmentRatingInfoContext } from '@/features/course-reviews/api/useDepartmentRatingInfoContext';
 import { ReviewComment } from '@/features/course-reviews/components/ReviewComment';

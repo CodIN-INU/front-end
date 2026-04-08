@@ -1,8 +1,8 @@
 'use client';
 
-import Title from '@/components/common/title';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import Header from '@/components/Layout/header/Header';
+import Title from '@/shared/ui/common/title';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Review from '@/features/courses/components/Review';
 import { CourseDetail, exampleCourse } from '@/types/course';

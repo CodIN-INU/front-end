@@ -4,11 +4,11 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import { GetVoteData } from '@/features/vote/api/getVoteData';
 import { PostVoting } from '@/features/vote/api/postVoting';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import Link from 'next/link';
-import ShadowBox from '@/components/common/shadowBox';
-import Title from '@/components/common/title';
+import ShadowBox from '@/shared/ui/common/shadowBox';
+import Title from '@/shared/ui/common/title';
 import clsx from 'clsx';
 import type { VoteListItem } from '@/api/server';
 

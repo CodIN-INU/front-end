@@ -1,7 +1,7 @@
 'use client';
 
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { Header } from '@/components/Layout/header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import { Header } from '@/shared/ui/layout/header';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 

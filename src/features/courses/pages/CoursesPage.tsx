@@ -3,8 +3,8 @@
 import { fetchClient } from '@/shared/api/fetchClient';
 import CourseCard from '@/features/courses/components/CourseCard';
 import CustomSelect from '@/features/courses/components/CourseCustomSelect';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import Header from '@/components/Layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
 import { Course } from '@/types/course';
 import CheckBox from '@public/icons/checkbox.svg';
 import Search from '@public/icons/search.svg';

@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { GetChatRoomData } from '@/features/chat/api/getChatRoomData';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import Image from 'next/image';
 import { Stomp } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';

@@ -4,8 +4,8 @@ import '@/styles/globals.css';
 import { useRouter } from 'next/navigation';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '@/context/AuthContext';
-import CommonBtn from '@/components/buttons/commonBtn';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import CommonBtn from '@/shared/ui/buttons/commonBtn';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import { PostLogin } from '@/features/auth/api/postLogin';
 import { UserContext } from '@/context/UserContext';
 

@@ -46,9 +46,8 @@ import PostDetailPage from '@/features/board/pages/PostDetailPage';
 export default PostDetailPage;
 
 // ✅ features/board/pages/PostDetailPage.tsx
-import { Header } from '@/components/Layout/header';
+import { Header, DefaultBody } from '@/shared/ui';
 import PostDetailClient from '../components/PostDetail/PostDetailClient';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
 
 export interface PostDetailPageProps {
   params: Promise<{ boardName: string; postId: string }>;
@@ -171,7 +170,7 @@ src/features/roomstatus/
 
 **판단**:
 - ✅ `features/board/components/PostItem/`에 위치
-- ❌ `components/`에 두지 않음 (board 전용)
+- ❌ `shared/ui`에 두지 않음 (board 전용)
 
 **이유**: 다른 feature에서 사용하지 않음
 
@@ -179,24 +178,17 @@ src/features/roomstatus/
 
 ### Case 2: AlertModal 컴포넌트
 
-**상황**: 여러 feature에서 사용하는 모달
+**상황**: 특정 플로우(예: 강의 리뷰 작성)에서만 쓰는 확인 모달
 
 **판단**:
-- ✅ `components/modals/AlertModal.tsx`로 이동
-- ❌ feature 내부에 두지 않음
+- ✅ 한 feature·한 라우트에서만 쓰이면 `features/<도메인>/components/`에 둠 (예: `course-reviews/components/AlertModal`)
+- ✅ 여러 feature에서 쓰이면 `shared/ui/modals/`에 둠
 
-**이유**: board, ticketing, chat 등 여러 곳에서 사용
+**이번 프로젝트 예시**: 작성 페이지 한 곳에서만 사용 → `features/course-reviews/components/AlertModal`
 
-**마이그레이션**:
+**import 예시**:
 ```typescript
-// 1단계: board feature에서 사용 중
-// features/board/components/AlertModal.tsx
-
-// 2단계: ticketing에서도 사용하게 됨
-// → components/modals/AlertModal.tsx로 이동
-
-// 모든 feature에서 import 경로 변경
-import AlertModal from '@/components/modals/AlertModal';
+import { AlertModal } from '@/features/course-reviews/components';
 ```
 
 ---
@@ -274,7 +266,7 @@ import type { Post } from '../../types';          // 상위 레벨
 ### Feature 외부 (절대 경로)
 ```typescript
 // features/board/components/PostDetail/PostDetailClient.tsx
-import { Button } from '@/components/common/Button';
+import { CommonBtn } from '@/shared/ui';
 import { useAuth } from '@/hooks/useAuth';
 import type { User } from '@/types/auth';
 import { formatDate } from '@/lib/utils/date';

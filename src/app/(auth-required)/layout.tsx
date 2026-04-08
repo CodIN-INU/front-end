@@ -5,7 +5,7 @@
  * @see docs/APP_STRUCTURE.md
  */
 import { ReactNode } from 'react';
-import BottomNav from '@/components/Layout/Navigation/BottomNav';
+import BottomNav from '@/shared/ui/layout/Navigation/BottomNav';
 
 export default function LayoutWithBottomNav({
   children,

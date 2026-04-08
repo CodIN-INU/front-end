@@ -1,6 +1,6 @@
 'use client';
 
-import SmRoundedBtn from '@/components/buttons/smRoundedBtn';
+import SmRoundedBtn from '@/shared/ui/buttons/smRoundedBtn';
 import { DEPARTMENTS, SEARCHTYPES } from '@/features/course-reviews/constants';
 import { labelType, reviewContentType, searchTypesType } from '@/features/course-reviews/types';
 import {
@@ -12,13 +12,13 @@ import {
   useRef,
   useState,
 } from 'react';
-import { Input } from '@/components/input/Input';
+import { Input } from '@/shared/ui/input/Input';
 import debounce from 'lodash/debounce';
-import { UnderbarBtn } from '@/components/buttons/underbarBtn';
+import { UnderbarBtn } from '@/shared/ui/buttons/underbarBtn';
 import { Subject } from '@/features/course-reviews/components/Subject';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
 import { useReviewsContext } from '@/features/course-reviews/api/getReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';

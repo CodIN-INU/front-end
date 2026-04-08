@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import Logo from '@/components/Layout/header/Logo';
-import Notice from '@/components/Layout/header/Notice';
-import TopNav from '@/components/Layout/Navigation/topNav';
+import Logo from '@/shared/ui/layout/header/Logo';
+import Notice from '@/shared/ui/layout/header/Notice';
+import TopNav from '@/shared/ui/layout/Navigation/topNav';
 import { useAuth } from '@/store/userStore';
 
 const Header = () => {

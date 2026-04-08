@@ -4,7 +4,7 @@ import Notice from '@public/icons/notice.svg';
 import Question from '@public/icons/question.svg';
 import Opinion from '@public/icons/opinion.svg';
 
-import ShadowBox from '@/components/common/shadowBox';
+import ShadowBox from '@/shared/ui/common/shadowBox';
 import NotionContainer from '@/features/dept-boards/components/NotionContainer';
 import QuestionContainer from '@/features/dept-boards/components/QuestionContainer';
 import DeptHeader from '@/features/dept-boards/components/DeptHeader';

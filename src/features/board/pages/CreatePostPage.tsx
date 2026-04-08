@@ -2,9 +2,9 @@
 
 import { useParams } from 'next/navigation';
 import { boardData } from '@/data/boardData';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import SmRoundedBtn from '@/components/buttons/smRoundedBtn';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import SmRoundedBtn from '@/shared/ui/buttons/smRoundedBtn';
 import { useCreatePost } from '@/features/board/hooks/useCreatePost';
 
 export default function CreatePostPage() {

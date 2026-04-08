@@ -8,13 +8,13 @@ import { GetVoteDetail } from '@/features/vote/api/getVoteDetail';
 import { PostBlockUser } from '@/features/auth/api/postBlockUser';
 import { useParams } from 'next/navigation';
 import { PostLike } from '@/shared/api/postLike';
-import Header from '@/components/Layout/header/Header';
+import Header from '@/shared/ui/layout/header/Header';
 import CommentSection from '@/features/comment/components/CommentSection';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import ReportModal from '@/components/modals/ReportModal';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import ReportModal from '@/shared/ui/modals/ReportModal';
 import { useReportModal } from '@/shared/hooks/useReportModal';
 import { DeletePost } from '@/features/board/api/deletePost';
-import MenuItem from '@/components/common/Menu/MenuItem';
+import MenuItem from '@/shared/ui/common/Menu/MenuItem';
 import { useShareActions } from '@/shared/hooks/useShareActions';
 import type { VoteDetail } from '@/api/server';
 
@@ -474,7 +474,7 @@ export default function VoteDetailPage({
                   </>
                 ) : (
                   // 투표 기간이 만료되었거나 유저가 투표를 완료하였을 때
-                  <div id="conT">
+                  <ul id="conT">
                     {vote.poll.pollOptions.map((option, i) => (
                       <li
                         key={i}
@@ -517,7 +517,7 @@ export default function VoteDetailPage({
                         </div>
                       </li>
                     ))}
-                  </div>
+                  </ul>
                 )}
 
                 {/* 기타 투표 정보 */}

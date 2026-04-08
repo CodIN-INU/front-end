@@ -1,8 +1,8 @@
 'use client';
 
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
-import Header from '@/components/Layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
+import Header from '@/shared/ui/layout/header/Header';
 import { RateBar } from '@/features/course-reviews/components/RateBar';
 import {
   SetStateAction,
@@ -21,7 +21,7 @@ import {
 } from '@/features/course-reviews/constants';
 import { CustomSelect } from '@/features/course-reviews/components/CustomSelect';
 import { useSearchedReviewContext } from '@/features/course-reviews/api/useSearchedReviewContext';
-import { AlertModal } from '@/components/modals/AlertModal';
+import { AlertModal } from '@/features/course-reviews/components';
 import { submitReview } from '@/features/course-reviews/api/submitReview';
 import { useRouter } from 'next/navigation';
 import { calcEmotion } from '@/features/course-reviews/utils/calcEmotion';

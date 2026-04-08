@@ -2,7 +2,7 @@
 
 import { FC, useState, useEffect, useRef } from "react";
 import { boardData } from "@/data/boardData";
-import BoardLayout from "@/components/Layout/BoardLayout";
+import BoardLayout from "@/shared/ui/layout/BoardLayout";
 import { useRouter } from "next/navigation";
 import { fetchClient } from "@/shared/api/fetchClient";
 import { SnackEvent, FetchSnackResponse } from "@/types/snackEvent";

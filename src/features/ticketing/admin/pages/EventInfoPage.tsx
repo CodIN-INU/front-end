@@ -8,9 +8,9 @@ import {
   FetchUserResponse,
 } from '@/types/snackEvent';
 import { formatToMonthDay } from '@/lib/utils/date';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import SearchInput from '@/components/common/SearchInput';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import SearchInput from '@/shared/ui/common/SearchInput';
 import ChangeStatusModal from '@/features/ticketing/components/modals/ChangeStatusModal';
 import ViewUserSignModal from '@/features/ticketing/components/modals/ViewUserSignModal';
 

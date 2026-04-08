@@ -96,7 +96,7 @@ src/features/<도메인명>/
 | 3 | 타입 정리 | `interfaces/*` 또는 `types/*` → `features/<도메인>/types.ts` 하나로 통합 (또는 공용은 `src/types/`) |
 | 4 | 페이지 컴포넌트 만들기 | 기존 `app/.../page.tsx` 안의 JSX/로직을 `features/<도메인>/pages/XXXPage.tsx`로 옮김 |
 | 5 | app은 re-export만 | `app/.../page.tsx`는 `import Page from '@/features/<도메인>/pages/...'; export default Page;` 만 남김 |
-| 6 | import 경로 수정 | feature 내부는 상대 경로, feature 밖(공용 컴포넌트 등)은 `@/components/` 등 절대 경로 |
+| 6 | import 경로 수정 | feature 내부는 상대 경로, 공용 UI는 `@/shared/ui` 등 절대 경로 |
 | 7 | 빌드·동작 확인 | `npm run build` 및 해당 라우트 직접 눌러서 확인 |
 
 ---
@@ -173,7 +173,7 @@ src/features/<도메인명>/
 - **feature 안에서** feature 안 파일 부를 때: 상대 경로  
   - 예: `import RoomItem from '../components/RoomItem';`
 - **feature 안에서** 공용 모듈 부를 때: `@/` 절대 경로  
-  - 예: `import Header from '@/components/Layout/header/Header';`, `import type { X } from '@/types/...';`
+  - 예: `import { Header } from '@/shared/ui';`, `import type { X } from '@/types/...';`
 
 ---
 

@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import PostList from '@/features/board/components/list/PostList';
 import { WriteFloatingButton } from '@/features/board/components/common/WriteFloatingButton';
 import { boardData } from '@/data/boardData';
-import BoardLayout from '@/components/Layout/BoardLayout';
+import BoardLayout from '@/shared/ui/layout/BoardLayout';
 import { useBoardPosts } from '@/features/board/hooks/useBoardPosts';
 import { useInfiniteScroll } from '@/features/board/hooks/useInfiniteScroll';
 

@@ -2,13 +2,13 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, Suspense, ChangeEvent, FormEvent, useEffect } from 'react';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import InputBlock from '@/features/ticketing/admin/components/InputBlock';
 import { fetchClient } from '@/shared/api/fetchClient';
 import { CreateTicketEventRequest } from '@/types/ticketEventRequest';
 import { FetchSnackDetailResponse } from '@/types/snackEvent';
-import CommonBtn from '@/components/buttons/commonBtn';
+import CommonBtn from '@/shared/ui/buttons/commonBtn';
 import { parseBackendDateToLocalDateTime } from '@/lib/utils/date';
 
 export default function EditEventPage() {

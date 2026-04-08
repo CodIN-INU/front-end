@@ -2,8 +2,8 @@
 
 import { FC, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { Header } from '@/components/Layout/header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import { Header } from '@/shared/ui/layout/header';
 
 const EventDetailPage: FC = () => {
   const router = useRouter();

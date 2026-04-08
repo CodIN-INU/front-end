@@ -1,8 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import Header from '@/shared/ui/layout/header/Header';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import PostList from '@/features/board/components/list/PostList';
 import { useUserBoardPosts } from '../hooks/useUserBoardPosts';
 import type { UserBoardType } from '../api/fetchUserBoardPosts';

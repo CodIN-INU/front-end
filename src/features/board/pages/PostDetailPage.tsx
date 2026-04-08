@@ -1,4 +1,4 @@
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
 import PostDetailView from '../components/post/PostDetailView';
 import { getPostById } from '@/server/getPost';
 

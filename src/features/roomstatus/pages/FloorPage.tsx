@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import apiClient from '@/shared/api/apiClient';
-import ShadowBox from '@/components/common/shadowBox';
+import ShadowBox from '@/shared/ui/common/shadowBox';
 import { useElementSizeHeight, useElementSizeWidth } from '@/shared/hooks/useElementSize';
 import type { LectureDict } from '../types';
 import CurrentTimePointer from '../components/CurrentTimePointer';

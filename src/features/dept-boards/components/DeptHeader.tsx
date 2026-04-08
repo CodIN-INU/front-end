@@ -1,5 +1,5 @@
 import Right from '@public/icons/arrow/arrow_right.svg';
-import Title from '@/components/common/title';
+import Title from '@/shared/ui/common/title';
 import Link from 'next/link';
 
 export default function DeptHeader({

@@ -3,7 +3,7 @@
 import { FC, useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { boardData } from '@/data/boardData';
-import BoardLayout from '@/components/Layout/BoardLayout';
+import BoardLayout from '@/shared/ui/layout/BoardLayout';
 import type { SnackEvent } from '@/types/snackEvent';
 import { useTicketingEventList } from '@/features/ticketing/hooks/useTicketingEventList';
 import { TicketingEventList } from '@/features/ticketing/components/event';
