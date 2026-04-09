@@ -1,8 +1,6 @@
 'use client';
 
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
-import Header from '@/shared/ui/layout/header/Header';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { RateBar } from '@/features/course-reviews/components/RateBar';
 import {
   SetStateAction,

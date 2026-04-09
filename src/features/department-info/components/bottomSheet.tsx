@@ -1,6 +1,6 @@
 'use client';
 
-import BackButton from '@/shared/ui/layout/header/BackButton';
+import { BackButton } from '@/shared/ui';
 import MapLinkButton from './MapLinkButton';
 import { Tags, OtherTag } from './tag';
 import { useState } from 'react';

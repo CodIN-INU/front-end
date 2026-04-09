@@ -1,11 +1,11 @@
 'use client';
 
 import React from 'react';
-import TopNav from '@/shared/ui/layout/Navigation/topNav';
+import TopNav from '../Navigation/topNav';
 import BackButton from './BackButton';
 import TitleComp from './Title';
 import SearchButton from './SearchButton';
-import Menu from '@/shared/ui/common/Menu';
+import Menu from '../../common/Menu';
 import Logo from './Logo';
 import Notice from './Notice';
 import DownloadButton from './DownloadButton';

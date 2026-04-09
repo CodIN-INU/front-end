@@ -1,12 +1,11 @@
 'use client';
 
 import { fetchClient } from '@/shared/api/fetchClient';
-import ShadowBox from '@/shared/ui/common/shadowBox';
+import { ShadowBox, Title } from '@/shared/ui';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { NoticeData } from '@/features/dept-boards/types';
-import Title from '@/shared/ui/common/title';
 
 function timeAgo(createdAt: string | number | Date) {
   const now = new Date();

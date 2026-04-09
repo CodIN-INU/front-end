@@ -1,9 +1,7 @@
 'use client';
 import { useState, useEffect, Suspense, useRef } from 'react';
 import Link from 'next/link';
-import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
-import Header from '@/shared/ui/layout/header/Header';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { PostLogout } from '@/features/auth/api/postLogout';
 import { DeleteUser } from '@/features/auth/api/deleteUser';
 import WebModal, { WebModalHandles } from '@/features/mypage/components/WebModal';

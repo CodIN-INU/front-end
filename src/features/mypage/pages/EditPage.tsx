@@ -3,11 +3,8 @@ import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import Header from '@/shared/ui/layout/header/Header';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import CommonBtn from '@/shared/ui/buttons/commonBtn';
+import { CommonBtn, DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
 import { useAuth } from '@/store/userStore';
-import LoadingOverlay from '@/shared/ui/common/LoadingOverlay';
 import { fetchClient } from '@/shared/api/fetchClient';
 import {
   COLLEGE_OPTIONS,

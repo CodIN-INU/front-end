@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import { DefaultBody } from '@/shared/ui';
 import { PostDetailModalBar } from '../modal/PostDetailModalBar';
 import type { Post } from '@/types/post';
 

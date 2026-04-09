@@ -7,7 +7,7 @@ dayjs.locale('en');
 import LeftArrow from '@public/icons/arrow/arrow_left.svg';
 import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import Calendar from '@public/icons/calendar.svg';
-import ShadowBox from '@/shared/ui/common/shadowBox';
+import { ShadowBox } from '@/shared/ui';
 import CloseIcon from '@public/icons/button/x.svg';
 import { fetchClient } from '@/shared/api/fetchClient';
 import clsx from 'clsx';

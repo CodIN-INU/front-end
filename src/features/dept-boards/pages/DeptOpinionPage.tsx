@@ -3,8 +3,7 @@
 import Sad from '@public/icons/sad.svg';
 
 import { fetchClient } from '@/shared/api/fetchClient';
-import ShadowBox from '@/shared/ui/common/shadowBox';
-import Title from '@/shared/ui/common/title';
+import { ShadowBox, Title } from '@/shared/ui';
 import clsx from 'clsx';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';

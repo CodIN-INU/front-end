@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Header from '@/shared/ui/layout/header/Header';
+import Header from '../layout/header/Header';
 import {
   GetNotificationList,
   Notification,
 } from '@/features/mypage/api/getNotificationList';
 import { useRouter } from 'next/navigation';
-import { createPostUrl } from '@/lib/utils/router/createPostUrl';
+import { createPostUrl } from '@/shared/utils/router/createPostUrl';
 
 // 알림 읽음 처리 (임시 더미 API 호출)
 const markNotificationAsRead = async (notificationId: string) => {

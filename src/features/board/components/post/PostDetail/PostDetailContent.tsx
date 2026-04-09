@@ -1,7 +1,7 @@
 'use client';
 
 import type { Post } from '@/types/post';
-import ZoomableImageModal from '@/shared/ui/modals/ZoomableImageModal';
+import { ZoomableImageModal } from '@/shared/ui';
 import { transStringToChartData } from '@/features/board/utils';
 
 interface PostDetailContentProps {

@@ -5,10 +5,7 @@ export { default as Tabs } from './Tabs';
 export {
   Header,
   BackButton,
-  Title as HeaderTitle,
   SearchButton,
-  Menu,
-  MenuItem,
   Logo,
   Notice,
   DownloadButton,

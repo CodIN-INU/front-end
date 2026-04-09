@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import ShadowBox from '@/shared/ui/common/shadowBox';
+import { ShadowBox } from '@/shared/ui';
 import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import RoomItemHourly from '@/features/roomstatus/components/RoomItemHourly';
 import type { LectureDict } from '@/features/roomstatus/types';

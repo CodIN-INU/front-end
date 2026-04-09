@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import ReportModal from "@/shared/ui/modals/ReportModal";
+import { ReportModal } from "@/shared/ui";
 
 interface UseReportModal {
     isOpen: boolean;

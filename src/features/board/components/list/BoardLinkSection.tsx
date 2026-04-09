@@ -1,6 +1,6 @@
 'use client';
 
-import ShadowBox from '@/shared/ui/common/shadowBox';
+import { ShadowBox } from '@/shared/ui';
 import NeedHelp from '@public/icons/need-help.svg';
 import Communicate from '@public/icons/communicate.svg';
 import Vote from '@public/icons/vote.svg';

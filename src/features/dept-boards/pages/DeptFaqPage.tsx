@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchClient } from '@/shared/api/fetchClient';
-import ShadowBox from '@/shared/ui/common/shadowBox';
+import { ShadowBox } from '@/shared/ui';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import type { Faq } from '@/features/dept-boards/types';
