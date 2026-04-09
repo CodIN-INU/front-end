@@ -21,8 +21,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"],
-      "@/server": ["./src/api/server"],
-      "@/server/*": ["./src/api/server/*"],
+      "@/server": ["./src/server"],
+      "@/server/*": ["./src/server/*"],
       "@/shared/*": ["./src/shared/*"]
     }
   },
