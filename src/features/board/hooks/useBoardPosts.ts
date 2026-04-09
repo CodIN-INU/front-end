@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { Post } from '@/types/post';
-import type { Board } from '@/data/boardData';
+import type { Board } from '@/features/board/data/boardData';
 import { fetchPostsByCategory } from '../api/fetchPostsByCategory';
 
 interface UseBoardPostsOptions {

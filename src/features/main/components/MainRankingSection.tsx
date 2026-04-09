@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import apiClient from '@/shared/api/apiClient';
-import { boardData } from '@/data/boardData';
+import { boardData } from '@/features/board/data/boardData';
 import { FEATURES } from '@/config/features';
 
 const timeAgo = (timestamp: string): string => {

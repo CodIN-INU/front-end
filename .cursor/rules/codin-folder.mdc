@@ -40,6 +40,9 @@ alwaysApply: false
 - shared -> shared 내부만 (feature 의존 금지)
 - server -> server + shared 일부(types/utils)만
 
+## Import 경로 상세 (별칭·배럴·예시)
+- 공용 UI는 `@/shared/ui` 배럴 우선, `@/shared/hooks`·`utils`·`types`·`api` 권장 경로: **`docs/IMPORT_RULES.md`**
+
 ## Feature Public API 강제 (deep import 금지)
 - 각 feature는 index.ts를 “공개 진입점”으로 사용
   - ✅ import { LoginForm } from "@/features/auth"

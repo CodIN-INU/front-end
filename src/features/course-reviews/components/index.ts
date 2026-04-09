@@ -8,3 +8,4 @@ export { CustomSelect } from './CustomSelect';
 export { RateBar } from './RateBar';
 export { DepartmentReviewComponent } from './DepartmentReview';
 export { ReviewComment } from './ReviewComment';
+export { AlertModal } from './AlertModal';

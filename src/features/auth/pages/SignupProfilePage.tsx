@@ -3,8 +3,7 @@ import { useRouter } from 'next/navigation';
 import { UserContext } from '@/context/UserContext';
 import { useContext, useState, useEffect, useMemo } from 'react';
 import { PostSignup } from '@/features/auth/api/postSignup';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import CommonBtn from '@/components/buttons/commonBtn';
+import { CommonBtn, DefaultBody } from '@/shared/ui';
 import {
   COLLEGE_OPTIONS,
   COLLEGE_TO_DEPARTMENTS,

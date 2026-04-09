@@ -1,6 +1,6 @@
 import TicketingPage from '@/features/ticketing/pages/TicketingPage';
 import { getTicketingEvents } from '@/server';
-import { boardData } from '@/data/boardData';
+import { boardData } from '@/features/board/data/boardData';
 
 export default async function TicketingRoutePage() {
   const defaultCampus = boardData['ticketing']?.tabs[0]?.postCategory ?? 'SONGDO_CAMPUS';

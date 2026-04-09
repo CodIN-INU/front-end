@@ -1,8 +1,6 @@
 'use client';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import Header from '@/components/Layout/header/Header';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { Suspense } from 'react';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
 
 const Page = () => {
   // backLink 정보가 있으면 해당 URL로, 없으면 기본 router.back() 실행

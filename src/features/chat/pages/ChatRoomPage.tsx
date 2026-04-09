@@ -11,8 +11,7 @@ import { deleteRoom } from '@/features/chat/api/deleteRoom';
 import { PostChatImage } from '@/features/chat/api/postChatImage';
 import MessageForm from '@/features/chat/components/room/MessageForm';
 import MessageList from '@/features/chat/components/room/MessageList';
-import Header from '@/components/Layout/header/Header';
-import MenuItem from '@/components/common/Menu/MenuItem';
+import { Header, MenuItem } from '@/shared/ui';
 
 interface Message {
   id: string;

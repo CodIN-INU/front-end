@@ -1,5 +1,5 @@
 import VoteListPage from '@/features/vote/pages/VoteListPage';
-import { getVotes } from '@/api/server';
+import { getVotes } from '@/server';
 
 export default async function VoteListRoutePage() {
   const { votes, nextPage } = await getVotes(0);

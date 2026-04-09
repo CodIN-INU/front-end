@@ -5,7 +5,7 @@
  * @see docs/APP_STRUCTURE.md
  */
 import { ReactNode } from 'react';
-import BottomNav from '@/components/Layout/Navigation/BottomNav';
+import { NavigationBottomNav } from '@/shared/ui';
 
 export default function LayoutWithBottomNav({
   children,
@@ -15,7 +15,7 @@ export default function LayoutWithBottomNav({
   return (
     <div className="max-w-md mx-auto w-full flex justify-center">
       {children}
-      <BottomNav />
+      <NavigationBottomNav />
     </div>
   );
 }

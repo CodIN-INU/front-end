@@ -29,12 +29,12 @@
 
 | 경로 | 용도 |
 |------|------|
-| `Layout/` | header, Body, Navigation, BoardLayout, pageBar, Tabs 등 |
+| `Layout/` | header, Body, Navigation, BoardLayout, Tabs 등 (`pageBar` 등은 해당 feature로 이전됨) |
 | `common/` | title, shadowBox, SearchInput, LoadingOverlay, AuthBootstrap, Menu, MenuItem |
 | `buttons/` | commonBtn, underbarBtn, smRoundedBtn |
 | `select/Select.tsx` | 범용 셀렉트 |
 | `input/Input.tsx` | 범용 인풋 |
-| `modals/` 중 공용 | ZoomableImageModal, AlertModal, AlarmModal, WebModal, ReportModal |
+| `modals/` 중 공용 | ZoomableImageModal, AlarmModal, ReportModal 등 (도메인 전용은 `features/*/components`) |
 | `icons/` | CheckIcon 등 아이콘 |
 
 ### 1.2 Feature 전용 컴포넌트 (이동 대상)
@@ -116,7 +116,7 @@
   - 절대 경로 사용: `@/features/board/components/PostList`, `@/features/ticketing/components/CancelModal` 등.
 
 - **공용 컴포넌트 참조**  
-  - 그대로 `@/components/Layout/...`, `@/components/common/...` 유지.
+  - `@/shared/ui` 또는 `@/shared/ui/<영역>/...` (레이아웃·버튼·모달 등).
 
 ---
 
@@ -169,4 +169,4 @@
 - **FEATURE_SEPARATION_GUIDE.md**: app → features 페이지/로직 분리 방식.
 - **FOLDER_STRUCTURE_PROPOSAL.md**: 제안 폴더 구조에서 board, ticketing 등 components 위치.
 
-이동 후에는 “공통은 `components/`, 도메인 전용은 `features/<이름>/components/`”로 역할이 명확해진다.
+이동 후에는 “공통은 `shared/ui/`, 도메인 전용은 `features/<이름>/components/`”로 역할이 명확해진다.

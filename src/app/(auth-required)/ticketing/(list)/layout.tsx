@@ -4,7 +4,7 @@
  * - (list)는 URL에 포함되지 않는 라우트 그룹
  */
 import { MainHeader } from '@/features/main';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody } from '@/shared/ui';
 
 export default function TicketingListLayout({
   children,

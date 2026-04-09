@@ -2,7 +2,7 @@
 
 import BottomSheet from '@/features/department-info/components/bottomSheet';
 import MapContainer from '@/features/department-info/components/mapContainer';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
+import { BottomNav } from '@/shared/ui';
 import { use, useEffect, useState } from 'react';
 import { IPartner, Tag } from '@/types/partners';
 import Script from 'next/script';

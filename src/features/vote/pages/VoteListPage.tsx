@@ -4,13 +4,10 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { AuthContext } from '@/context/AuthContext';
 import { GetVoteData } from '@/features/vote/api/getVoteData';
 import { PostVoting } from '@/features/vote/api/postVoting';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header, ShadowBox, Title } from '@/shared/ui';
 import Link from 'next/link';
-import ShadowBox from '@/components/common/shadowBox';
-import Title from '@/components/common/title';
 import clsx from 'clsx';
-import type { VoteListItem } from '@/api/server';
+import type { VoteListItem } from '@/server';
 
 interface VoteListPageProps {
   initialVotes?: VoteListItem[];

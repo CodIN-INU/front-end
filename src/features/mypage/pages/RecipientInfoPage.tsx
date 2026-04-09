@@ -1,13 +1,11 @@
 // pages/ticketing/ticket/page.tsx
 'use client';
 
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
 import { useState, Suspense, useEffect } from 'react';
 import { fetchClient } from '@/shared/api/fetchClient';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/store/userStore';
-import LoadingOverlay from '@/components/common/LoadingOverlay';
 
 export default function RecipientInfo() {
   const router = useRouter();

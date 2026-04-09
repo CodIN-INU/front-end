@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { boardData } from '@/data/boardData';
+import { boardData } from '@/features/board/data/boardData';
 import { FEATURES } from '@/config/features';
 import { mapPostCategoryToBoardPath, timeAgo } from '@/features/board/utils';
 import type { Post } from '@/types/post';

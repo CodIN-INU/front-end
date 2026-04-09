@@ -1,7 +1,7 @@
 'use client';
 
-import BackButton from '@/components/Layout/header/BackButton';
-import MapLinkButton from '@/components/Layout/header/MapLinkButton';
+import { BackButton } from '@/shared/ui';
+import MapLinkButton from './MapLinkButton';
 import { Tags, OtherTag } from './tag';
 import { useState } from 'react';
 import { Tag } from '@/types/partners';

@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import ShadowBox from '@/components/common/shadowBox';
+import { ShadowBox } from '@/shared/ui';
 import RightArrow from '@public/icons/arrow/arrow_right.svg';
 import RoomItemHourly from '@/features/roomstatus/components/RoomItemHourly';
 import type { LectureDict } from '@/features/roomstatus/types';
 import { getTimeTableData } from '@/features/roomstatus/utils/getTimeTableData';
 import { fetchClient } from '@/shared/api/fetchClient';
-import PageBar from '@/components/Layout/pageBar';
+import PageBar from '@/features/main/components/PageBar';
 
 const defaultRoomStatus: (LectureDict | null)[] = Array.from(
   { length: 5 },

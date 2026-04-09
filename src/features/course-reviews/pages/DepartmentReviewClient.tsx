@@ -3,17 +3,15 @@
 import { useParams } from 'next/navigation';
 import { Suspense, useContext, useEffect, useState } from 'react';
 import type { lectureInfoType, emotionType, reviewType } from '@/features/course-reviews/types';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { DepartmentReviewComponent } from '@/features/course-reviews/components/DepartmentReview';
 import { useDepartmentRatingInfoContext } from '@/features/course-reviews/api/useDepartmentRatingInfoContext';
 import { ReviewComment } from '@/features/course-reviews/components/ReviewComment';
 import { useLectureReviewsContext } from '@/features/course-reviews/api/useLectureReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';
-import type { LectureRatingInfo } from '@/server/getCourseReviews';
-import type { ReviewComment as ReviewCommentType } from '@/server/getCourseReviews';
+import type { LectureRatingInfo } from '@/server';
+import type { ReviewComment as ReviewCommentType } from '@/server';
 
 interface DepartmentReviewClientProps {
   initialLectureInfo?: LectureRatingInfo | null;
@@ -79,8 +77,8 @@ const DepartmentReviewClient = ({
       });
       setEmotion(resData.emotion);
     } catch (error) {
-      console.error('과목별 후기 조회 실패', error);
-      alert('과목별 후기 조회 실패');
+      console.error('과목별 강의 조회 실패', error);
+      alert('데이터 조회에 실패했습니다.');
     }
   };
 
@@ -92,8 +90,8 @@ const DepartmentReviewClient = ({
       const resData = response.data;
       setReviewList(resData.contents ?? []);
     } catch (error) {
-      console.error('과목별 후기 조회 실패', error);
-      alert('과목별 후기 조회 실패');
+      console.error('리뷰 목록 조회 실패', error);
+      alert('데이터 조회에 실패했습니다.');
     }
   };
 
@@ -109,7 +107,7 @@ const DepartmentReviewClient = ({
       setData({
         ...data,
         grade: {
-          label: `${lectureInfo.grade}학년`,
+          label: `${lectureInfo.grade} 학년`,
           value: `${lectureInfo.grade}`,
         },
       });
@@ -125,7 +123,7 @@ const DepartmentReviewClient = ({
 
   return (
     <Suspense>
-      <Header title="과목 별 후기" showBack />
+      <Header title="과목별 강의" showBack />
       <DefaultBody headerPadding="compact">
         {lectureInfo && emotion && (
           <DepartmentReviewComponent

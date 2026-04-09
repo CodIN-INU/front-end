@@ -2,9 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense, useCallback } from 'react';
-import LoadingOverlay from '@/components/common/LoadingOverlay';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
 import UserInfoModal from '@/features/ticketing/components/modals/UserInfoModal';
 import { EventDetailContent, TicketBottomBar } from '@/features/ticketing/components/event';
 import { fetchClient } from '@/shared/api/fetchClient';

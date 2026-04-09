@@ -1,5 +1,5 @@
 import VoteDetailPage from '@/features/vote/pages/VoteDetailPage';
-import { getVoteById } from '@/api/server';
+import { getVoteById } from '@/server';
 
 interface PageProps {
   params: Promise<{ voteId: string }>;

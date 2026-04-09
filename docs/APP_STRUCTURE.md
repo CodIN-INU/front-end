@@ -111,13 +111,13 @@ src/app/
 | 컴포넌트 | 경로 | 역할 |
 |----------|------|------|
 | MainHeader | `@/features/main` (index) | 로고 + Notice + TopNav |
-| Header | `@/components/Layout/header/Header` | 뒤로가기 + 타이틀 (범용) |
-| DefaultBody | `@/components/Layout/Body/defaultBody` | 콘텐츠 래퍼 + 패딩 |
-| BottomNav | `@/components/Layout/Navigation/BottomNav` | 하단 탭 네비게이션 |
-| BoardLayout | `@/components/Layout/BoardLayout` | 게시판/티켓팅용 레이아웃 |
+| Header | `@/shared/ui` → `layout/header/Header` | 뒤로가기 + 타이틀 (범용) |
+| DefaultBody | `@/shared/ui` → `layout/Body/defaultBody` | 콘텐츠 래퍼 + 패딩 |
+| BottomNav | `@/shared/ui` → `layout/BottomNav/BottomNav` 등 | 하단 탭 네비게이션 |
+| BoardLayout | `@/shared/ui` → `layout/BoardLayout` | 게시판/티켓팅용 레이아웃 |
 
 ## 6. codin-folder 룰 적용
 
-- **@/server**: 서버 전용 API (api/server) → `import { getTopPosts } from '@/server'`
+- **@/server**: 서버 전용 API (server) → `import { getTopPosts } from '@/server'`
 - **@/features/xxx**: feature index 통해 import 권장 → `import { MainPage } from '@/features/main'`
-- **shared/**: 마이그레이션 예정 (components, lib, hooks 등)
+- **@/shared/ui**: 공용 레이아웃·버튼·모달 등 (`@/shared/hooks`, `@/shared/utils` 등과 함께 사용)

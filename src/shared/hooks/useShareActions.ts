@@ -1,3 +1,4 @@
+//공유하기 눌렀을 때 실행되는 로직
 'use client';
 
 import { useCallback } from 'react';

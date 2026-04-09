@@ -1,5 +1,4 @@
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { Header } from '@/components/Layout/header';
+import { DefaultBody, Header } from '@/shared/ui';
 
 const topNav = [
   {

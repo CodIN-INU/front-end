@@ -275,8 +275,8 @@ export * from './course';
 - [ ] `features/<domain>/pages/`에 페이지 컴포넌트 생성
 - [ ] `app/`의 `page.tsx`는 단순히 import & export만
 - [ ] feature 내부 import는 상대 경로 사용 (예: `./components/PostItem`)
-- [ ] feature 외부 import는 절대 경로 사용 (예: `@/components/common/Button`)
-- [ ] 공용으로 쓰이는 컴포넌트는 `components/`로 이동 검토
+- [ ] feature 외부 import는 절대 경로 사용 (예: `@/shared/ui`, `@/shared/hooks`)
+- [ ] 공용으로 쓰이는 컴포넌트는 `shared/ui/`로 이동 검토
 - [ ] 타입이 공용이면 `types/`로 이동 검토
 
 ---
@@ -293,7 +293,7 @@ import { usePost } from '../hooks/usePost';
 ### Feature 외부
 ```typescript
 // ✅ 절대 경로 사용 (@ alias)
-import { Button } from '@/components/common/Button';
+import { CommonBtn } from '@/shared/ui';
 import { useAuth } from '@/hooks/useAuth';
 import type { Post } from '@/types/board';
 ```

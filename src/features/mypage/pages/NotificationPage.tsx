@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header } from '@/shared/ui';
 import { PostSubscribe } from '@/features/mypage/api/postSubscribe';
 import { PostUnsubscribe } from '@/features/mypage/api/postUnsubscribe';
 

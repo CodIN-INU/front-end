@@ -1,5 +1,5 @@
 import PartnersClient from './PartnersClient';
-import { getPartners } from '@/api/server';
+import { getPartners } from '@/server';
 
 export default async function PartnersRoutePage() {
   const initialPartners = await getPartners();

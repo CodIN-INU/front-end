@@ -19,10 +19,7 @@ const DatePicker = dynamic(
     ),
   }
 );
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import CommonBtn from '@/components/buttons/commonBtn';
-import CheckIcon from '@/components/icons/CheckIcon';
+import { CheckIcon, CommonBtn, DefaultBody, Header } from '@/shared/ui';
 
 export default function WriteVotePage() {
   const router = useRouter();

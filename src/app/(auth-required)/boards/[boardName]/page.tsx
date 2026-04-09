@@ -1,6 +1,6 @@
 import BoardListPage from '@/features/board/pages/BoardListPage';
-import { boardData } from '@/data/boardData';
-import { getPostsByCategory } from '@/server/getPostsByCategory';
+import { boardData } from '@/features/board/data/boardData';
+import { getPostsByCategory } from '@/server';
 
 interface PageProps {
   params: Promise<{ boardName: string }>;
@@ -14,7 +14,7 @@ export default async function BoardRoutePage({ params }: PageProps) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <h2 className="text-xl font-semibold text-gray-700">
-          존재하지 않는 게시판입니다.
+          존�?�??�? ??�?? �?�???��????�?�.
         </h2>
       </div>
     );

@@ -1,6 +1,6 @@
 'use client';
 
-import DateCalendar from '@/components/calendar/DateCalendar';
+import DateCalendar from '@/features/main/components/DateCalendar';
 
 const MainCalendarSection = () => {
   return (

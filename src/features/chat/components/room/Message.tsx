@@ -1,7 +1,7 @@
 // Message.tsx
 'use client'
 import { useState } from 'react'; 
-import ZoomableImageModal from "@/components/modals/ZoomableImageModal";
+import { ZoomableImageModal } from "@/shared/ui";
 interface MessageProps {
     id: string;
     content: string;

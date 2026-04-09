@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody } from '@/shared/ui';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

@@ -2,8 +2,7 @@
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header } from '@/shared/ui';
 import SignModal from './modals/SignModal';
 import CancelModal from './modals/CancelModal';
 import { fetchClient } from '@/shared/api/fetchClient';

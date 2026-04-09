@@ -3,9 +3,8 @@
 import { PostChatRoom } from '@/features/chat/api/postChatRoom';
 import { PostBlockUser } from '@/features/auth/api/postBlockUser';
 import { DeletePost } from '@/features/board/api/deletePost';
-import { useReportModal } from '@/hooks/useReportModal';
-import Header from '@/components/Layout/header/Header';
-import MenuItem from '@/components/common/Menu/MenuItem';
+import { useReportModal } from '@/shared/hooks/useReportModal';
+import { Header, MenuItem } from '@/shared/ui';
 import { getBoardNameByCategory } from '@/features/board/utils';
 import { useShareActions } from '@/shared/hooks/useShareActions';
 import type { Post } from '@/types/post';

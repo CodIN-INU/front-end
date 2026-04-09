@@ -3,15 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import apiClient from '@/shared/api/apiClient';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { DefaultBody, Header, ShadowBox } from '@/shared/ui';
 import Phone from '@public/icons/phone.svg';
 import Fax from '@public/icons/fax.svg';
 import Location from '@public/icons/location.svg';
 import Open from '@public/icons/opentime.svg';
 import Vacation from '@public/icons/vacation.svg';
 import Email from '@public/icons/email.svg';
-import ShadowBox from '@/components/common/shadowBox';
 import Link from 'next/link';
 
 const departmentNamesMap: Record<string, string> = {

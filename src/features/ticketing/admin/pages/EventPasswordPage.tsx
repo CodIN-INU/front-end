@@ -2,8 +2,7 @@
 
 import { FC, Suspense, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
-import { Header } from '@/components/Layout/header';
+import { DefaultBody, Header } from '@/shared/ui';
 import { fetchClient } from '@/shared/api/fetchClient';
 
 const EventPasswordPage: FC = () => {

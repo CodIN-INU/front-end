@@ -1,12 +1,10 @@
 'use client';
 import { useState, useEffect, Suspense, useRef } from 'react';
 import Link from 'next/link';
-import BottomNav from '@/components/Layout/BottomNav/BottomNav';
-import Header from '@/components/Layout/header/Header';
-import DefaultBody from '@/components/Layout/Body/defaultBody';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { PostLogout } from '@/features/auth/api/postLogout';
 import { DeleteUser } from '@/features/auth/api/deleteUser';
-import WebModal, { WebModalHandles } from '@/components/modals/WebModal';
+import WebModal, { WebModalHandles } from '@/features/mypage/components/WebModal';
 import { fetchClient } from '@/shared/api/fetchClient';
 import Head from 'next/head';
 
