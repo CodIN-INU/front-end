@@ -9,7 +9,7 @@
  * @param title - 게시판 제목 (예: '모집해요')
  * @returns 해당하는 boardType (예: 'need-help') 또는 찾을 수 없는 경우 undefined
  */
-import { boardData } from "@/data/boardData";
+import { boardData } from "@/features/board/data/boardData";
 export interface Tab {
     label: string;
     value: string;

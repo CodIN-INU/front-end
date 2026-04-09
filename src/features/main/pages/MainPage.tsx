@@ -1,7 +1,7 @@
 'use client';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AlarmModal from '@/shared/ui/modals/AlarmModal';
+import { AlarmModal } from '@/shared/ui';
 import { useAuth } from '@/store/userStore';
 import { MainCalendarSection, MainSectionSkeleton } from '../components';
 

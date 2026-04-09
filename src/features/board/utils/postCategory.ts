@@ -1,7 +1,7 @@
 /**
  * postCategory 관련 매핑 유틸 (boardData 의존성 캡슐화)
  */
-import { boardData } from '@/data/boardData';
+import { boardData } from '@/features/board/data/boardData';
 
 const POST_CATEGORY_LABELS: Record<string, string> = {
   REQUEST: '구해요 전체',

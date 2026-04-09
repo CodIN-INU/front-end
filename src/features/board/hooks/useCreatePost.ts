@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Tab } from '@/data/boardData';
+import type { Tab } from '@/features/board/data/boardData';
 import { createPost } from '../api/createPost';
 
 export interface CreatePostFormData {

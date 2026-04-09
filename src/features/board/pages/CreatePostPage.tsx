@@ -1,10 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { boardData } from '@/data/boardData';
-import Header from '@/shared/ui/layout/header/Header';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import SmRoundedBtn from '@/shared/ui/buttons/smRoundedBtn';
+import { boardData } from '@/features/board/data/boardData';
+import { DefaultBody, Header, SmRoundedBtn } from '@/shared/ui';
 import { useCreatePost } from '@/features/board/hooks/useCreatePost';
 
 export default function CreatePostPage() {

@@ -3,11 +3,11 @@
 
 import { FC, PropsWithChildren, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Tabs from '@/shared/ui/layout/Tabs';
-import { boardData } from '@/data/boardData'; // boardData 불러오기
+import Tabs from './Tabs';
+import { boardData } from '@/features/board/data/boardData'; // boardData 불러오기
 import Header from './header/Header';
 import DefaultBody from './Body/defaultBody';
-import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
+import BottomNav from './BottomNav/BottomNav';
 import SmRoundedBtn from '../buttons/smRoundedBtn';
 
 interface BoardLayoutProps extends PropsWithChildren {
