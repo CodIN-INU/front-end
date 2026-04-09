@@ -118,6 +118,6 @@ src/app/
 
 ## 6. codin-folder 룰 적용
 
-- **@/server**: 서버 전용 API (api/server) → `import { getTopPosts } from '@/server'`
+- **@/server**: 서버 전용 API (server) → `import { getTopPosts } from '@/server'`
 - **@/features/xxx**: feature index 통해 import 권장 → `import { MainPage } from '@/features/main'`
 - **@/shared/ui**: 공용 레이아웃·버튼·모달 등 (`@/shared/hooks`, `@/shared/utils` 등과 함께 사용)

@@ -18,13 +18,13 @@ src/
 ├── types/        # 호환 레이어: 파일별 re-export → @/shared/types
 ├── lib/utils/    # 호환 레이어: 일부 re-export → @/shared/utils
 ├── api/          # 클라이언트 API (boards, chat, user 등)
-└── api/server/   # 서버 전용 → import 시 @/server 사용 ✓
+└── server/       # 서버 전용 → import 시 @/server 사용 ✓
 ```
 
 ## 적용 완료
 
-- [x] **@/server** 경로 별칭 추가 (`api/server` → `@/server`)
-- [x] 모든 `@/api/server` import를 `@/server`로 변경
+- [x] **@/server** 경로 별칭 추가 (`server` → `@/server`)
+- [x] 모든 `@/server` import로 통일
 - [x] `shared/` 폴더 구조 생성
 - [x] **types** — `src/shared/types/*` 실구현 + `src/types/*` forwarder (`export * from '@/shared/types/...'`)
 - [x] **lib/utils (범용)** — `src/shared/utils/*` 실구현 + `src/lib/utils/*` 등 forwarder
@@ -66,7 +66,7 @@ src/
 | fcm | features/mypage/api | ✅ 완료 |
 | clients | shared/api | ✅ 완료 |
 
-- **api/server**: 별도 유지 (@/server), 이번 마이그레이션 제외
+- **server**: 별도 유지 (@/server), 이번 마이그레이션 제외
 
 ## 진행 예정
 
