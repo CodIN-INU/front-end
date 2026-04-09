@@ -19,7 +19,7 @@ export default async function RoomStatusPage({ searchParams }: PageProps) {
 
   return (
     <>
-      <Header title="ê°?ì?????í?©" showBack tempBackOnClick="/main" />
+      <Header title="ê°•ì˜ì‹¤ í˜„í™©" showBack tempBackOnClick="/main" />
       <FloorPage
         initialFloor={floorNum}
         building={buildingId}
@@ -28,4 +28,3 @@ export default async function RoomStatusPage({ searchParams }: PageProps) {
     </>
   );
 }
-
