@@ -8,15 +8,12 @@ import { GetVoteDetail } from '@/features/vote/api/getVoteDetail';
 import { PostBlockUser } from '@/features/auth/api/postBlockUser';
 import { useParams } from 'next/navigation';
 import { PostLike } from '@/shared/api/postLike';
-import Header from '@/shared/ui/layout/header/Header';
+import { DefaultBody, Header, MenuItem, ReportModal } from '@/shared/ui';
 import CommentSection from '@/features/comment/components/CommentSection';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import ReportModal from '@/shared/ui/modals/ReportModal';
 import { useReportModal } from '@/shared/hooks/useReportModal';
 import { DeletePost } from '@/features/board/api/deletePost';
-import MenuItem from '@/shared/ui/common/Menu/MenuItem';
 import { useShareActions } from '@/shared/hooks/useShareActions';
-import type { VoteDetail } from '@/api/server';
+import type { VoteDetail } from '@/server';
 
 interface VoteDetailPageProps {
   voteId?: string;

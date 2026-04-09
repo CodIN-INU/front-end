@@ -1,5 +1,5 @@
 import CoursesPage from '@/features/courses/pages/CoursesPage';
-import { getCourses } from '@/api/server';
+import { getCourses } from '@/server';
 
 export default async function CoursesRoutePage() {
   const { courses, nextPage } = await getCourses(0);

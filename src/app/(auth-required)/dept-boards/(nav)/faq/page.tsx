@@ -1,5 +1,5 @@
 import DeptFaqPage from '@/features/dept-boards/pages/DeptFaqPage';
-import { getDeptFaqs } from '@/api/server';
+import { getDeptFaqs } from '@/server';
 
 interface PageProps {
   searchParams: Promise<{ dept?: string }>;

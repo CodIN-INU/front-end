@@ -1,5 +1,5 @@
 import DeptNoticePage from '@/features/dept-boards/pages/DeptNoticePage';
-import { getDeptNotices } from '@/api/server';
+import { getDeptNotices } from '@/server';
 
 interface PageProps {
   searchParams: Promise<{ dept?: string }>;

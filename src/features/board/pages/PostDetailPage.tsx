@@ -1,6 +1,6 @@
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
+import { DefaultBody } from '@/shared/ui';
 import PostDetailView from '../components/post/PostDetailView';
-import { getPostById } from '@/server/getPost';
+import { getPostById } from '@/server';
 
 export interface PostDetailPageProps {
   params: Promise<{ boardName: string; postId: string }>;

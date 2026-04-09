@@ -1,5 +1,5 @@
 import DeptQuestionDetailPage from '@/features/dept-boards/pages/DeptQuestionDetailPage';
-import { getDeptNoticeById } from '@/api/server';
+import { getDeptNoticeById } from '@/server';
 
 interface PageProps {
   params: Promise<{ id: string }>;

@@ -3,17 +3,15 @@
 import { useParams } from 'next/navigation';
 import { Suspense, useContext, useEffect, useState } from 'react';
 import type { lectureInfoType, emotionType, reviewType } from '@/features/course-reviews/types';
-import Header from '@/shared/ui/layout/header/Header';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import BottomNav from '@/shared/ui/layout/BottomNav/BottomNav';
+import { BottomNav, DefaultBody, Header } from '@/shared/ui';
 import { DepartmentReviewComponent } from '@/features/course-reviews/components/DepartmentReview';
 import { useDepartmentRatingInfoContext } from '@/features/course-reviews/api/useDepartmentRatingInfoContext';
 import { ReviewComment } from '@/features/course-reviews/components/ReviewComment';
 import { useLectureReviewsContext } from '@/features/course-reviews/api/useLectureReviewsContext';
 import { ReviewBtn } from '@/features/course-reviews/components/ReviewBtn';
 import { ReviewContext } from '@/context/WriteReviewContext';
-import type { LectureRatingInfo } from '@/server/getCourseReviews';
-import type { ReviewComment as ReviewCommentType } from '@/server/getCourseReviews';
+import type { LectureRatingInfo } from '@/server';
+import type { ReviewComment as ReviewCommentType } from '@/server';
 
 interface DepartmentReviewClientProps {
   initialLectureInfo?: LectureRatingInfo | null;
@@ -57,8 +55,8 @@ const DepartmentReviewClient = ({
   const [refetch, setRefetch] = useState<boolean>(false);
   const context = useContext(ReviewContext);
   const data = context?.data ?? {
-    departments: { label: '학과', value: '' },
-    grade: { label: '학년', value: '' },
+    departments: { label: '??과', value: '' },
+    grade: { label: '??�??', value: '' },
   };
   const setData = context?.setData ?? (() => {});
 
@@ -79,8 +77,8 @@ const DepartmentReviewClient = ({
       });
       setEmotion(resData.emotion);
     } catch (error) {
-      console.error('과목별 후기 조회 실패', error);
-      alert('과목별 후기 조회 실패');
+      console.error('과목�???기 조�?? ?��?�', error);
+      alert('과목�???기 조�?? ?��?�');
     }
   };
 
@@ -92,8 +90,8 @@ const DepartmentReviewClient = ({
       const resData = response.data;
       setReviewList(resData.contents ?? []);
     } catch (error) {
-      console.error('과목별 후기 조회 실패', error);
-      alert('과목별 후기 조회 실패');
+      console.error('과목�???기 조�?? ?��?�', error);
+      alert('과목�???기 조�?? ?��?�');
     }
   };
 
@@ -109,7 +107,7 @@ const DepartmentReviewClient = ({
       setData({
         ...data,
         grade: {
-          label: `${lectureInfo.grade}학년`,
+          label: `${lectureInfo.grade}??�??`,
           value: `${lectureInfo.grade}`,
         },
       });
@@ -125,7 +123,7 @@ const DepartmentReviewClient = ({
 
   return (
     <Suspense>
-      <Header title="과목 별 후기" showBack />
+      <Header title="과목 �???기" showBack />
       <DefaultBody headerPadding="compact">
         {lectureInfo && emotion && (
           <DepartmentReviewComponent

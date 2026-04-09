@@ -1,12 +1,10 @@
 'use client';
 
 import { fetchClient } from '@/shared/api/fetchClient';
-import ShadowBox from '@/shared/ui/common/shadowBox';
-import DefaultBody from '@/shared/ui/layout/Body/defaultBody';
-import Header from '@/shared/ui/layout/header/Header';
+import { DefaultBody, Header, ShadowBox } from '@/shared/ui';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import type { DeptNoticePost } from '@/api/server';
+import type { DeptNoticePost } from '@/server';
 
 export interface Post {
   _id: string;

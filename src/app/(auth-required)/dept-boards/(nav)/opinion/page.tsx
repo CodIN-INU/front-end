@@ -1,5 +1,5 @@
 import DeptOpinionPage from '@/features/dept-boards/pages/DeptOpinionPage';
-import { getDeptOpinions } from '@/api/server';
+import { getDeptOpinions } from '@/server';
 
 interface PageProps {
   searchParams: Promise<{ dept?: string }>;

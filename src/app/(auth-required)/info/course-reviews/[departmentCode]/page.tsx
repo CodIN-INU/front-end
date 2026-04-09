@@ -1,5 +1,5 @@
 import DepartmentReviewClient from '@/features/course-reviews/pages/DepartmentReviewClient';
-import { getLectureRatingInfo, getLectureReviews } from '@/api/server';
+import { getLectureRatingInfo, getLectureReviews } from '@/server';
 
 interface PageProps {
   params: Promise<{ departmentCode: string }>;

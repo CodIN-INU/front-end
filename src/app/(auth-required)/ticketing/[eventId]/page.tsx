@@ -1,5 +1,5 @@
 import TicketingEventPage from '@/features/ticketing/pages/TicketingEventPage';
-import { getTicketingEventById } from '@/api/server';
+import { getTicketingEventById } from '@/server';
 
 interface PageProps {
   params: Promise<{ eventId: string }>;

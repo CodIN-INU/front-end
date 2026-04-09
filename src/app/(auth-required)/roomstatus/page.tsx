@@ -1,7 +1,7 @@
 import FloorPage from '@/features/roomstatus/pages/FloorPage';
-import { getRoomStatusDetail } from '@/api/server';
+import { getRoomStatusDetail } from '@/server';
 import { DEFAULT_BUILDING } from '@/features/roomstatus/constants/buildings';
-import { Header } from '@/shared/ui/layout/header';
+import { Header } from '@/shared/ui';
 
 interface PageProps {
   searchParams: Promise<{ building?: string; floor?: string }>;
@@ -19,7 +19,7 @@ export default async function RoomStatusPage({ searchParams }: PageProps) {
 
   return (
     <>
-      <Header title="ê°•ì˜ì‹¤ í˜„í™©" showBack tempBackOnClick="/main" />
+      <Header title="ê°?ì?????í?©" showBack tempBackOnClick="/main" />
       <FloorPage
         initialFloor={floorNum}
         building={buildingId}

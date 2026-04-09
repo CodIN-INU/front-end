@@ -1,5 +1,5 @@
 import CourseDetailPage from '@/features/courses/pages/CourseDetailPage';
-import { getCourseById } from '@/api/server';
+import { getCourseById } from '@/server';
 
 interface PageProps {
   params: Promise<{ id: string }>;
