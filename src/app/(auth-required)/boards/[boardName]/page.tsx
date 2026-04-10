@@ -14,7 +14,7 @@ export default async function BoardRoutePage({ params }: PageProps) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <h2 className="text-xl font-semibold text-gray-700">
-          존�?�??�? ??�?? �?�???��????�?�.
+          존재하지 않는 게시판입니다.
         </h2>
       </div>
     );

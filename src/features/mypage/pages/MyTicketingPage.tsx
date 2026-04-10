@@ -38,7 +38,7 @@ const TicketingPage: FC = () => {
       console.log(response)
       const eventList = response?.data?.eventList;
       if (!Array.isArray(eventList)) {
-        console.error('eventList? ??????????:', eventList);
+        console.error('eventList? 간식나눔 이벤트 없음:', eventList);
         setHasMore(false);
         return;
       }
@@ -50,7 +50,7 @@ const TicketingPage: FC = () => {
       }
 
     } catch (e) {
-      console.error("??????? ???.", e);
+      console.error("이벤트 정보 불러오기 실패.", e);
       setHasMore(false);
     } finally {
       setIsLoading(false);
@@ -58,7 +58,7 @@ const TicketingPage: FC = () => {
     }
   };
 
-  // ???
+  // 초기화
   useEffect(() => {
     const initialize = async () => {
       setSnacks([]);
@@ -70,7 +70,7 @@ const TicketingPage: FC = () => {
     initialize();
   }, [activeTab]);
 
-  // ??? ??
+  // 스크롤
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -88,7 +88,7 @@ const TicketingPage: FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isLoading, hasMore]);
 
-  // ??? ?? ?
+
   useEffect(() => {
     if (page > 1) {
       fetchPosts(page);
@@ -130,31 +130,31 @@ const TicketingPage: FC = () => {
             <div className="flex flex-col items-start">
                 <div className="flex items-start">
                     <p className="font-semibold text-[14px]">{snack.title}</p>
-                    <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> ?</p>
+                    <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
                 </div>
                 <div className="mt-[22px] text-[12px] text-black">{convertToKoreanDate(snack.eventTime)}</div>
                 <div className="text-[12px] text-black">{snack.locationInfo}</div>
-                <div className="text-[12px] text-black">????</div>
+                <div className="text-[12px] text-black">티켓팅 완료</div>
                 
-                {/* ?? ?? */}
+                {/* 티켓팅 상태 버튼 */}
                     {snack && (
                         <div className="w-full bg-white flex justify-start">
                             {snack.status === 'WAITING' && (
                                 <button className="bg-[#0D99FF] rounded-[20px] justify-center items-center py-[7px] gap-[10px] text-[14px] text-[#ffffff] w-[95px] mt-[9px]" 
                                         onClick={(e) => {e.stopPropagation(); setEventId(snack.eventId); setShowCancelModal(true);}}>
-                                    ?? ??
+                                    티켓팅 취소
                                 </button>
                             )}
 
                             {snack.status === 'CANCELED' && (
                                 <button className="bg-[#EBF0F7] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[19px] py-[7px]" disabled>
-                                    ?? ??
+                                    취소 완료
                                 </button>
                             )}
 
                             {snack.status === 'COMPLETED' && (
                                 <button className="bg-[#A6A6AB] rounded-[20px] text-[14px] text-[#808080] mt-[9px] px-[40px] py-[7px]" disabled>
-                                    ?? ??
+                                    사용 완료
                                 </button>
                             )}
                         </div>
