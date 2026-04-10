@@ -40,7 +40,7 @@ export function EventDetailInfoPanel({
             <span className="font-semibold">티켓팅 시작 시간:</span>{' '}
             {convertToKoreanDate(eventData.eventTime)}
           </div>
-          <div className="text-black/50 self-center mt-[18px]">
+          <div className="text-black/50 self-center mt-[18px] whitespace-pre-wrap break-words">
             {eventData.description}
           </div>
           <a

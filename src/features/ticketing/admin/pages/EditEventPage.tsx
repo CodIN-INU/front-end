@@ -35,7 +35,7 @@ export default function EditEventPage() {
             eventTime: parseBackendDateToLocalDateTime(data.eventTime),
             eventEndTime: parseBackendDateToLocalDateTime(data.eventEndTime),
             locationInfo: data.locationInfo,
-            campus: data.campus == "SONGDO_CAMPUS" ? '성도 캠퍼스' : '미추가 캠퍼스',
+            campus: data.campus == "SONGDO_CAMPUS" ? '송도 캠퍼스' : '미추홀 캠퍼스',
             target: data.target,
             stock: data.currentQuantity,
             promotionLink: data.promotionLink,
@@ -88,7 +88,9 @@ export default function EditEventPage() {
   };
 
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     let newValue: string | number = value;
@@ -218,7 +220,7 @@ export default function EditEventPage() {
                 
                  {/* 제목 */}
                 <InputBlock
-                  label="제목"
+                  label="행사명"
                   name="title"
                   placeholder="내용을 입력해주세요"
                   value={form.title ?? ''}
@@ -235,9 +237,9 @@ export default function EditEventPage() {
                   withIcon
                 />
 
-                {/* 종시 */}
+                {/* 일시 */}
                 <InputBlock
-                  label="종시"
+                  label="일시"
                   name="eventEndTime"
                   type="datetime-local"
                   value={form.eventEndTime ?? ''}
@@ -259,12 +261,12 @@ export default function EditEventPage() {
                   name="campus"
                   value={form.campus ?? ''}
                   onChange={handleSelectChange}
-                  defaultValue={'성도 캠퍼스'}
+                  defaultValue={'송도 캠퍼스'}
                   className="w-full rounded-[5px] border border-gray-200 bg-white text-sm px-3 py-3 outline-none placeholder:text-gray-400 font-normal"
                 >
                   <option value="">캠퍼스를 선택해주세요</option>
-                  <option value="성도 캠퍼스">성도 캠퍼스</option>
-                  <option value="미추가 캠퍼스">미추가 캠퍼스</option>
+                  <option value="송도 캠퍼스">송도 캠퍼스</option>
+                  <option value="미추홀 캠퍼스">미추홀 캠퍼스</option>
                 </select>
 
 
@@ -313,6 +315,7 @@ export default function EditEventPage() {
                   placeholder="내용을 입력해주세요"
                   value={form.description ?? ''}
                   onChange={handleChange}
+                  multiline
                 />
                 
                 <CommonBtn text='수정하기' status={1} onClick={handleSubmit}></CommonBtn>
