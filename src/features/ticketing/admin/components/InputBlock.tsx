@@ -10,7 +10,12 @@ export default function InputBlock({
   placeholder,
   type = 'text',
   withIcon,
+  multiline,
 }: InputBlockProps) {
+  const fieldClass = `w-full rounded-[5px] border border-gray-200 bg-white text-sm px-3 py-3 outline-none placeholder:text-gray-400 font-normal ${
+    withIcon ? 'pl-9' : ''
+  }`;
+
   return (
     <section className="space-y-2 w-full ">
       <p className="text-sm font-medium">{label}</p>
@@ -28,16 +33,25 @@ export default function InputBlock({
             </svg>
           </span>
         )}
-        <input
-          name={name}
-          value={value}
-          onChange={onChange}
-          type={type}
-          placeholder={placeholder}
-          className={`w-full rounded-[5px] border border-gray-200 bg-white text-sm px-3 py-3 outline-none placeholder:text-gray-400 font-normal ${
-            withIcon ? 'pl-9' : ''
-          }`}
-        />
+        {multiline ? (
+          <textarea
+            name={name}
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            rows={5}
+            className={`${fieldClass} min-h-[120px] resize-y`}
+          />
+        ) : (
+          <input
+            name={name}
+            value={value}
+            onChange={onChange}
+            type={type}
+            placeholder={placeholder}
+            className={fieldClass}
+          />
+        )}
       </div>
     </section>
   );

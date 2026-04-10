@@ -30,7 +30,9 @@ export default function CreateEventPage() {
   };
 
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     let newValue: string | number = value;
@@ -257,6 +259,7 @@ export default function CreateEventPage() {
                     placeholder="내용을 입력하세요."
                     value={form.description ?? ''}
                     onChange={handleChange}
+                    multiline
                 />
 
                 <CommonBtn text='생성하기' status={isFormValid? 1 : 0} onClick={handleSubmit}></CommonBtn>
