@@ -483,7 +483,9 @@ export default function CommentSection({
       idFromParent: string | null,
   ) => (
       <ul className="w-full">
-        {commentList.map((comment) => (
+        {commentList.map((comment) => {
+          const replyCount = (comment.replies ?? []).length;
+          return (
             <div className="flex w-full flex-row gap-[8px] pt-[24px]">
               {depth > 0 ? (
                   <img
@@ -558,27 +560,54 @@ export default function CommentSection({
                         </p>
                     )}
 
-                    {/* 좋아요 수 */}
-                    <div className="flex items-center text-xs text-gray-500 mb-2">
-                      <button
-                          onClick={
-                            //수정된 좋아요 토글
-                            (e) => handleLike(e, status, comment._id)
-                          }
-                      >
-                        <img
-                            src={
-                              isCommentLiked[comment._id]
-                                  ? "/icons/board/active_hearticon.svg"
-                                  : "/icons/board/hearticon.svg"
+                    <div className="flex items-center justify-between">
+                      {/* 좋아요 수 */}
+                      <div className="flex items-center text-xs text-gray-500 mb-2">
+                        <button
+                            onClick={
+                              //수정된 좋아요 토글
+                              (e) => handleLike(e, status, comment._id)
                             }
+                        >
+                          <img
+                              src={
+                                isCommentLiked[comment._id]
+                                    ? "/icons/board/active_hearticon.svg"
+                                    : "/icons/board/hearticon.svg"
+                              }
+                              width={16}
+                              height={16}
+                              className="mr-[4px]"
+                          />
+                        </button>
+                        {repLikeCount[comment._id]}
+
+
+                         {/* 답글 달기 · 대댓글 수 */}
+                     <button
+                        type="button"
+                        className="ml-3 flex items-center"
+                        onClick={() => {
+                            setreplyTargetNickname(status === "REPLY" ? comment.nickname : null);
+                            setReplyTargetId(comment._id );
+                            setMenuOpenId(null);
+                        }}>
+                          <img
+                            src={"/icons/board/commenticon.svg"}
                             width={16}
                             height={16}
                             className="mr-[4px]"
-                        />
+                            alt=""
+                          />
+                          <span className="text-xs text-gray-500 whitespace-nowrap">
+                            {replyCount === 0 ? "답글달기" : String(replyCount)}
+                          </span>
                       </button>
-                      {repLikeCount[comment._id]}
+                      </div>
+
+                    
                     </div>
+                  
                   </div>
 
                   {/* 메뉴 버튼: 삭제된 댓글이라면 표시 X */}
@@ -603,17 +632,7 @@ export default function CommentSection({
                                 className="absolute right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg w-32 z-10"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                              {/* 답글 달기 */}
-                              <button
-                                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
-                                  onClick={() => {
-                                    setreplyTargetNickname(status === "REPLY" ? comment.nickname : null);
-                                    setReplyTargetId(comment._id );
-                                    setMenuOpenId(null);
-                                  }}
-                              >
-                                답글 달기
-                              </button>
+                             
 
                               {/* 1) 내 댓글이라면 수정/삭제 */}
                               {currentUserId === comment.userId ? (
@@ -705,11 +724,12 @@ export default function CommentSection({
                 )}
 
                 {/* 재귀적으로 대댓글 렌더링 */}
-                {comment.replies.length > 0 &&
+                {replyCount > 0 &&
                     renderComments(comment.replies, depth + 1, "REPLY", comment._id)}
               </li>
             </div>
-        ))}
+          );
+        })}
       </ul>
   );
 
