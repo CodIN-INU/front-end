@@ -8,6 +8,7 @@ export const PostSignup = async (
   name: string,
   college: string,
   department: string,
+  studentId: string,
   profileImage: File | null
 ): Promise<unknown> => {
   axios.defaults.withCredentials = true;
@@ -15,7 +16,7 @@ export const PostSignup = async (
   const formData = new FormData();
   formData.append(
     'userProfileRequestDto ',
-    JSON.stringify({ email: email ?? '', nickname, name, college, department })
+    JSON.stringify({ email: email ?? '', nickname, name, college, department, studentId })
   );
   if (profileImage) formData.append('userImage', profileImage);
 
