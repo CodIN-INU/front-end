@@ -3,13 +3,14 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect, Suspense, useCallback } from 'react';
 import { DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
-import UserInfoModal from '@/features/ticketing/components/modals/UserInfoModal';
 import { EventDetailContent, TicketBottomBar } from '@/features/ticketing/components/event';
 import { fetchClient } from '@/shared/api/fetchClient';
 import { FetchSnackDetailResponse, TicketEvent } from '@/types/snackEvent';
 import { parseBackendLocalMs } from '@/features/ticketing/utils/ticketingTime';
 import { useTicketingSSE } from '@/features/ticketing/hooks/useTicketingSSE';
 import { useTicketStatus } from '@/features/ticketing/hooks/useTicketStatus';
+import { useAuth } from '@/store/userStore';
+import type { User } from '@/shared/types/auth';
 
 interface TicketingEventPageProps {
   eventId?: string;
@@ -20,13 +21,11 @@ export default function TicketingEventPage({
   eventId: eventIdProp,
   initialEvent,
 }: TicketingEventPageProps = {}) {
+  const user = useAuth((s)=> s.user) as User;
   const router = useRouter();
   const paramsEventId = useParams().eventId;
   const eventId = eventIdProp ?? (Array.isArray(paramsEventId) ? paramsEventId[0] : paramsEventId);
-
-  const [isInfo, setIsInfo] = useState(initialEvent?.existParticipationData ?? false);
   const [isLoading, setIsLoading] = useState(!initialEvent);
-  const [showModal, setShowModal] = useState(initialEvent?.existParticipationData === false);
   const [eventData, setEventData] = useState<TicketEvent | null>(initialEvent ?? null);
   const [errorMessage, setErrorMessage] = useState('');
   const [isSelected, setIsSelected] = useState<'info' | 'note'>('info');
@@ -54,8 +53,6 @@ export default function TicketingEventPage({
           `/ticketing/event/${idStr}`
         );
         setEventData(response.data);
-        setIsInfo(response.data.existParticipationData);
-        if (response.data.existParticipationData === false) setShowModal(true);
       } catch (err) {
         console.error('이벤트 상세 불러오기 실패:', err);
         setErrorMessage(
@@ -119,16 +116,6 @@ export default function TicketingEventPage({
       <DefaultBody headerPadding="compact">
         {isLoading && <LoadingOverlay />}
 
-        {showModal && (
-          <UserInfoModal
-            onClose={() => setShowModal(false)}
-            onComplete={() => {
-              setIsInfo(true);
-              setShowModal(false);
-            }}
-            initialStep={isInfo ? 2 : 1}
-          />
-        )}
 
         {errorMessage && (
           <div className="text-red-500 text-center my-4 text-sm">
@@ -145,10 +132,10 @@ export default function TicketingEventPage({
         {!isLoading && eventData && (
           <EventDetailContent
             eventData={eventData}
-            isInfo={isInfo}
+            user={user}
             selectedTab={isSelected}
             onTabChange={setIsSelected}
-            onShowUserInfoModal={() => setShowModal(true)}
+            onShowUserInfoModal={() => router.push('/mypage/edit')}
           />
         )}
 
