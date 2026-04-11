@@ -558,7 +558,7 @@ export default function CommentSection({
                         <img
                             src={
                               isCommentLiked[comment._id]
-                                  ? "/icons/board/active_heartIcon.svg"
+                                  ? "/icons/board/active_hearticon.svg"
                                   : "/icons/board/heartIcon.svg"
                             }
                             width={16}

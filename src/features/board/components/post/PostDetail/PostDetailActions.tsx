@@ -13,18 +13,10 @@ export function PostDetailActions({
   onLike,
   onBookmark,
 }: PostDetailActionsProps) {
+  console.log(post);
   return (
-    <div className="flex justify-between items-center text-sr text-sub">
-      <div className="flex space-x-[12px]">
-        <span className="flex items-center gap-[4.33px]">
-          <img
-            src="/icons/board/viewIcon.svg"
-            width={16}
-            height={16}
-            alt="조회수"
-          />
-          {post.hits || 0}
-        </span>
+    <div className="flex w-full justify-between items-center text-[12px] px-10 py-[22px] mt-[22px] text-[#ABABAB] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] rounded-b-[20px] border-t border-[#D4D4D4]">
+        
         <button
           type="button"
           onClick={onLike}
@@ -33,25 +25,26 @@ export function PostDetailActions({
           <img
             src={
               post.userInfo.like
-                ? '/icons/board/active_heartIcon.svg'
+                ? '/icons/board/active_hearticon.svg'
                 : '/icons/board/heartIcon.svg'
             }
-            width={16}
-            height={16}
+            width={20}
+            height={20}
             alt="좋아요"
           />
-          {post.likeCount || 0}
+          좋아요 {post.likeCount || 0}
         </button>
+        
         <span className="flex items-center gap-[4.33px]">
           <img
             src="/icons/board/commentIcon.svg"
-            width={16}
-            height={16}
+            width={20}
+            height={20}
             alt="댓글"
           />
-          {post.commentCount || 0}
+          댓글 {post.commentCount || 0}
         </span>
-      </div>
+     
       <button
         type="button"
         onClick={onBookmark}
@@ -61,16 +54,16 @@ export function PostDetailActions({
           src={
             post.userInfo.scrap
               ? '/icons/board/active_BookmarkIcon.svg'
-              : '/icons/board/BookmarkIcon.svg'
+              : '/icons/board/Bookmark.svg'
           }
-          width={16}
-          height={16}
+          width={20}
+          height={20}
           className={`w-[16px] h-[16px] ${
             post.userInfo.scrap ? 'text-yellow-300' : 'text-gray-500'
           }`}
           alt="북마크"
         />
-        <span>{post.scrapCount}</span>
+        스크랩 {post.scrapCount}
       </button>
     </div>
   );

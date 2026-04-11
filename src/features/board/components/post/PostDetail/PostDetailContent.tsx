@@ -22,6 +22,19 @@ export function PostDetailContent({ post }: PostDetailContentProps) {
           <ZoomableImageModal images={post.postImageUrl} />
         )}
       </div>
+      <div>
+      <span className="flex items-center gap-[4.33px] text-[#ABABAB] text-[12px]">
+          <img
+            src="/icons/board/viewicon.svg"
+            width={16}
+            height={16}
+            alt="조회수"
+          />
+          {post.hits || 0}명이 봤어요
+        </span>
+        
+      </div>
+
     </>
   );
 }
