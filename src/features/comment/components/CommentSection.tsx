@@ -597,7 +597,7 @@ export default function CommentSection({
                             setMenuOpenId(null);
                         }}>
                           <img
-                            src={"/icons/board/commenticon.svg"}
+                            src={"/icons/board/commentIcon.svg"}
                             width={16}
                             height={16}
                             className="mr-[4px]"
