@@ -37,6 +37,7 @@ export default function PostDetailView({
     error,
     toggleLike,
     toggleBookmark,
+    adjustCommentCount,
   } = usePostDetail({ postId, initialPost });
 
   if (loading) return <LoadingState />;
@@ -46,8 +47,8 @@ export default function PostDetailView({
   }
 
   return (
-    <div className="bg-white min-h-screen flex justify-center">
-      <div className="w-full max-w-[500px] px-4">
+    <div className="bg-white min-h-screen flex justify-center ">
+      <div className="w-full max-w-[500px]">
         <PostDetailHeader post={post} />
         <PostDetailContent post={post} />
         <PostDetailActions
@@ -55,7 +56,11 @@ export default function PostDetailView({
           onLike={toggleLike}
           onBookmark={toggleBookmark}
         />
-        <CommentSection postId={postId} postName={post.title} />
+        <CommentSection
+          postId={postId}
+          postName={post.title}
+          onCommentCountChange={adjustCommentCount}
+        />
       </div>
     </div>
   );

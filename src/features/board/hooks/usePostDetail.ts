@@ -72,6 +72,7 @@ export function usePostDetail({ postId, initialPost }: UsePostDetailOptions) {
             ? post.scrapCount - 1
             : post.scrapCount + 1,
         });
+        console.log(response.data);
       } else {
         console.error(response.data.message || '북마크 실패');
       }
@@ -80,11 +81,22 @@ export function usePostDetail({ postId, initialPost }: UsePostDetailOptions) {
     }
   }, [post, postId]);
 
+  const adjustCommentCount = useCallback((delta: number) => {
+    setPost((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        commentCount: Math.max(0, prev.commentCount + delta),
+      };
+    });
+  }, []);
+
   return {
     post,
     loading,
     error,
     toggleLike,
     toggleBookmark,
+    adjustCommentCount,
   };
 }

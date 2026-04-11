@@ -1,4 +1,5 @@
 export { timeAgo } from './timeAgo';
+export { formatShortDateTime } from './formatShortDateTime';
 export {
   mapPostCategoryToName,
   mapPostCategoryToBoardPath,

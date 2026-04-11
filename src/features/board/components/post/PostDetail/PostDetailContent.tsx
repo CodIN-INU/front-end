@@ -3,6 +3,7 @@
 import type { Post } from '@/types/post';
 import { ZoomableImageModal } from '@/shared/ui';
 import { transStringToChartData } from '@/features/board/utils';
+import { PostDetailViewCount } from './PostDetailViewCount';
 
 interface PostDetailContentProps {
   post: Post;
@@ -22,6 +23,7 @@ export function PostDetailContent({ post }: PostDetailContentProps) {
           <ZoomableImageModal images={post.postImageUrl} />
         )}
       </div>
+      <PostDetailViewCount hits={post.hits ?? 0} />
     </>
   );
 }

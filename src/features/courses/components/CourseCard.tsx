@@ -1,6 +1,6 @@
 import { CourseTag } from './Tag';
 import Link from 'next/link';
-import Heart from '@public/icons/heart.svg';
+import Heart from '@public/icons/board/heartIcon.svg';
 import Rating from './Rating';
 import { Course } from '@/types/course';
 import { forwardRef, useState } from 'react';

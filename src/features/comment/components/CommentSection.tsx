@@ -22,6 +22,7 @@ interface Comment {
   likeCount: number;
   isLiked?: boolean;
   userInfo: { like: boolean };
+  userImageUrl: string;
   deleted: boolean;
   replies: Comment[];
   createdAt: string;
@@ -33,6 +34,8 @@ interface Comment {
 interface CommentSectionProps {
   postId: string;
   postName?: string;
+  /** 댓글·대댓글 작성 성공 시 상위(예: 게시글 `commentCount`)와 동기화 */
+  onCommentCountChange?: (delta: number) => void;
 }
 
 interface ApiResponse {
@@ -49,13 +52,13 @@ const timeAgo = (timestamp: string): string => {
   );
 
   if (diffInSeconds < 60) {
-    return "방금 전";
+    return "방금";
   } else if (diffInSeconds < 3600) {
-    return `${Math.floor(diffInSeconds / 60)}분 전`;
+    return `${Math.floor(diffInSeconds / 60)}분`;
   } else if (diffInSeconds < 86400) {
-    return `${Math.floor(diffInSeconds / 3600)}시간 전`;
+    return `${Math.floor(diffInSeconds / 3600)}시간`;
   } else {
-    return `${Math.floor(diffInSeconds / 86400)}일 전`;
+    return `${Math.floor(diffInSeconds / 86400)}일`;
   }
 };
 
@@ -128,6 +131,7 @@ const CommentInput = ({
 export default function CommentSection({
                                          postId,
                                          postName,
+                                         onCommentCountChange,
                                        }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
@@ -308,6 +312,7 @@ export default function CommentSection({
       );
 
       if (data.success) {
+        onCommentCountChange?.(1);
         fetchComments();
         setNewComment("");
         setSuccessMessage(data.message || "댓글이 추가되었습니다.");
@@ -392,6 +397,7 @@ export default function CommentSection({
       );
 
       if (data.success) {
+        onCommentCountChange?.(1);
         fetchComments();
         setNewReply("");
         setReplyTargetId(null);
@@ -477,17 +483,33 @@ export default function CommentSection({
       idFromParent: string | null,
   ) => (
       <ul className="w-full">
-        {commentList.map((comment) => (
-            <div className="flex w-full flex-row gap-[8px] pt-[24px]">
+        {commentList.map((comment) => {
+          const replyCount = (comment.replies ?? []).length;
+          return (
+            <div
+              className={`flex w-full flex-row gap-[8px] pt-3 mt-2 ${
+                depth > 0 ? "bg-[#F9F9F9] rounded-[20px] " : ""
+              }`}
+            >
+              {depth > 0 ? (
+                  <img
+                      src="/icons/board/arrow.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="h-[20px] w-[20px] shrink-0 self-start ml-[-30px]"
+                      aria-hidden
+                  />
+              ) : null}
               <img
                   src={
                     comment.anonymous
-                        ? "/icons/chat/DeafultProfile.png"
-                        : "/icons/chat/DeafultProfile.png"
+                        ? "/images/anonymousUserImage.svg"
+                        : comment.userImageUrl
                   }
                   width={36}
                   height={36}
-                  className="w-[36px] h-[36px]"
+                  className={`w-[36px] h-[36px] ${depth > 0 ? "ml-3" : ""}`}
               />
               <li className="w-full" key={comment._id}>
                 {/* 상단 영역 */}
@@ -542,27 +564,54 @@ export default function CommentSection({
                         </p>
                     )}
 
-                    {/* 좋아요 수 */}
-                    <div className="flex items-center text-xs text-gray-500 mb-2">
-                      <button
-                          onClick={
-                            //수정된 좋아요 토글
-                            (e) => handleLike(e, status, comment._id)
-                          }
-                      >
-                        <img
-                            src={
-                              isCommentLiked[comment._id]
-                                  ? "/icons/board/active_heartIcon.svg"
-                                  : "/icons/board/heartIcon.svg"
+                    <div className="flex items-center justify-between">
+                      {/* 좋아요 수 */}
+                      <div className="flex items-center text-xs text-gray-500 mb-2">
+                        <button
+                            onClick={
+                              //수정된 좋아요 토글
+                              (e) => handleLike(e, status, comment._id)
                             }
+                        >
+                          <img
+                              src={
+                                isCommentLiked[comment._id]
+                                    ? "/icons/board/active_hearticon.svg"
+                                    : "/icons/board/hearticon.svg"
+                              }
+                              width={16}
+                              height={16}
+                              className="mr-[4px]"
+                          />
+                        </button>
+                        {repLikeCount[comment._id]}
+
+
+                         {/* 답글 달기 · 대댓글 수 */}
+                     <button
+                        type="button"
+                        className="ml-3 flex items-center"
+                        onClick={() => {
+                            setreplyTargetNickname(status === "REPLY" ? comment.nickname : null);
+                            setReplyTargetId(comment._id );
+                            setMenuOpenId(null);
+                        }}>
+                          <img
+                            src={"/icons/board/commenticon.svg"}
                             width={16}
                             height={16}
                             className="mr-[4px]"
-                        />
+                            alt=""
+                          />
+                          <span className="text-xs text-[#808080] whitespace-nowrap">
+                            {replyCount === 0 ? "답글달기" : String(replyCount)}
+                          </span>
                       </button>
-                      {repLikeCount[comment._id]}
+                      </div>
+
+                    
                     </div>
+                  
                   </div>
 
                   {/* 메뉴 버튼: 삭제된 댓글이라면 표시 X */}
@@ -578,7 +627,7 @@ export default function CommentSection({
                               e.stopPropagation();
                               toggleMenu(comment._id);
                             }}
-                            className="text-gray-400 hover:text-gray-600"
+                            className="text-gray-400 hover:text-gray-600 mr-3"
                         >
                           ⋮
                         </button>
@@ -587,17 +636,7 @@ export default function CommentSection({
                                 className="absolute right-0 mt-2 bg-white border border-gray-200 rounded shadow-lg w-32 z-10"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                              {/* 답글 달기 */}
-                              <button
-                                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-gray-700"
-                                  onClick={() => {
-                                    setreplyTargetNickname(status === "REPLY" ? comment.nickname : null);
-                                    setReplyTargetId(comment._id );
-                                    setMenuOpenId(null);
-                                  }}
-                              >
-                                답글 달기
-                              </button>
+                             
 
                               {/* 1) 내 댓글이라면 수정/삭제 */}
                               {currentUserId === comment.userId ? (
@@ -689,17 +728,17 @@ export default function CommentSection({
                 )}
 
                 {/* 재귀적으로 대댓글 렌더링 */}
-                {comment.replies.length > 0 &&
+                {replyCount > 0 &&
                     renderComments(comment.replies, depth + 1, "REPLY", comment._id)}
               </li>
             </div>
-        ))}
+          );
+        })}
       </ul>
   );
 
   return (
       <div className="relative w-full max-w-[500px] mx-auto" id="scrollbar-hidden"> {/* max-w-[500px] 및 mx-auto 추가 */}
-        <div className="bg-[#FCFCFC] h-[8px] w-full mt-[24px]" id="scrollbar-hidden" />
 
         {/* 에러 메시지 */}
         {error && <p className="text-red-500 mb-2">{error}</p>}

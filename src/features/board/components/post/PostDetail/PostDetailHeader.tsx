@@ -1,15 +1,21 @@
 'use client';
 
 import type { Post } from '@/types/post';
+import { formatShortDateTime } from '@/features/board/utils/formatShortDateTime';
+
+export type PostDetailHeaderProfile = Pick<
+  Post,
+  'anonymous' | 'nickname' | 'userImageUrl' | 'createdAt'
+>;
 
 interface PostDetailHeaderProps {
-  post: Post;
+  post: PostDetailHeaderProfile;
 }
 
 export function PostDetailHeader({ post }: PostDetailHeaderProps) {
   const displayName = post.anonymous ? '익명' : post.nickname || '익명';
   const avatarSrc = post.anonymous
-    ? '/images/anonymousUserImage.png'
+    ? '/images/anonymousUserImage.svg'
     : post.userImageUrl;
 
   return (
@@ -27,7 +33,7 @@ export function PostDetailHeader({ post }: PostDetailHeaderProps) {
       </div>
       <div>
         <h4 className="text-sm">{displayName}</h4>
-        <p className="text-sr text-sub">{post.createdAt}</p>
+        <p className="text-sr text-sub text-[#BFBFBF]">{formatShortDateTime(post.createdAt)}</p>
       </div>
     </div>
   );
