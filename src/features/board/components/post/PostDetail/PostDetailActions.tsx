@@ -2,8 +2,13 @@
 
 import type { Post } from '@/types/post';
 
+export type PostDetailActionsPost = Pick<
+  Post,
+  'userInfo' | 'likeCount' | 'commentCount' | 'scrapCount'
+>;
+
 interface PostDetailActionsProps {
-  post: Post;
+  post: PostDetailActionsPost;
   onLike: () => void;
   onBookmark: () => void;
 }
@@ -13,9 +18,8 @@ export function PostDetailActions({
   onLike,
   onBookmark,
 }: PostDetailActionsProps) {
-  console.log(post);
   return (
-    <div className="flex w-full justify-between items-center text-[12px] px-10 py-[22px] mt-[22px] text-[#ABABAB] shadow-[0px_5px_13.3px_4px_rgba(212,212,212,0.59)] rounded-b-[20px] border-t border-[#D4D4D4]">
+    <div className="flex w-full justify-between items-center text-[12px] px-10 py-[22px] mt-[22px] text-[#ABABAB] shadow-[0px_5px_13.3px_0px_rgba(212,212,212,0.59)] rounded-b-[20px] border-t border-[#D4D4D4]">
         
         <button
           type="button"

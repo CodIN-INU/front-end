@@ -715,7 +715,6 @@ export default function CommentSection({
 
   return (
       <div className="relative w-full max-w-[500px] mx-auto" id="scrollbar-hidden"> {/* max-w-[500px] 및 mx-auto 추가 */}
-        <div className="bg-[#FCFCFC] h-[8px] w-full mt-[24px]" id="scrollbar-hidden" />
 
         {/* 에러 메시지 */}
         {error && <p className="text-red-500 mb-2">{error}</p>}

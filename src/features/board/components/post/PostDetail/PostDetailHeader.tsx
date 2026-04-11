@@ -1,10 +1,15 @@
 'use client';
 
 import type { Post } from '@/types/post';
-import {formatShortDateTime} from '@/features/board/utils/formatShortDateTime';
+import { formatShortDateTime } from '@/features/board/utils/formatShortDateTime';
+
+export type PostDetailHeaderProfile = Pick<
+  Post,
+  'anonymous' | 'nickname' | 'userImageUrl' | 'createdAt'
+>;
 
 interface PostDetailHeaderProps {
-  post: Post;
+  post: PostDetailHeaderProfile;
 }
 
 export function PostDetailHeader({ post }: PostDetailHeaderProps) {
