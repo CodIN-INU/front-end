@@ -186,7 +186,7 @@ export default function CreateEventPage() {
 
                 {/* 일시 */}
                 <InputBlock
-                    label="일시"
+                    label="간식나눔 시작시간"
                     name="eventEndTime"
                     type="datetime-local"
                     value={form.eventEndTime ?? ''}
