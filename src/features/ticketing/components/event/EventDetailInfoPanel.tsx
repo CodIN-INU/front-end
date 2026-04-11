@@ -62,10 +62,10 @@ export function EventDetailInfoPanel({
             • <span className="text-[#0D99FF]">1인 1매</span>씩 구매 가능합니다.{' '}
             <br />
             • 반드시{' '}
-            <span className="text-[#0D99FF]">본인 학생증·학번</span>으로
-            구매해야 하며, 수령 시 학생증으로 본인 확인합니다.{' '}
+            <span className="text-[#0D99FF]">본인 학과·이름·학번</span>으로
+            구매해야 합니다.{' '}<br />
             <span className="text-[#eb2e2e]">
-              (학생증 미지참 시 수령 불가){' '}
+              (본인정보와 다를시 수령 불가){' '}
             </span>
             <br />• 티켓의 정해진 수량으로, 소진 시 조기 마감됩니다.
           </div>
