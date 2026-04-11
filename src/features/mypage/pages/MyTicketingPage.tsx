@@ -132,7 +132,7 @@ const TicketingPage: FC = () => {
                     <p className="font-semibold text-[14px]">{snack.title}</p>
                     <p className="text-[25px] text-[#0D99FF] mt-[-17px]"> •</p>
                 </div>
-                <div className="mt-[22px] text-[12px] text-black">{convertToKoreanDate(snack.eventTime)}</div>
+                <div className="mt-[10px] text-[12px] text-black">{convertToKoreanDate(snack.eventTime)}</div>
                 <div className="text-[12px] text-black">{snack.locationInfo}</div>
                 <div className="text-[12px] text-black">티켓팅 완료</div>
                 

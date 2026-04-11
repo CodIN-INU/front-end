@@ -11,6 +11,7 @@ import {
   type CollegeCode,
   type DepartmentCode,
 } from '@/constants/college';
+import { getApiErrorMessage } from '@/shared/utils';
 
 export default function SignupProfilePage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function SignupProfilePage() {
   const [isClient, setIsClient] = useState(false);
   const userContext = useContext(UserContext);
   const [email, setEmail] = useState<string | null>('');
+  const [studentId, setStudentId] = useState<string>('');
 
   useEffect(() => {
     setIsClient(true); // 클라이언트 측에서만 실행하도록 설정
@@ -51,6 +53,10 @@ export default function SignupProfilePage() {
       setImgPrev(URL.createObjectURL(file));
       console.log(URL.createObjectURL(file));
     }
+  };
+
+  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setStudentId(e.target.value);
   };
 
   useEffect(() => {
@@ -90,10 +96,12 @@ export default function SignupProfilePage() {
     const nameTrimmed = name.trim();
     const nicknameTrimmed = nickname.trim();
     const missing: string[] = [];
+    const studentIdTrimmed = studentId.trim();
     if (!nameTrimmed) missing.push('이름');
     if (!selectedCollege) missing.push('단과대');
     if (!selectedDepartment) missing.push('학과');
     if (!nicknameTrimmed) missing.push('닉네임');
+    if (!studentIdTrimmed) missing.push('학번');
 
     if (missing.length > 0) {
       alert(`다음 항목을 입력해주세요: ${missing.join(', ')}`);
@@ -107,6 +115,7 @@ export default function SignupProfilePage() {
         nameTrimmed,
         selectedCollege,
         selectedDepartment,
+        studentId,
         profileImg
       );
       console.log('회원가입 결과:', response);
@@ -114,18 +123,7 @@ export default function SignupProfilePage() {
       router.push('/login');
     } catch (err) {
       console.error('회원가입 실패', err);
-      const message =
-        err &&
-        typeof err === 'object' &&
-        'response' in err &&
-        err.response &&
-        typeof err.response === 'object' &&
-        'data' in err.response &&
-        err.response.data &&
-        typeof (err.response.data as { message?: string }).message === 'string'
-          ? (err.response.data as { message: string }).message
-          : '회원가입 실패';
-      alert(message);
+      alert(getApiErrorMessage(err, '회원가입 실패'));
     }
   };
 
@@ -201,8 +199,16 @@ export default function SignupProfilePage() {
                   ))}
                 </select>
               </div>
+              
+              {/* 3. 학번 */}
+              <input
+                className="defaultInput w-full min-h-[4vh]"
+                placeholder="학번을 입력해주세요"
+                value={studentId}
+                onChange={handleStudentIdChange}
+              />
 
-              {/* 3. 닉네임 */}
+              {/* 4. 닉네임 */}
               <input
                 className="defaultInput w-full min-h-[4vh]"
                 placeholder="닉네임을 입력해주세요"
@@ -219,7 +225,9 @@ export default function SignupProfilePage() {
               <div className="w-[2vw] min-w-[8px] max-w-[14px] aspect-square bg-[#EBF0F7] rounded-full" />
               <div className="w-[2vw] min-w-[8px] max-w-[14px] aspect-square bg-[#0D99FF] rounded-full" />
             </div>
-            <CommonBtn id="signupBtn" text="계정 등록하기" status={1} onClick={handleSubmit} />
+            <div className="w-full max-w-[500px] mx-auto">
+              <CommonBtn id="signupBtn" text="계정 등록하기" status={1} onClick={handleSubmit} />
+            </div>
           </div>
         </DefaultBody>
       )}

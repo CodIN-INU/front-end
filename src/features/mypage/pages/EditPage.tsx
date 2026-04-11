@@ -1,8 +1,6 @@
 'use client';
 import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import axios from 'axios';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { CommonBtn, DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
 import { useAuth } from '@/store/userStore';
 import { fetchClient } from '@/shared/api/fetchClient';
@@ -18,6 +16,7 @@ const UserInfoEditPage = () => {
     name: '',
     nickname: '',
     department: '',
+    studentId: '',
     profileImageUrl: '',
     email: '',
     college: '',
@@ -27,6 +26,7 @@ const UserInfoEditPage = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [initialNick, setInitialNick] = useState<string>('');
   const [initialName, setInitialName] = useState<string>('');
+  const [initialStudentId, setStudentId] = useState<string>('');
   const [selectedCollege, setSelectedCollege] = useState<CollegeCode | ''>('');
   const [selectedDepartment, setSelectedDepartment] = useState<DepartmentCode | ''>('');
   const user = useAuth((s)=> s.user);
@@ -41,6 +41,7 @@ const UserInfoEditPage = () => {
       profileImageUrl: user.profileImageUrl,
       email: user.email,
       college: user.college ?? '',
+      studentId: user.studentId,
     });
     setInitialNick(user.nickname);
     setInitialName(user.name);
@@ -107,6 +108,7 @@ const UserInfoEditPage = () => {
           college: userInfo.college,
           department: userInfo.department,
           profileImageUrl: userInfo.profileImageUrl,
+          studentId: userInfo.studentId,
         })
         alert('수정이 완료되었습니다.');
         console.log('User Info Updated:', userResponse);
@@ -146,6 +148,10 @@ const UserInfoEditPage = () => {
     setSelectedDepartment(v);
     setUserInfo((prev) => ({ ...prev, department: v }));
   };
+  const handleStudentIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInfo((prev) => ({ ...prev, studentId: e.target.value }));
+  };
+
   const departmentOptions = useMemo(() => {
     if (!selectedCollege) return [];
     return COLLEGE_TO_DEPARTMENTS[selectedCollege].map((code) => ({
@@ -258,6 +264,20 @@ const UserInfoEditPage = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* 학번 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-[8px]">
+                  학번
+                </label>
+                <input
+                  type="text"
+                  name="studentId"
+                  value={userInfo.studentId}
+                  onChange={handleStudentIdChange}
+                  className="defaultInput"
+                />
               </div>
           {/* 이메일 */}
           <div>

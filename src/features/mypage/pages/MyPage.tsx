@@ -6,7 +6,6 @@ import { PostLogout } from '@/features/auth/api/postLogout';
 import { DeleteUser } from '@/features/auth/api/deleteUser';
 import WebModal, { WebModalHandles } from '@/features/mypage/components/WebModal';
 import { fetchClient } from '@/shared/api/fetchClient';
-import Head from 'next/head';
 
 interface MenuItem {
   label: string;
@@ -92,7 +91,6 @@ export default function MyPage() {
     { label: '스크랩', href: '/mypage/board/scraps', isSpacer: true },
     { label: '이용약관', href: '/mypage/condition', isSpacer: true },
     //{ label: '알림 설정', href: '/mypage/notification', isSpacer: true },
-    { label: '수령자 정보', href: '/mypage/recipientInfo' },
     { label: '티켓팅 내역', href: '/mypage/ticketing', isSpacer: true },
 
     // {
