@@ -486,7 +486,11 @@ export default function CommentSection({
         {commentList.map((comment) => {
           const replyCount = (comment.replies ?? []).length;
           return (
-            <div className="flex w-full flex-row gap-[8px] pt-[24px]">
+            <div
+              className={`flex w-full flex-row gap-[8px] pt-3 mt-2 ${
+                depth > 0 ? "bg-[#F9F9F9] rounded-[20px] " : ""
+              }`}
+            >
               {depth > 0 ? (
                   <img
                       src="/icons/board/arrow.svg"
@@ -505,7 +509,7 @@ export default function CommentSection({
                   }
                   width={36}
                   height={36}
-                  className="w-[36px] h-[36px]"
+                  className={`w-[36px] h-[36px] ${depth > 0 ? "ml-3" : ""}`}
               />
               <li className="w-full" key={comment._id}>
                 {/* 상단 영역 */}
@@ -599,7 +603,7 @@ export default function CommentSection({
                             className="mr-[4px]"
                             alt=""
                           />
-                          <span className="text-xs text-gray-500 whitespace-nowrap">
+                          <span className="text-xs text-[#808080] whitespace-nowrap">
                             {replyCount === 0 ? "답글달기" : String(replyCount)}
                           </span>
                       </button>
@@ -623,7 +627,7 @@ export default function CommentSection({
                               e.stopPropagation();
                               toggleMenu(comment._id);
                             }}
-                            className="text-gray-400 hover:text-gray-600"
+                            className="text-gray-400 hover:text-gray-600 mr-3"
                         >
                           ⋮
                         </button>
