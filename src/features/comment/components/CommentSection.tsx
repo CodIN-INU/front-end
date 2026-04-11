@@ -576,8 +576,8 @@ export default function CommentSection({
                           <img
                               src={
                                 isCommentLiked[comment._id]
-                                    ? "/icons/board/active_hearticon.svg"
-                                    : "/icons/board/hearticon.svg"
+                                    ? "/icons/board/active_heart.svg"
+                                    : "/icons/board/heartIcon.svg"
                               }
                               width={16}
                               height={16}
@@ -597,7 +597,7 @@ export default function CommentSection({
                             setMenuOpenId(null);
                         }}>
                           <img
-                            src={"/icons/board/commenticon.svg"}
+                            src={"/icons/board/commentIcon.svg"}
                             width={16}
                             height={16}
                             className="mr-[4px]"

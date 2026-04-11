@@ -29,7 +29,7 @@ export function PostDetailActions({
           <img
             src={
               post.userInfo.like
-                ? '/icons/board/active_hearticon.svg'
+                ? '/icons/board/active_heart.svg'
                 : '/icons/board/heartIcon.svg'
             }
             width={20}

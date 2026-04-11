@@ -10,7 +10,7 @@ export function PostDetailViewCount({ hits }: PostDetailViewCountProps) {
     <div>
       <span className="flex items-center gap-[4.33px] text-[#ABABAB] text-[12px]">
         <img
-          src="/icons/board/viewicon.svg"
+          src="/icons/board/viewIcon.svg"
           width={16}
           height={16}
           alt="조회수"
