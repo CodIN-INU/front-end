@@ -6,6 +6,7 @@ import { CommonBtn, DefaultBody, Header } from '@/shared/ui';
 import InputBlock from '@/features/ticketing/admin/components/InputBlock';
 import type { CreateTicketEventRequest } from '@/types/ticketEventRequest';
 import { fetchClient } from '@/shared/api/fetchClient';
+import { getApiErrorMessage } from '@/shared/utils';
 
 export default function CreateEventPage() {
   const router = useRouter();
@@ -119,7 +120,8 @@ export default function CreateEventPage() {
     alert("생성 성공!");
     router.back();
   } catch (error: any) {
-    alert(`생성 실패 : ${error.message}`);
+    console.error('이벤트 생성 실패', error);
+    alert(`생성 실패 : ${getApiErrorMessage(error, '이벤트 생성 실패')}`);
   }
 };
 
@@ -184,7 +186,7 @@ export default function CreateEventPage() {
 
                 {/* 일시 */}
                 <InputBlock
-                    label="일시"
+                    label="간식나눔 시작시간"
                     name="eventEndTime"
                     type="datetime-local"
                     value={form.eventEndTime ?? ''}

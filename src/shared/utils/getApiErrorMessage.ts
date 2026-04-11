@@ -38,6 +38,19 @@ function sliceTrailingJsonArray(s: string): string | null {
   return s.slice(start, end + 1);
 }
 
+/** Spring BindingResult / 검증 예외 본문의 `default message [...]` 구간을 모아 사용자 문구로 만든다. */
+function extractSpringDefaultMessages(text: string): string | null {
+  const re = /default message \[([^\]]+)\]/g;
+  const parts: string[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    const p = m[1].trim();
+    if (p.length > 0) parts.push(p);
+  }
+  if (parts.length === 0) return null;
+  return parts.join(' · ');
+}
+
 function parseMessageFromJsonishString(raw: string): string | null {
   const t = raw.trim();
 
@@ -73,6 +86,9 @@ function parseMessageFromJsonishString(raw: string): string | null {
 
   const quoted = t.match(/"message"\s*:\s*"((?:[^"\\]|\\.)*)"/);
   if (quoted?.[1]) return quoted[1].replace(/\\"/g, '"');
+
+  const spring = extractSpringDefaultMessages(t);
+  if (spring) return spring;
 
   return null;
 }
@@ -110,6 +126,18 @@ export function getApiErrorMessage(err: unknown, fallback: string): string {
     const fromMsg = parseMessageFromJsonishString(err.message);
     if (fromMsg) return fromMsg;
     return err.message || fallback;
+  }
+  /** `fetchClient` 등이 던지는 `{ status, message, code }` 형태 */
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'message' in err &&
+    typeof (err as { message: unknown }).message === 'string'
+  ) {
+    const msg = (err as { message: string }).message;
+    const extracted = parseMessageFromJsonishString(msg);
+    if (extracted) return extracted;
+    if (msg.trim().length > 0) return msg;
   }
   return fallback;
 }
