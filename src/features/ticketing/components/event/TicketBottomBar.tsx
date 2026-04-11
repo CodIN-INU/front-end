@@ -11,6 +11,8 @@ interface TicketBottomBarProps {
   ticketStatus: TicketStatusType;
   upcomingLabel: string;
   remainingTime: string;
+  /** 이름·학번·학과가 모두 있어야 티켓팅 가능 */
+  isRecipientProfileComplete: boolean;
   onTicketClick: () => void;
 }
 
@@ -20,13 +22,20 @@ export function TicketBottomBar({
   ticketStatus,
   upcomingLabel,
   remainingTime,
+  isRecipientProfileComplete,
   onTicketClick,
 }: TicketBottomBarProps) {
   return (
     <div className="fixed bottom-[50px] left-0 w-full px-4 bg-white pb-[35px] flex justify-center">
       {ticketStatus === 'available' && eventData.currentQuantity !== 0 && (
         <button
-          className={`${BUTTON_BASE} bg-[#0D99FF] text-white`}
+          type="button"
+          className={`${BUTTON_BASE} ${
+            isRecipientProfileComplete
+              ? 'bg-[#0D99FF] text-white'
+              : 'bg-[#A6A6AB] text-[#808080] cursor-not-allowed'
+          }`}
+          disabled={!isRecipientProfileComplete}
           onClick={onTicketClick}
         >
           티켓팅하기

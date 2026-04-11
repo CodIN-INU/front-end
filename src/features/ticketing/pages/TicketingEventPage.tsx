@@ -65,8 +65,15 @@ export default function TicketingEventPage({
     fetchDetail();
   }, [idStr, initialEvent]);
 
+  const isRecipientProfileComplete = Boolean(
+    user?.name?.trim() &&
+      user?.studentId?.trim() &&
+      user?.department?.trim()
+  );
+
   const handleTicketClick = useCallback(async () => {
     if (!eventData) return;
+    if (!isRecipientProfileComplete) return;
 
     const ticketMs = parseBackendLocalMs(eventData.eventTime);
     if (ticketMs === null) {
@@ -107,7 +114,7 @@ export default function TicketingEventPage({
     } finally {
       setIsLoading(false);
     }
-  }, [eventData, idStr, router, serverOffsetMs]);
+  }, [eventData, idStr, isRecipientProfileComplete, router, serverOffsetMs]);
 
   return (
     <Suspense>
@@ -145,6 +152,7 @@ export default function TicketingEventPage({
             ticketStatus={ticketStatus}
             upcomingLabel={upcomingLabel}
             remainingTime={remainingTime}
+            isRecipientProfileComplete={isRecipientProfileComplete}
             onTicketClick={handleTicketClick}
           />
         )}
