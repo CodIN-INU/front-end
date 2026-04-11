@@ -4,7 +4,21 @@ import type { TicketEvent } from '@/types/snackEvent';
 import { EventDetailInfoPanel } from './EventDetailInfoPanel';
 import type { User } from '@/shared/types/auth';
 import { getDepartmentLabel } from '@/shared/utils/getDepartmentLabel';
+
 type TabType = 'info' | 'note';
+
+/** 이름 → 학과 → 학번 순으로 누락 항목만 나열 */
+function getMissingProfileFieldsMessage(user: User): string {
+  const labels: string[] = [];
+  if (!user.name) labels.push('이름');
+  if (!user.department) labels.push('학과');
+  if (!user.studentId) labels.push('학번');
+  return `${labels.join(', ')} 입력이 필요합니다.`;
+}
+
+function isProfileComplete(user: User): boolean {
+  return Boolean(user.department && user.studentId && user.name);
+}
 
 interface EventDetailContentProps {
   eventData: TicketEvent;
@@ -50,11 +64,18 @@ export function EventDetailContent({
 
       <div className="flex flex-col items-center">
         <div className="text-[13px] text-[#0D99FF] mt-2 text-center font-medium leading-[17px]">
-          수령자 정보가 올바른지 확인해주세요.
+          {isProfileComplete(user) ? (
+            <>
+              수령자 정보를 확인해주세요.
+              <div className="text-[16px] text-black mt-2 text-center font-semibold leading-[17px]">
+                {getDepartmentLabel(user.department!)} {user.studentId} {user.name}
+              </div>
+            </>
+          ) : (
             <div className="text-[16px] text-black mt-2 text-center font-semibold leading-[17px]">
-              {getDepartmentLabel(user.department)} {user.studentId} {user.name} 
+              {getMissingProfileFieldsMessage(user)}
             </div>
-
+          )}
         </div>
         <button
           className="mt-3 text-white text-[12px] px-[22px] py-[6px] gap-[10px] bg-[#0D99FF] rounded-[20px]"
