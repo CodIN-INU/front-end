@@ -33,6 +33,8 @@ interface Comment {
 interface CommentSectionProps {
   postId: string;
   postName?: string;
+  /** 댓글·대댓글 작성 성공 시 상위(예: 게시글 `commentCount`)와 동기화 */
+  onCommentCountChange?: (delta: number) => void;
 }
 
 interface ApiResponse {
@@ -128,6 +130,7 @@ const CommentInput = ({
 export default function CommentSection({
                                          postId,
                                          postName,
+                                         onCommentCountChange,
                                        }: CommentSectionProps) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>("");
@@ -308,6 +311,7 @@ export default function CommentSection({
       );
 
       if (data.success) {
+        onCommentCountChange?.(1);
         fetchComments();
         setNewComment("");
         setSuccessMessage(data.message || "댓글이 추가되었습니다.");
@@ -392,6 +396,7 @@ export default function CommentSection({
       );
 
       if (data.success) {
+        onCommentCountChange?.(1);
         fetchComments();
         setNewReply("");
         setReplyTargetId(null);
