@@ -22,6 +22,7 @@ interface Comment {
   likeCount: number;
   isLiked?: boolean;
   userInfo: { like: boolean };
+  userImageUrl: string;
   deleted: boolean;
   replies: Comment[];
   createdAt: string;
@@ -484,11 +485,21 @@ export default function CommentSection({
       <ul className="w-full">
         {commentList.map((comment) => (
             <div className="flex w-full flex-row gap-[8px] pt-[24px]">
+              {depth > 0 ? (
+                  <img
+                      src="/icons/board/arrow.svg"
+                      alt=""
+                      width={20}
+                      height={20}
+                      className="h-[20px] w-[20px] shrink-0 self-start ml-[-30px]"
+                      aria-hidden
+                  />
+              ) : null}
               <img
                   src={
                     comment.anonymous
-                        ? "/icons/chat/DeafultProfile.png"
-                        : "/icons/chat/DeafultProfile.png"
+                        ? "/images/anonymousUserImage.svg"
+                        : comment.userImageUrl
                   }
                   width={36}
                   height={36}
@@ -559,7 +570,7 @@ export default function CommentSection({
                             src={
                               isCommentLiked[comment._id]
                                   ? "/icons/board/active_hearticon.svg"
-                                  : "/icons/board/heartIcon.svg"
+                                  : "/icons/board/hearticon.svg"
                             }
                             width={16}
                             height={16}
