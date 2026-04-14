@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Tab } from '@/features/board/data/boardData';
 import { createPost } from '../api/createPost';
+import { useRNImagePicker } from '@/shared/hooks';
 
 export interface CreatePostFormData {
   title: string;
@@ -34,6 +35,7 @@ export function useCreatePost(
   const [postImages, setPostImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { isRN, openPicker } = useRNImagePicker();
 
   useEffect(() => {
     const category =
@@ -56,6 +58,14 @@ export function useCreatePost(
     setPostImages(fileList);
     setPreviewImages(fileList.map((f) => URL.createObjectURL(f)));
   }, []);
+
+  // 앱 환경: RN ImagePicker로 다중 이미지 선택
+  const handleNativePick = useCallback(async () => {
+    const files = await openPicker({ multiple: true });
+    if (files.length === 0) return;
+    setPostImages(files);
+    setPreviewImages(files.map((f) => URL.createObjectURL(f)));
+  }, [openPicker]);
 
   const handleAnonymousChange = useCallback((checked: boolean) => {
     setFormData((prev) => ({ ...prev, anonymous: checked }));
@@ -102,8 +112,10 @@ export function useCreatePost(
     previewImages,
     isLoading,
     isFormValid,
+    isRN,
     handleChange,
     handleFileChange,
+    handleNativePick,
     handleAnonymousChange,
     handleSubmit,
   };
