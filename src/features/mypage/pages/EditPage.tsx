@@ -1,9 +1,10 @@
 'use client';
-import React, { useState, useEffect, Suspense, useMemo } from 'react';
+import React, { useState, useEffect, Suspense, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { CommonBtn, DefaultBody, Header, LoadingOverlay } from '@/shared/ui';
 import { useAuth } from '@/store/userStore';
 import { fetchClient } from '@/shared/api/fetchClient';
+import { useRNImagePicker } from '@/shared/hooks';
 import {
   COLLEGE_OPTIONS,
   COLLEGE_TO_DEPARTMENTS,
@@ -32,6 +33,7 @@ const UserInfoEditPage = () => {
   const user = useAuth((s)=> s.user);
   const updateUser = useAuth((s) => s.updateUser);
   const fetchMe = useAuth((s) => s.fetchMe);
+  const { isRN, openPicker } = useRNImagePicker();
   useEffect(() => {
     if (!user) return;
     setUserInfo({
@@ -84,6 +86,16 @@ const UserInfoEditPage = () => {
       setPreviewUrl(objectUrl);
     }
   };
+
+  // 앱 환경: RN ImagePicker로 프로필 사진 선택
+  const handleRNProfileImagePick = useCallback(async () => {
+    const files = await openPicker({ multiple: false });
+    if (files.length === 0) return;
+    const file = files[0];
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setProfileImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  }, [openPicker, previewUrl]);
   // 컴포넌트 언마운트/이미지 교체 시 미리보기 URL 해제
   useEffect(() => {
     return () => {
@@ -183,19 +195,31 @@ const UserInfoEditPage = () => {
               </span>
             )}
           </div>
-          <label
-            htmlFor="profileImage"
-            className="mt-[12px] cursor-pointer text-active text-sr font-medium"
-          >
-            프로필 사진 변경
-          </label>
-          <input
-            type="file"
-            id="profileImage"
-            accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+          {isRN ? (
+            <button
+              type="button"
+              onClick={handleRNProfileImagePick}
+              className="mt-[12px] cursor-pointer text-active text-sr font-medium bg-transparent border-none p-0"
+            >
+              프로필 사진 변경
+            </button>
+          ) : (
+            <>
+              <label
+                htmlFor="profileImage"
+                className="mt-[12px] cursor-pointer text-active text-sr font-medium"
+              >
+                프로필 사진 변경
+              </label>
+              <input
+                type="file"
+                id="profileImage"
+                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </>
+          )}
         </div>
         {/* 이름, 닉네임, 학과 수정 박스 */}
         <form

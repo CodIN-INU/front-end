@@ -1,5 +1,6 @@
 'use client';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
+import { useRNImagePicker } from '@/shared/hooks';
 
 interface Message {
     content: string;
@@ -21,6 +22,7 @@ interface MessageFormProps {
 const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: MessageFormProps) => {
     const [messageContent, setMessageContent] = useState<string>('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const { isRN, openPicker } = useRNImagePicker();
 
  
 
@@ -85,6 +87,17 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
         }
     };
 
+    // 앱 환경: RN ImagePicker로 이미지 선택
+    const handleRNImagePick = useCallback(async () => {
+        const files = await openPicker({ multiple: false });
+        if (files.length === 0) return;
+        const file = files[0];
+        setImageFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => setImagePreview(reader.result as string);
+        reader.readAsDataURL(file);
+    }, [openPicker, setImageFile]);
+
     return (
         <>
         <div id="imagePrevCont">
@@ -106,18 +119,26 @@ const MessageForm = ({ onMessageSubmit, myId, imageFile, setImageFile }: Message
             <div id="inputCont">
                
                <div className="flex items-center justify-center w-10 h-10">
-                
-                    <label
-                        id="imageSubmit"
-                        className="flex items-center justify-center cursor-pointer"
-                    >
-                        <input
-                            type="file"
-                            accept="image/*"
-                            className="sr-only"                   
-                            onChange={handleImageUpload}
+                    {isRN ? (
+                        <button
+                            type="button"
+                            id="imageSubmit"
+                            className="flex items-center justify-center cursor-pointer bg-transparent border-none"
+                            onClick={handleRNImagePick}
                         />
-                    </label>
+                    ) : (
+                        <label
+                            id="imageSubmit"
+                            className="flex items-center justify-center cursor-pointer"
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="sr-only"
+                                onChange={handleImageUpload}
+                            />
+                        </label>
+                    )}
                 </div>
                
                 <div id="messagesendForm" >

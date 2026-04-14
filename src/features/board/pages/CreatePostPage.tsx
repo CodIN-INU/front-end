@@ -32,8 +32,10 @@ export default function CreatePostPage() {
     previewImages,
     isLoading,
     isFormValid,
+    isRN,
     handleChange,
     handleFileChange,
+    handleNativePick,
     handleAnonymousChange,
     handleSubmit,
   } = useCreatePost(boardName, tabs, defaultTab);
@@ -86,28 +88,48 @@ export default function CreatePostPage() {
                   className="w-[100px] h-[100px] object-cover rounded-[5px]"
                 />
               ))}
-              <label
-                className={`min-w-[52px] h-[52px] ${
-                  postImages.length <= 0 ? 'ml-0' : 'ml-5'
-                } border border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer`}
-              >
-                <img
-                  src="/icons/board/camera.png"
-                  width={18}
-                  height={15}
-                  alt="이미지 추가"
-                />
-                <span className="text-sr text-[12px]">
-                  {postImages.length}/10
-                </span>
-                <input
-                  type="file"
-                  multiple
-                  accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
+              {isRN ? (
+                <button
+                  type="button"
+                  onClick={handleNativePick}
+                  className={`min-w-[52px] h-[52px] ${
+                    postImages.length <= 0 ? 'ml-0' : 'ml-5'
+                  } border border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer bg-transparent`}
+                >
+                  <img
+                    src="/icons/board/camera.png"
+                    width={18}
+                    height={15}
+                    alt="이미지 추가"
+                  />
+                  <span className="text-sr text-[12px]">
+                    {postImages.length}/10
+                  </span>
+                </button>
+              ) : (
+                <label
+                  className={`min-w-[52px] h-[52px] ${
+                    postImages.length <= 0 ? 'ml-0' : 'ml-5'
+                  } border border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer`}
+                >
+                  <img
+                    src="/icons/board/camera.png"
+                    width={18}
+                    height={15}
+                    alt="이미지 추가"
+                  />
+                  <span className="text-sr text-[12px]">
+                    {postImages.length}/10
+                  </span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
+              )}
             </div>
           </div>
 
